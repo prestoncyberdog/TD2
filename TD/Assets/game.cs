@@ -13,6 +13,7 @@ public class game : MonoBehaviour {
 	public tile start;
 	public tile end;
 	public ant[] creeps;
+	public tile[] route;
 
 	public int[][] waves;
 	public int numWaves;
@@ -32,11 +33,49 @@ public class game : MonoBehaviour {
 	public int gold;
 	public Text goldText;
 
+	//special boosts
+	public double damageBoost;
+	public double rangeBoost;
+	public double speedBoost;
+	public tile damageBoostedTower;
+	public tile rangeBoostedTower;
+	public tile speedBoostedTower;
+	public boostIndicator damageIndicator;
+	public boostIndicator rangeIndicator;
+	public boostIndicator speedIndicator;
+	public Transform Indicator;
+	public int damageCost;
+	public int rangeCost;
+	public int speedCost;
+	public double dBoostGain;
+	public double rBoostGain;
+	public double sBoostGain;
+	//assumed: all boosts scale consistently at doubling cost
+
+
 	// Use this for initialization
 	void Start () {
+		damageIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
+		rangeIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
+		speedIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
+		rangeIndicator.GetComponent<SpriteRenderer>().sprite = rangeIndicator.range;
+		speedIndicator.GetComponent<SpriteRenderer>().sprite = speedIndicator.speed;
+		damageIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
+		rangeIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
+		speedIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
+		damageCost = 50;
+		rangeCost = 50;
+		speedCost = 30;
+		dBoostGain = 1;
+		rBoostGain = 0.5;
+		sBoostGain = .75;
+
+		damageBoost = 1;//multiplicative
+		rangeBoost = 0;//additive
+		speedBoost = 1;//this multiplies cooldown
 		MaxLives = 20;
 		lives = MaxLives;
-		gold = 25;
+		gold = 2500;
 		numWaves = 10;
 		waveIndex = -1;
 		waves = new int[numWaves][];
@@ -114,6 +153,7 @@ public class game : MonoBehaviour {
 					waveIndex += 1;
 				}
 				//SpawnCreeps(10, 10, 3);
+				route = null;
 				SpawnCreeps(waves[waveIndex][0], waves[waveIndex][1], waves[waveIndex][2]);
 				for(int i=0;i<tiles.Length;i++)
 				{

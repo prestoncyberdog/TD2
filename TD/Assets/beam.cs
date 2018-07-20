@@ -11,6 +11,8 @@ public class beam : MonoBehaviour {
 	public int damage = 0;
 	public float angle;
 
+	public Sprite whiteBeam;
+
 	// Use this for initialization
 	void Start () {
 		angle = 0;

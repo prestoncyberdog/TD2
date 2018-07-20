@@ -50,7 +50,18 @@ public class ant : MonoBehaviour {
 		start = GameObject.Find("StartTile").GetComponent<tile>();
 		end = GameObject.Find("EndTile").GetComponent<tile>();
 		route = new tile[200];//max route length < width * height < 200
-		FindPath(start, end);
+
+		//keep all creeps on the same route for the round
+		if (g.route == null)
+		{
+			FindPath(start, end);
+			g.route = route;
+		}
+		else
+		{
+			route = g.route;
+		}
+
 		progress = MAX_PROGRESS;
 		routeIndex = 1;
 		previous = route[0];

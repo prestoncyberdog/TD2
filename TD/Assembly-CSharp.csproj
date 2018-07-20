@@ -64,21 +64,23 @@
     <Compile Include="Assets\ant.cs" />
     <Compile Include="Assets\bar.cs" />
     <Compile Include="Assets\beam.cs" />
+    <Compile Include="Assets\boostIndicator.cs" />
     <Compile Include="Assets\button.cs" />
+    <Compile Include="Assets\canvas.cs" />
     <Compile Include="Assets\game.cs" />
     <Compile Include="Assets\missile.cs" />
     <Compile Include="Assets\tile.cs" />
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>C:/Users/elijahg/Documents/TD/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>C:/Users/elijahg/Documents/temp/TD/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/elijahg/Documents/TD/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>C:/Users/elijahg/Documents/temp/TD/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>C:/Users/elijahg/Documents/TD/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>C:/Users/elijahg/Documents/temp/TD/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/elijahg/Documents/TD/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>C:/Users/elijahg/Documents/temp/TD/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

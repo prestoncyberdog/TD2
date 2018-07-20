@@ -94,8 +94,11 @@ MonoBehaviour:
   BLOCKER: 0
   MISSILE: 1
   SPLASH: 2
+  SHOCK: 3
+  maxCooldown: 0
   cooldown: 0
   damage: 0
+  range: 0
   cooldowns: 
   ranges: []
   damages: 
@@ -105,7 +108,23 @@ MonoBehaviour:
   towerSprites:
   - {fileID: 21300000, guid: 06553babf1ecaa34aa201b73d13ff667, type: 3}
   - {fileID: 21300000, guid: 4859754c6e442064489a542684671cd1, type: 3}
-  - {fileID: 21300000, guid: f808bcb69e98c9e469f2a4e32d691a60, type: 3}
+  - {fileID: 21300000, guid: 4e923973d56ed4a45a351cc48aa04828, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: b405d2dc316c30f42901101db6de2c3c, type: 3}
+  - {fileID: 21300000, guid: 4064fa3df08b823419216a4dcf19aef8, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   towerCosts: 
   refund: 0

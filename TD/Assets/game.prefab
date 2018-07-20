@@ -58,6 +58,7 @@ MonoBehaviour:
   start: {fileID: 0}
   end: {fileID: 0}
   creeps: []
+  route: []
   numWaves: 0
   waveIndex: 0
   toSpawnCount: 0
@@ -65,5 +66,20 @@ MonoBehaviour:
   spawnCD: 0
   waveActive: 0
   spawnHealth: 0
+  MaxLives: 0
   currButtonActive: 0
-  wave: {fileID: 114938515459424946, guid: e9a929b4647b57947954554df115f08a, type: 2}
+  waveText: {fileID: 0}
+  lives: 0
+  livesText: {fileID: 0}
+  gold: 0
+  goldText: {fileID: 0}
+  damageBoost: 0
+  rangeBoost: 0
+  speedBoost: 0
+  damageBoostedTower: {fileID: 0}
+  rangeBoostedTower: {fileID: 0}
+  speedBoostedTower: {fileID: 0}
+  damageIndicator: {fileID: 0}
+  rangeIndicator: {fileID: 0}
+  speedIndicator: {fileID: 0}
+  Indicator: {fileID: 4873597675604376, guid: 644f2d0d0dbde354483e39b9f280fc29, type: 2}
