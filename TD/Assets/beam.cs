@@ -10,42 +10,98 @@ public class beam : MonoBehaviour {
 	public int lifetime;
 	public int damage = 0;
 	public float angle;
+	public int beamType;
+	public double maxRange;
 
+	//default is green
 	public Sprite whiteBeam;
+	public Sprite redBeam;
+	public Sprite blueBeam;
 
 	// Use this for initialization
 	void Start () {
 		angle = 0;
-		lifetime = 5;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		lifetime--;
-		if (target == null)
+		if (beamType == 0)//splash or shock tower
 		{
-			Destroy(gameObject);
+			lifetime--;
+			if (target == null)
+			{
+				Destroy(gameObject);
+			}
+			else if (source.gameObject.GetComponent<tile>().status == source.gameObject.GetComponent<tile>().EMPTY)
+			{
+				enemy.health -= damage;
+				Destroy(gameObject);
+			}
+			else if (lifetime <= 0)
+			{
+				enemy.health -= damage;
+				Destroy(gameObject);
+			}
+			else
+			{
+				setBeam(beamType);
+			}
 		}
-		else if (source == null)
+		else if (beamType == 1)//beam tower, no enemy variable here
 		{
-			enemy.health -= damage;
-			Destroy(gameObject);
+			lifetime--;
+			if (target == null)
+			{
+				Destroy(gameObject);
+			}
+			else if (source.gameObject.GetComponent<tile>().status == source.gameObject.GetComponent<tile>().EMPTY)
+			{
+				Destroy(gameObject);
+			}
+			else if (lifetime <= 0)
+			{
+				Destroy(gameObject);
+			}
+			else
+			{
+				setBeam(beamType);
+			}
 		}
-		else if (lifetime <= 0)
+		else if (beamType == 2)//coil tower, lifetime and damage work differently
 		{
-			enemy.health -= damage;
-			Destroy(gameObject);
-		}
-		else
-		{
-			setBeam();
+			lifetime++;
+			if (target == null)
+			{
+				Destroy(gameObject);
+			}
+			else if (source.gameObject.GetComponent<tile>().status == source.gameObject.GetComponent<tile>().EMPTY)
+			{
+				//enemy.health -= damage*lifetime/10;
+				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow(lifetime, 3)) + 0.0f) / 84375.0f);
+				Destroy(gameObject);
+			}
+			else if ((target.transform.position - source.transform.position).magnitude > maxRange || enemy.next == enemy.end)//range check
+			{
+				//enemy.health -= damage*lifetime/10;
+				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow(lifetime, 3)) + 0.0f) / 84375.0f);
+				source.gameObject.GetComponent<tile>().targeting.Remove(enemy);
+				Destroy(gameObject);
+			}
+			else
+			{
+				setBeam(beamType);
+			}
 		}
 	}
 
-	public void setBeam()
+	public void setBeam(int type)
 	{
-		Vector3 start = source.position;
+		Vector3 start = source.position + new Vector3 (0, 0, -0.001f);
 		Vector3 end = target.position;
+		if (type == 1)
+		{
+			end = end + ((end - start).normalized * 0.5f);
+		}
 		transform.position = (start + end) / 2;
 		float dist = (start - end).magnitude / 5;
 		float angleNeeded = Vector3.Angle(end - start, new Vector3(1, 0, 0));
@@ -57,5 +113,7 @@ public class beam : MonoBehaviour {
 		transform.rotation = Quaternion.identity;
 		transform.Rotate(new Vector3(0, 0, angleNeeded));
 		transform.localScale = new Vector3(dist, .02f, 1);
+
+		
 	}
 }

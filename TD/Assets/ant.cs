@@ -11,7 +11,7 @@ public class ant : MonoBehaviour {
 	public tile previous;
 	public tile next;
 	public int progress;
-	public const int MAX_PROGRESS = 10;
+	public int MAX_PROGRESS = 10;
 	public int routeIndex;
 	public int health = 1;
 	public int maxHealth = 1;

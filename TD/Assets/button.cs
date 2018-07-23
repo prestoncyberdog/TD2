@@ -13,15 +13,20 @@ public class button : MonoBehaviour {
 	public GameObject temp;
 	public Text buttonInfo;
 	public string buttonText;
+	public int DBoostCode; 
+	public int RBoostCode; 
+	public int SBoostCode;
 
 	// Use this for initialization
 	void Start () {
+		DBoostCode = 17;
+		RBoostCode = 18;
+		SBoostCode = 19;
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		this.GetComponent<SpriteRenderer>().sprite = towerSprites[buttonType];
 		temp = new GameObject("temp");
 		temp.transform.SetParent(FindObjectOfType<Canvas>().transform);
 		buttonInfo = temp.AddComponent<Text>();
-		tile sample = FindObjectOfType<tile>();
 
 		buttonInfo.fontSize = 14;
 		buttonInfo.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
@@ -55,15 +60,28 @@ public class button : MonoBehaviour {
 				buttonText = "Shock-" + sample.towerCosts[buttonType];
 				break;
 			case 4:
-				buttonText = "Damage-" + g.damageCost;
+				buttonText = "Beam-" + sample.towerCosts[buttonType];
 				break;
 			case 5:
-				buttonText = "Range-"  + g.rangeCost;
+				buttonText = "Coil-" + sample.towerCosts[buttonType];
 				break;
-			case 6:
-				buttonText = "Speed-" +  g.speedCost;
+			default:
+				//cover boost buttons
+				if (buttonType == DBoostCode)
+				{
+					buttonText = "Damage-" + g.damageCost;
+				}
+				else if (buttonType == RBoostCode)
+				{
+					buttonText = "Range-" + g.rangeCost;
+				}
+				else if (buttonType == SBoostCode)
+				{
+					buttonText = "Speed-" + g.speedCost;
+				}
 				break;
 		}
+
 		buttonInfo.text = buttonText;
 	}
 
@@ -75,45 +93,46 @@ public class button : MonoBehaviour {
 		}
 		if (Input.GetMouseButtonDown(1))
 		{
-			switch (buttonType)
+			if(buttonType == DBoostCode)
 			{
-				case 4:
-					if (g.gold > g.damageCost)
+				if (g.gold > g.damageCost)
+				{
+					g.gold -= g.damageCost;
+					g.damageCost *= 2;
+					g.damageBoost += g.dBoostGain;
+					if (g.damageBoostedTower != null)
 					{
-						g.gold -= g.damageCost;
-						g.damageCost *= 2;
-						g.damageBoost += g.dBoostGain;
-						if (g.damageBoostedTower != null)
-						{
-							g.damageBoostedTower.damage = (int)(g.damageBoostedTower.damages[g.damageBoostedTower.towerType] * g.damageBoost);
-						}
+						g.damageBoostedTower.damage = (int)(g.damageBoostedTower.damages[g.damageBoostedTower.towerType] * g.damageBoost);
 					}
-					break;
-				case 5:
-					if (g.gold > g.rangeCost)
-					{
-						g.gold -= g.rangeCost;
-						g.rangeCost *= 2;
-						g.rangeBoost += g.rBoostGain;
-						if (g.rangeBoostedTower != null)
-						{
-							g.rangeBoostedTower.range = (g.rangeBoostedTower.ranges[g.rangeBoostedTower.towerType] + g.rangeBoost);
-						}
-					}
-					break;
-				case 6:
-					if (g.gold > g.speedCost)
-					{
-						g.gold -= g.speedCost;
-						g.speedCost *= 2;
-						g.speedBoost *= g.sBoostGain;
-						if (g.speedBoostedTower != null)
-						{
-							g.speedBoostedTower.maxCooldown = (int)(g.speedBoostedTower.cooldowns[g.speedBoostedTower.towerType] * g.speedBoost);
-						}
-					}
-					break;
+				}
 			}
+			else if (buttonType == RBoostCode)
+			{
+				if (g.gold > g.rangeCost)
+				{
+					g.gold -= g.rangeCost;
+					g.rangeCost *= 2;
+					g.rangeBoost += g.rBoostGain;
+					if (g.rangeBoostedTower != null)
+					{
+						g.rangeBoostedTower.range = (g.rangeBoostedTower.ranges[g.rangeBoostedTower.towerType] + g.rangeBoost);
+					}
+				}
+			}
+			else if (buttonType == SBoostCode)
+			{
+				if (g.gold > g.speedCost)
+				{
+					g.gold -= g.speedCost;
+					g.speedCost *= 2;
+					g.speedBoost *= g.sBoostGain;
+					if (g.speedBoostedTower != null)
+					{
+						g.speedBoostedTower.maxCooldown = (int)(g.speedBoostedTower.cooldowns[g.speedBoostedTower.towerType] * g.speedBoost);
+					}
+				}
+			}
+			
 			g.currButtonActive = buttonType;
 		}
 	}

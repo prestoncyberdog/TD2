@@ -25,6 +25,8 @@ public class game : MonoBehaviour {
 	public int spawnHealth;
 	public int MaxLives;
 
+	public tile lastTowerSelected;
+
 	//menu stuff
 	public int currButtonActive;
 	public Text waveText;
@@ -76,19 +78,25 @@ public class game : MonoBehaviour {
 		MaxLives = 20;
 		lives = MaxLives;
 		gold = 2500;
-		numWaves = 10;
+		numWaves = 15;
 		waveIndex = -1;
 		waves = new int[numWaves][];
-		waves[0] = new int[] { 10, 10, 1 };
-		waves[1] = new int[] { 10, 6, 1 };
-		waves[2] = new int[] { 15, 10, 1 };
-		waves[3] = new int[] { 20, 10, 2 };
-		waves[4] = new int[] { 20, 12, 3 };
-		waves[5] = new int[] { 30, 10, 5 };
-		waves[6] = new int[] { 30, 8, 6 };
-		waves[7] = new int[] { 50, 10, 7 };
-		waves[8] = new int[] { 50, 10, 10 };
-		waves[9] = new int[] { 100, 10, 15 };
+		waves[0] = new int[] { 10, 10, 1 };//1
+		waves[1] = new int[] { 10, 6, 1 };//2
+		waves[2] = new int[] { 15, 10, 1 };//3
+		waves[3] = new int[] { 20, 10, 2 };//4
+		waves[4] = new int[] { 20, 12, 3 }; //5
+		waves[5] = new int[] { 30, 10, 5 };//6
+		waves[6] = new int[] { 30, 8, 6 };//7
+		waves[7] = new int[] { 50, 10, 7 };//8
+		waves[8] = new int[] { 50, 10, 10 };//9
+		waves[9] = new int[] { 100, 10, 15 };//10
+		waves[10] = new int[] { 50, 12, 25 };//11
+		waves[11] = new int[] { 50, 10, 30 };//12
+		waves[12] = new int[] { 50, 6, 30 };//13
+		waves[13] = new int[] { 50, 10, 35 };//14
+		waves[14] = new int[] { 100, 10, 40 };//15
+
 
 		currButtonActive = 0;
 		start = GameObject.Find("StartTile").GetComponent<tile>();
@@ -160,6 +168,35 @@ public class game : MonoBehaviour {
 					tiles[i].refund = false;
 					tiles[i].cooldown = 0;
 				}
+			}
+		}
+
+		if (Input.GetKeyDown(KeyCode.UpArrow))
+		{
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && waveActive == false)
+			{
+				lastTowerSelected.orient(0);
+			}
+		}
+		if (Input.GetKeyDown(KeyCode.RightArrow))
+		{
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && waveActive == false)
+			{
+				lastTowerSelected.orient(1);
+			}
+		}
+		if (Input.GetKeyDown(KeyCode.DownArrow))
+		{
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && waveActive == false)
+			{
+				lastTowerSelected.orient(2);
+			}
+		}
+		if (Input.GetKeyDown(KeyCode.LeftArrow))
+		{
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && waveActive == false)
+			{
+				lastTowerSelected.orient(3);
 			}
 		}
 

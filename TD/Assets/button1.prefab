@@ -87,22 +87,28 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4859754c6e442064489a542684671cd1, type: 3}
   - {fileID: 21300000, guid: 4e923973d56ed4a45a351cc48aa04828, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 616850e41901fbc409f17d569fd396a4, type: 3}
+  - {fileID: 21300000, guid: 673240998bf1a1644bdf038d5646c112, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: 616850e41901fbc409f17d569fd396a4, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: b405d2dc316c30f42901101db6de2c3c, type: 3}
   - {fileID: 21300000, guid: 4064fa3df08b823419216a4dcf19aef8, type: 3}
   - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  temp: {fileID: 0}
+  buttonInfo: {fileID: 0}
+  buttonText: 
+  DBoostCode: 0
+  RBoostCode: 5
+  SBoostCode: 0
 --- !u!212 &212094831267773680
 SpriteRenderer:
   m_ObjectHideFlags: 1

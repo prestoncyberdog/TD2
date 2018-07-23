@@ -20,6 +20,9 @@ public class tile : MonoBehaviour {
 	public int MISSILE = 1;
 	public int SPLASH = 2;
 	public int SHOCK = 3;
+	public int BEAM = 4;
+	public int COIL = 5;
+	public int beamDirection;
 	public int maxCooldown;
 	public int cooldown = 0;
 	public int damage;
@@ -27,6 +30,8 @@ public class tile : MonoBehaviour {
 	public int[] cooldowns;
 	public double[] ranges;
 	public int[] damages;
+	public float splashRadius;
+	public List<ant> targeting;
 
 	public Sprite emptySprite;
 	public Sprite startSprite;
@@ -42,15 +47,18 @@ public class tile : MonoBehaviour {
 
 	// Use this for initialization 
 	void Start() {
-		towerCosts = new int[] {1, 10, 20, 30};
-		cooldowns = new int[] {0, 20, 50, 120};
-		ranges = new double[] {0, 5.2, 3.2, 1.8};
-		damages = new int[] { 0, 1, 1, 5};
+		towerCosts = new int[] {1, 10, 20, 30, 40, 50};
+		cooldowns = new int[] {0, 20, 45, 150, 80, 0};
+		ranges = new double[] {0, 5.2, 3.2, 1.8, 0, 1.8};
+		damages = new int[] { 0, 1, 1, 5, 4, 1};
+		splashRadius = 3.2f;//for splash tower only
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		status = EMPTY;
 		this.GetComponent<SpriteRenderer>().sprite = emptySprite;
 
 		beams = new List<beam>();
+		beamDirection = 0;//defaults to up
+		targeting = new List<ant>();
 	}
 
 	// Update is called once per frame
@@ -99,7 +107,7 @@ public class tile : MonoBehaviour {
 						Vector3 currPos = g.creeps[i].transform.position;
 						for (int j=0;j<g.creeps.Length;j++)
 						{
-							if (g.creeps[j] != null && (g.creeps[j].transform.position - currPos).magnitude < 2.2)
+							if (g.creeps[j] != null && (g.creeps[j].transform.position - currPos).magnitude < splashRadius)
 							{
 								hits.Add(g.creeps[j]);
 							}
@@ -108,6 +116,8 @@ public class tile : MonoBehaviour {
 						{
 							beam temp = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
 							temp.transform.position = new Vector3(100, 100, 0);
+							temp.beamType = 0;
+							temp.lifetime = 5;
 							if (hits[k] != g.creeps[i])
 							{
 								temp.source = g.creeps[i].transform;
@@ -123,7 +133,7 @@ public class tile : MonoBehaviour {
 								temp.target = hits[k].transform;
 								temp.damage += damage;
 								temp.enemy = hits[k];
-								temp.setBeam();
+								temp.setBeam(temp.beamType);
 							}
 
 						}
@@ -171,9 +181,10 @@ public class tile : MonoBehaviour {
 							temp.damage += damage;
 							temp.target = g.creeps[i].transform;
 							temp.enemy = g.creeps[i];
+							temp.beamType = 0;
 							temp.GetComponent<SpriteRenderer>().sprite = temp.whiteBeam;
-
-							temp.setBeam();
+							temp.lifetime = 5;
+							temp.setBeam(temp.beamType);
 						}
 
 
@@ -189,12 +200,119 @@ public class tile : MonoBehaviour {
 				cooldown -= 1;
 			}
 		}
+		else if (status == FILLED && towerType == BEAM)
+		{
+			if (cooldown == 0)
+			{
+				bool fired = false;
+
+				//fire if enemies on path
+				tile lastTile;
+				tile beamPathTile = this;
+				
+				while (true)//go through tiles in line
+				{
+					int i = 0;
+					while (i < g.creeps.Length)
+					{
+						//hits creeps if they are going to the tile
+						if (g.creeps[i] != null && ((g.creeps[i].next == beamPathTile && g.creeps[i].progress <= g.creeps[i].MAX_PROGRESS/2) || (g.creeps[i].previous == beamPathTile && g.creeps[i].progress >= g.creeps[i].MAX_PROGRESS/2)) )
+						{
+							g.creeps[i].health -= damage;
+							fired = true;
+						}
+						i++;
+					}
+
+
+					//get next tile in line
+					lastTile = beamPathTile;
+					if (beamDirection == 0)//north
+					{
+						beamPathTile = beamPathTile.north;
+					}
+					else if (beamDirection == 1)//east
+					{
+						beamPathTile = beamPathTile.east;
+					}
+					else if (beamDirection == 2)//south
+					{
+						beamPathTile = beamPathTile.south;
+					}
+					else if (beamDirection == 3)//west
+					{
+						beamPathTile = beamPathTile.west;
+					}
+
+					//check if end of beam
+					if (beamPathTile == null || beamPathTile.status != EMPTY)
+					{
+						break;
+					}
+				}
+				if (fired)
+				{
+					cooldown = maxCooldown;
+					//create beam
+					beam temp = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
+					temp.source = this.transform;
+					temp.target = lastTile.transform;
+					temp.beamType = 1;
+					temp.GetComponent<SpriteRenderer>().sprite = temp.redBeam;
+					temp.setBeam(temp.beamType);
+					temp.lifetime = 8;
+
+				}
+			}
+			else
+			{
+				cooldown -= 1;
+			}
+		}
+		else if (status == FILLED && towerType == COIL)
+		{
+			for (int i=0;i<g.creeps.Length;i++)
+			{
+				if (g.creeps[i] != null && ((g.creeps[i].transform.position - transform.position).magnitude <= range) && g.creeps[i].next != g.creeps[i].end)
+				{
+					bool newTarget = true;
+					for (int j = 0; j < targeting.Count; j++)
+					{
+						if (g.creeps[i] == targeting[j])
+						{
+							newTarget = false;
+						}
+					}
+
+					if (newTarget)
+					{
+						targeting.Add(g.creeps[i]);
+						//create beam
+						beam temp = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
+						temp.source = this.transform;
+						temp.target = g.creeps[i].transform;
+						temp.enemy = g.creeps[i];
+						temp.damage = damage;
+						temp.maxRange = range;
+						temp.beamType = 2;
+						temp.lifetime = 0;
+						temp.GetComponent<SpriteRenderer>().sprite = temp.blueBeam;
+						temp.setBeam(temp.beamType);
+					}
+				}
+			}
+		}
 	}
 
 	void OnMouseOver()
 	{
+		button sample2 = FindObjectOfType<button>();
+		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+		{
+			g.lastTowerSelected = this;
+		}
 		//prevents building during waves on creep paths
-		if (this == g.start || this == g.end)
+			if (this == g.start || this == g.end)
 		{
 			return;
 		}
@@ -216,6 +334,12 @@ public class tile : MonoBehaviour {
 					}
 				}
 			}
+
+			//you cant move boosts during a round
+			if (g.currButtonActive == sample2.DBoostCode || g.currButtonActive == sample2.RBoostCode || g.currButtonActive == sample2.SBoostCode)
+			{
+				return;
+			}
 		}
 
 		//allows you to build whatever you have selected
@@ -223,7 +347,8 @@ public class tile : MonoBehaviour {
 		{
 			//handle boost buttons
 			//for each one, must remove boost from any other tower first
-			if (g.currButtonActive == 4)
+			
+			if (g.currButtonActive == sample2.DBoostCode)
 			{
 				if (status == FILLED)
 				{
@@ -236,7 +361,7 @@ public class tile : MonoBehaviour {
 					damage = (int)(damage * g.damageBoost);
 				}
 			}
-			else if (g.currButtonActive == 5)
+			else if (g.currButtonActive == sample2.RBoostCode)
 			{
 				if (status == FILLED)
 				{
@@ -249,7 +374,7 @@ public class tile : MonoBehaviour {
 					range = range + g.rangeBoost;
 				}
 			}
-			else if (g.currButtonActive == 6)
+			else if (g.currButtonActive == sample2.SBoostCode)
 			{
 				if (status == FILLED)
 				{
@@ -312,5 +437,12 @@ public class tile : MonoBehaviour {
 			}
 		}
 		
+	}
+
+	public void orient (int direction)
+	{
+		transform.rotation = Quaternion.identity;
+		transform.Rotate(new Vector3(0, 0, -90 * direction));
+		beamDirection = direction;
 	}
 }
