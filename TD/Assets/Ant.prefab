@@ -59,10 +59,13 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   progress: 0
+  MAX_PROGRESS: 10
   routeIndex: 0
   health: 1
+  maxHealth: 1
   healthBar: {fileID: 0}
   Bar: {fileID: 4031786141763194, guid: 45f5eeab5f03e1748897dbea82372598, type: 2}
+  Beam: {fileID: 4169319785508466, guid: 644104a5154153c49bec71e12807a27f, type: 2}
 --- !u!212 &212001031876520328
 SpriteRenderer:
   m_ObjectHideFlags: 1

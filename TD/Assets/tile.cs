@@ -22,6 +22,8 @@ public class tile : MonoBehaviour {
 	public int SHOCK = 3;
 	public int BEAM = 4;
 	public int COIL = 5;
+	public int TESLA = 6;
+	public int BRIDGE = 7;
 	public int beamDirection;
 	public int maxCooldown;
 	public int cooldown = 0;
@@ -32,6 +34,11 @@ public class tile : MonoBehaviour {
 	public int[] damages;
 	public float splashRadius;
 	public List<ant> targeting;
+	public int webbed;
+	public bool vertBridge;
+	public bool unchanged;
+	public tile bridgeStart;
+	public tile bridgeEnd;
 
 	public Sprite emptySprite;
 	public Sprite startSprite;
@@ -42,23 +49,22 @@ public class tile : MonoBehaviour {
 
 	public Transform Missile;
 	public Transform Beam;
-	public List<beam> beams;
 
 
 	// Use this for initialization 
 	void Start() {
-		towerCosts = new int[] {1, 10, 20, 30, 40, 50};
-		cooldowns = new int[] {0, 20, 45, 150, 80, 0};
-		ranges = new double[] {0, 5.2, 3.2, 1.8, 0, 1.8};
-		damages = new int[] { 0, 1, 1, 5, 4, 1};
+		towerCosts = new int[] {1, 10, 20, 30, 40, 50, 40, 80};
+		cooldowns = new int[] {0, 20, 45, 150, 80, 0, 0, 200};
+		ranges = new double[] {0, 5.2, 3.2, 1.8, 0, 1.8, 0, 0};
+		damages = new int[] { 0, 1, 1, 5, 4, 1, 30, 0};
 		splashRadius = 3.2f;//for splash tower only
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		status = EMPTY;
 		this.GetComponent<SpriteRenderer>().sprite = emptySprite;
 
-		beams = new List<beam>();
 		beamDirection = 0;//defaults to up
 		targeting = new List<ant>();
+		webbed = 0;
 	}
 
 	// Update is called once per frame
@@ -302,6 +308,58 @@ public class tile : MonoBehaviour {
 				}
 			}
 		}
+		else if (status == FILLED && towerType == TESLA)
+		{
+			//do nothing 
+		}
+		else if (status == FILLED && towerType == BRIDGE)
+		{
+			if (cooldown == 0)
+			{
+				if (g.waveActive == false)
+				{
+					configureBridge();
+				}
+				if (bridgeStart != null)
+				{
+					//there is a valid bridge to work with
+				
+				
+					bool fired = false;
+					//choose enemy
+					for (int i = 0; i < g.creeps.Length; i++)
+					{
+						if (g.creeps[i] != null && g.creeps[i].next == bridgeStart && g.creeps[i].progress <= 1)
+						{
+							fired = true;
+							//move target ant
+							int endIndex = 0;
+							for (int j = 0; j < g.route.Length; j++)
+							{
+								if (g.route[j] != null && g.route[j] == bridgeEnd)
+								{
+									endIndex = j;
+									break;
+								}
+							}
+							g.creeps[i].next = bridgeEnd;
+							g.creeps[i].previous = bridgeStart;
+							g.creeps[i].routeIndex = endIndex;
+							g.creeps[i].progress = g.creeps[i].MAX_PROGRESS * 2;
+							g.insertCreep(i);//resorts creep
+						}
+					}
+					if (fired)
+					{
+						cooldown = maxCooldown;
+					}
+				}
+			}
+			else
+			{
+				cooldown -= 1;
+			}
+		}
 	}
 
 	void OnMouseOver()
@@ -318,22 +376,19 @@ public class tile : MonoBehaviour {
 		}
 		else if (g.waveActive == true)
 		{
-			//any ant will do
-			ant sample = FindObjectOfType<ant>();
-			if (sample != null)
+			
+			for (int i = 0; i < g.route.Length; i++)
 			{
-				for (int i = 0; i < sample.route.Length; i++)
+				if (g.route[i] == g.end)
 				{
-					if (sample.route[i] == g.end)
-					{
-						break;
-					}
-					else if (sample.route[i] == this)
-					{
-						return;
-					}
+					break;
+				}
+				else if (g.route[i] == this)
+				{
+					return;
 				}
 			}
+			
 
 			//you cant move boosts during a round
 			if (g.currButtonActive == sample2.DBoostCode || g.currButtonActive == sample2.RBoostCode || g.currButtonActive == sample2.SBoostCode)
@@ -355,10 +410,18 @@ public class tile : MonoBehaviour {
 					if (g.damageBoostedTower != null)
 					{
 						g.damageBoostedTower.damage = damages[g.damageBoostedTower.towerType];
+						if (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA)
+						{
+							g.damageBoostedTower.makeWebs();
+						}
 					}
 					g.damageBoostedTower = this;
 					g.damageIndicator.transform.position = transform.position + new Vector3(-.3f, .3f, -.001f);
 					damage = (int)(damage * g.damageBoost);
+					if (towerType == TESLA)
+					{
+						makeWebs();
+					}
 				}
 			}
 			else if (g.currButtonActive == sample2.RBoostCode)
@@ -393,8 +456,18 @@ public class tile : MonoBehaviour {
 				status = FILLED;
 
 				//if the blocks the path, do nothing
-				bool valid = g.CheckLegal();
-				if (valid == false)
+				//bool valid = g.CheckLegal();
+				tile[] routeHolder = new tile[200]; 
+				for (int i =0;i<routeHolder.Length;i++)
+				{
+					routeHolder[i] = g.route[i];
+				}
+				int valid = g.FindPath(g.start, g.end);
+				for (int i = 0; i < routeHolder.Length; i++)
+				{
+					g.route[i] = routeHolder[i];
+				}
+				if (valid == 0)
 				{
 					status = EMPTY;
 					return;
@@ -409,6 +482,24 @@ public class tile : MonoBehaviour {
 				if (g.waveActive == false)
 				{
 					refund = true;
+				}
+
+				//handle beam
+				if (towerType == BEAM)
+				{
+					unchanged = true;
+				}
+
+				//handle tesla
+				if (towerType == TESLA)
+				{
+					makeWebs();
+				}
+
+				//handle bridge
+				if (towerType == BRIDGE)
+				{
+					configureBridge();
 				}
 			}
 		}
@@ -434,9 +525,138 @@ public class tile : MonoBehaviour {
 				{
 					g.gold += towerCosts[towerType];
 				}
+				if (towerType == TESLA)
+				{
+					if (north != null)
+					{
+						north.webbed = 0;
+
+					}
+					if (south != null)
+					{
+						south.webbed = 0;
+
+					}
+					if (east != null)
+					{
+						east.webbed = 0;
+
+					}
+					if (west != null)
+					{
+						west.webbed = 0;
+
+					}
+				}
+				else if (towerType == BEAM)
+				{
+					orient(0);
+				}
+				else if (towerType == BRIDGE)
+				{
+					bridgeStart = null;
+					bridgeEnd = null;
+				}
 			}
 		}
 		
+	}
+
+	public void makeWebs()
+	{
+		if (north != null && north.north != null && north.north.status == FILLED && north.north.towerType == TESLA)
+		{
+			north.webbed = Mathf.Max(north.north.damage, damage);
+		}
+		if (south != null && south.south != null && south.south.status == FILLED && south.south.towerType == TESLA)
+		{
+			south.webbed = Mathf.Max(south.south.damage, damage);
+		}
+		if (east != null && east.east != null && east.east.status == FILLED && east.east.towerType == TESLA)
+		{
+			east.webbed = Mathf.Max(east.east.damage, damage);
+		}
+		if (west != null && west.west != null && west.west.status == FILLED && west.west.towerType == TESLA)
+		{
+			west.webbed = Mathf.Max(west.west.damage, damage);
+		}
+	}
+
+	public void configureBridge()
+	{
+		if (g.waveActive == false)
+		{
+			g.FindPath(g.start, g.end);
+		}
+		bridgeStart = null;
+		bridgeEnd = null;
+		int eIndex = -1;
+		int wIndex = -1;
+		int nIndex = -1;
+		int sIndex = -1;
+		if (east != null && west != null)
+		{
+			for (int i = 0; i<g.route.Length; i++)
+			{
+				if (g.route[i] != null && g.route[i] == east)
+				{
+					eIndex = i;
+				}
+				else if (g.route[i] != null && g.route[i] == west)
+				{
+					wIndex = i;
+				}
+			}
+			if (eIndex >= 0 && wIndex >= 0)
+			{
+				//here we make a bridge
+				vertBridge = false;
+				transform.rotation = Quaternion.identity;
+				transform.Rotate(new Vector3(0, 0, 0));
+				if (eIndex > wIndex)
+				{
+					bridgeStart = east;
+					bridgeEnd = west;
+				}
+				else
+				{
+					bridgeStart = west;
+					bridgeEnd = east;
+				}
+
+			}
+		}
+		if (north != null && south != null)
+		{
+			for (int i = 0; i < g.route.Length; i++)
+			{
+				if (g.route[i] != null && g.route[i] == north)
+				{
+					nIndex = i;
+				}
+				else if (g.route[i] != null && g.route[i] == south)
+				{
+					sIndex = i;
+				}
+			}
+			if (nIndex >= 0 && sIndex >= 0 && ((Mathf.Abs(nIndex - sIndex) > Mathf.Abs(eIndex - wIndex)) || bridgeStart == null))
+			{
+				//here we make a bridge
+				vertBridge = true;
+				transform.rotation = Quaternion.identity;
+				transform.Rotate(new Vector3(0, 0, 90));
+				if (nIndex > sIndex)
+				{
+					bridgeStart = north;
+					bridgeEnd = south;
+				}
+				else
+				{
+					bridgeStart = south;
+					bridgeEnd = north;
+				}
+			}
+		}
 	}
 
 	public void orient (int direction)
@@ -444,5 +664,6 @@ public class tile : MonoBehaviour {
 		transform.rotation = Quaternion.identity;
 		transform.Rotate(new Vector3(0, 0, -90 * direction));
 		beamDirection = direction;
+		unchanged = false;
 	}
 }

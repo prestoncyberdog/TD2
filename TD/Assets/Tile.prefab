@@ -97,6 +97,7 @@ MonoBehaviour:
   SHOCK: 3
   BEAM: 4
   COIL: 5
+  TESLA: 6
   beamDirection: 0
   maxCooldown: 0
   cooldown: 0
@@ -107,6 +108,8 @@ MonoBehaviour:
   damages: 
   splashRadius: 0
   targeting: []
+  webbed: 0
+  unchanged: 0
   emptySprite: {fileID: 21300000, guid: 965471a8c011fa840a9264639f4c3a4d, type: 3}
   startSprite: {fileID: 21300000, guid: e3d84f5dddfacdd4eb02b9761a904032, type: 3}
   endSprite: {fileID: 21300000, guid: 796a19e75b1a7bf4c8c04794314cf1a9, type: 3}
@@ -117,8 +120,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: 616850e41901fbc409f17d569fd396a4, type: 3}
   - {fileID: 21300000, guid: 673240998bf1a1644bdf038d5646c112, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: 616850e41901fbc409f17d569fd396a4, type: 3}
+  - {fileID: 21300000, guid: e48e9ff8e74f5f24fb5af14da4e8811c, type: 3}
+  - {fileID: 21300000, guid: 6e729779548bdf441898bbf12cef8af8, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
@@ -135,7 +138,6 @@ MonoBehaviour:
   refund: 0
   Missile: {fileID: 4954611194299990, guid: cfc6f7ca3ce9c8247b8e82e40e0380ec, type: 2}
   Beam: {fileID: 4169319785508466, guid: 644104a5154153c49bec71e12807a27f, type: 2}
-  beams: []
 --- !u!212 &212574097314647884
 SpriteRenderer:
   m_ObjectHideFlags: 1

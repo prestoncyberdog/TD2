@@ -17,6 +17,7 @@ public class beam : MonoBehaviour {
 	public Sprite whiteBeam;
 	public Sprite redBeam;
 	public Sprite blueBeam;
+	public Sprite weirdBeam;
 
 	// Use this for initialization
 	void Start () {
@@ -32,7 +33,7 @@ public class beam : MonoBehaviour {
 			{
 				Destroy(gameObject);
 			}
-			else if (source.gameObject.GetComponent<tile>().status == source.gameObject.GetComponent<tile>().EMPTY)
+			else if (source == null)
 			{
 				enemy.health -= damage;
 				Destroy(gameObject);

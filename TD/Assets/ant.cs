@@ -11,13 +11,15 @@ public class ant : MonoBehaviour {
 	public tile previous;
 	public tile next;
 	public int progress;
-	public int MAX_PROGRESS = 10;
+	public int MAX_PROGRESS;
 	public int routeIndex;
 	public int health = 1;
 	public int maxHealth = 1;
+	public int identIndex = 0;
 
 	public bar healthBar;
 	public Transform Bar;
+	public Transform Beam;
 
 
 
@@ -25,23 +27,8 @@ public class ant : MonoBehaviour {
 	Vector3 zboy = new Vector3(0, 0, -.01f);
 	// Use this for initialization
 	void Start () {
-		/*
-		LineRenderer temp2;
-		temp2 = gameObject.AddComponent(typeof(LineRenderer)) as LineRenderer;
-		temp2.material = new Material(Shader.Find("Particles/Additive"));
-		//temp2.material = new Material(Shader.Find("Unlit"));
-;		temp2.endColor = new Color(1, 1, 1);
-		temp2.startColor = new Color(1, 1, 1);
-		temp2.startWidth = .1f;
-		temp2.endWidth = .1f;
-		temp2.positionCount = 3;
-		Vector3[] things = new Vector3[] { end.transform.position, transform.position, start.transform.position };
-		//temp2.SetPosition(0, transform.position);
-		//temp2.SetPosition(1, start.transform.position);
-		//temp2.SetPosition(2, end.transform.position);
-		temp2.SetPositions(things);*/
-
-
+		MAX_PROGRESS = 10;
+		
 		healthBar = Instantiate(Bar, transform.position, Quaternion.identity).gameObject.GetComponent<bar>();
 		healthBar.parent = this;
 
@@ -52,16 +39,12 @@ public class ant : MonoBehaviour {
 		route = new tile[200];//max route length < width * height < 200
 
 		//keep all creeps on the same route for the round
-		if (g.route == null)
+		if (g.route[0] == null)
 		{
-			FindPath(start, end);
-			g.route = route;
+			g.FindPath(start, end);
 		}
-		else
-		{
-			route = g.route;
-		}
-
+		
+		route = g.route;
 		progress = MAX_PROGRESS;
 		routeIndex = 1;
 		previous = route[0];
@@ -71,31 +54,72 @@ public class ant : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-
+		route = g.route;
 		if (health <= 0)
 		{
+			progress = 100000;
+			g.insertCreep(identIndex);
 			kill();
 			return;
 		}
 
 		//movement of creeps
-		if (progress > 0)
-		{
-			Vector3 step = (next.transform.position+zboy - transform.position)/progress;
-			transform.Translate(step);
-			progress -= 1;
-		}
-		else
+		if (progress <= 0)
 		{
 			if (next == end)
 			{
 				g.lives -= 1;
 				Destroy(gameObject);
+				return;
 			}
 			progress = MAX_PROGRESS;
+			//check for webbing
+			if (next.webbed > 0)
+			{
+				progress += next.webbed;
+				g.insertCreep(identIndex);
+				//create visual beams to tesla towers
+				beam temp = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
+				temp.target = this.transform;
+				temp.damage = 0;
+				temp.enemy = this;
+				temp.beamType = 0;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.weirdBeam;
+				temp.lifetime = progress;
+
+				beam temp2 = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
+				temp2.target = this.transform;
+				temp2.damage = 0;
+				temp2.enemy = this;
+				temp2.beamType = 0;
+				temp2.GetComponent<SpriteRenderer>().sprite = temp.weirdBeam;
+				temp2.lifetime = progress;
+
+				//north-south or east-west
+				if (next.north != null && next.north.status == next.FILLED && next.north.towerType == next.TESLA)
+				{
+					temp.source = next.north.transform;
+					temp2.source = next.south.transform;
+				}
+				else
+				{
+					temp.source = next.east.transform;
+					temp2.source = next.west.transform;
+				}
+				temp.setBeam(0);
+				temp2.setBeam(0);
+
+			}
 			previous = next;
 			next = route[routeIndex + 1];
 			routeIndex += 1;
+		}
+		
+		if (progress > 0)
+		{
+			Vector3 step = (next.transform.position + zboy - transform.position) / progress;
+			transform.Translate(step);
+			progress -= 1;
 		}
 
 		
@@ -108,8 +132,8 @@ public class ant : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
-
-
+	//this code has been improved upon elsewhere but is still here in case i find a bug later
+	/*
 	//plan a path from location 'from' to location 'to'
 	//returns 1 if successful, 0 if no path was found
 	//updates route as it goes
@@ -181,5 +205,5 @@ public class ant : MonoBehaviour {
 		
 		//if queue runs out without finding end, return 0
 		return 0;
-	}
+	}*/
 }

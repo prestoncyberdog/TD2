@@ -65,6 +65,12 @@ public class button : MonoBehaviour {
 			case 5:
 				buttonText = "Coil-" + sample.towerCosts[buttonType];
 				break;
+			case 6:
+				buttonText = "Tesla-" + sample.towerCosts[buttonType];
+				break;
+			case 7:
+				buttonText = "Bridge-" + sample.towerCosts[buttonType];
+				break;
 			default:
 				//cover boost buttons
 				if (buttonType == DBoostCode)
@@ -95,7 +101,7 @@ public class button : MonoBehaviour {
 		{
 			if(buttonType == DBoostCode)
 			{
-				if (g.gold > g.damageCost)
+				if (g.gold >= g.damageCost)
 				{
 					g.gold -= g.damageCost;
 					g.damageCost *= 2;
@@ -103,12 +109,16 @@ public class button : MonoBehaviour {
 					if (g.damageBoostedTower != null)
 					{
 						g.damageBoostedTower.damage = (int)(g.damageBoostedTower.damages[g.damageBoostedTower.towerType] * g.damageBoost);
+						if (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA)
+						{
+							g.damageBoostedTower.makeWebs();
+						}
 					}
 				}
 			}
 			else if (buttonType == RBoostCode)
 			{
-				if (g.gold > g.rangeCost)
+				if (g.gold >= g.rangeCost)
 				{
 					g.gold -= g.rangeCost;
 					g.rangeCost *= 2;
@@ -121,7 +131,7 @@ public class button : MonoBehaviour {
 			}
 			else if (buttonType == SBoostCode)
 			{
-				if (g.gold > g.speedCost)
+				if (g.gold >= g.speedCost)
 				{
 					g.gold -= g.speedCost;
 					g.speedCost *= 2;

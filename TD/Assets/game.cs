@@ -96,13 +96,18 @@ public class game : MonoBehaviour {
 		waves[12] = new int[] { 50, 6, 30 };//13
 		waves[13] = new int[] { 50, 10, 35 };//14
 		waves[14] = new int[] { 100, 10, 40 };//15
+		//waves[15] = new int[] { 1, 0, 1000 };//16
 
 
+
+		
 		currButtonActive = 0;
 		start = GameObject.Find("StartTile").GetComponent<tile>();
 		end = GameObject.Find("EndTile").GetComponent<tile>();
 		start.GetComponent<SpriteRenderer>().sprite = start.startSprite;
 		end.GetComponent<SpriteRenderer>().sprite = end.endSprite;
+		route = new tile[200];//max route length < width * height < 200
+		FindPath(start, end);
 		toSpawnCount = 0;
 		spawnSpacing = 10;
 		waveActive = false;
@@ -127,9 +132,19 @@ public class game : MonoBehaviour {
 		{
 			if (spawnCD == 0)
 			{
-				creeps[creeps.Length - toSpawnCount] = Instantiate(Ant, start.transform.position, Quaternion.identity).gameObject.GetComponent<ant>();
-				creeps[creeps.Length - toSpawnCount].maxHealth = spawnHealth;
-				creeps[creeps.Length - toSpawnCount].health = spawnHealth;
+				int tempIndex = 0;
+				for (int i=0;i<creeps.Length;i++)
+				{
+					tempIndex = i;
+					if (creeps[i] == null)
+					{
+						break;
+					}
+				}
+				creeps[tempIndex] = Instantiate(Ant, start.transform.position, Quaternion.identity).gameObject.GetComponent<ant>();
+				creeps[tempIndex].maxHealth = spawnHealth;
+				creeps[tempIndex].health = spawnHealth;
+				creeps[tempIndex].identIndex = tempIndex;
 				spawnCD = spawnSpacing;
 				toSpawnCount -= 1;
 			}
@@ -141,12 +156,15 @@ public class game : MonoBehaviour {
 
 		//check if a wave is in progress
 		//if so, map cannot be edited
-		waveActive = false;
-		for (int i=0; i<creeps.Length;i++)
+		if (toSpawnCount == 0)
 		{
-			if (creeps[i] != null)
+			waveActive = false;
+			for (int i = 0; i < creeps.Length; i++)
 			{
-				waveActive = true;
+				if (creeps[i] != null)
+				{
+					waveActive = true;
+				}
 			}
 		}
 
@@ -161,7 +179,7 @@ public class game : MonoBehaviour {
 					waveIndex += 1;
 				}
 				//SpawnCreeps(10, 10, 3);
-				route = null;
+				route = new tile[200];//max route length < width * height < 200
 				SpawnCreeps(waves[waveIndex][0], waves[waveIndex][1], waves[waveIndex][2]);
 				for(int i=0;i<tiles.Length;i++)
 				{
@@ -173,28 +191,28 @@ public class game : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.UpArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && waveActive == false)
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(0);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.RightArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && waveActive == false)
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(1);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.DownArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && waveActive == false)
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(2);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.LeftArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && waveActive == false)
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(3);
 			}
@@ -211,7 +229,8 @@ public class game : MonoBehaviour {
 		goldText.text = "Gold: " + gold;
 	}
 
-	//returns true if there is a valid path, false if not
+	//this code has been improved upon elsewhere but is still here in case i find a bug later
+	/*//returns true if there is a valid path, false if not
 	public bool CheckLegal ()
 	{
 		tile current;
@@ -269,7 +288,7 @@ public class game : MonoBehaviour {
 			}
 		}
 		return false ;
-	}
+	}*/
 
 	//sets conditions for enemies to be spawned over time
 	//actual instantiation happens in update
@@ -311,6 +330,108 @@ public class game : MonoBehaviour {
 					tiles[j].north = tiles[i];
 				}
 
+			}
+		}
+	}
+
+	//plan a path from location 'from' to location 'to'
+	//returns 1 if successful, 0 if no path was found
+	//updates route as it goes
+	public int FindPath(tile from, tile to)
+	{
+		tile current;
+		//set all tiles to unvisited, prev to null, dist to 10000
+		for (int i = 0; i < tiles.Length; i++)
+		{
+			tiles[i].visited = false;
+			tiles[i].prev = null;
+			tiles[i].dist = 10000;
+		}
+
+		//enqueue from
+		Queue q = new Queue();
+		from.dist = 0;
+		from.visited = true;
+		q.Enqueue(from);
+
+		//while queue is not empty
+		while (q.Count > 0)
+		{
+			current = (tile)q.Dequeue();//dequeue, check for end, return 1 if so
+			if (current == to)
+			{
+				//fill in correct path in route
+				//wont change route if no path is found
+				tile backTemp = current;
+				while (backTemp != null)
+				{
+					route[backTemp.dist] = backTemp;
+					backTemp = backTemp.prev;
+				}
+
+				return 1;
+			}
+
+			//enqueue valid neighbors
+			if (current.north != null && current.north.visited == false && current.north.status == current.EMPTY)
+			{
+				current.north.visited = true;
+				current.north.dist = current.dist + 1;
+				current.north.prev = current;
+				q.Enqueue(current.north);
+			}
+			if (current.south != null && current.south.visited == false && current.south.status == current.EMPTY)
+			{
+				current.south.visited = true;
+				current.south.dist = current.dist + 1;
+				current.south.prev = current;
+				q.Enqueue(current.south);
+			}
+			if (current.east != null && current.east.visited == false && current.east.status == current.EMPTY)
+			{
+				current.east.visited = true;
+				current.east.dist = current.dist + 1;
+				current.east.prev = current;
+				q.Enqueue(current.east);
+			}
+			if (current.west != null && current.west.visited == false && current.west.status == current.EMPTY)
+			{
+				current.west.visited = true;
+				current.west.dist = current.dist + 1;
+				current.west.prev = current;
+				q.Enqueue(current.west);
+			}
+		}
+
+		//if queue runs out without finding end, return 0
+		return 0;
+	}
+
+	//this is used whenever a creep is slowed or misplaced
+	//insetion/bubble sort to correct the placement of element wrongIndex
+	public void insertCreep (int wrongIndex)
+	{
+		for (int i = wrongIndex;i<(creeps.Length -1);i++)
+		{
+			if (creeps[i+1]==null)
+			{
+				return;
+			}
+			//compare i and i+1
+			int score1 = creeps[i].routeIndex * creeps[i].MAX_PROGRESS - creeps[i].progress;
+			int score2 = creeps[i+1].routeIndex * creeps[i+1].MAX_PROGRESS - creeps[i+1].progress;
+
+			if (score1 < score2)
+			{
+				ant holder = creeps[i];
+				creeps[i] = creeps[i + 1];
+				creeps[i + 1] = holder;
+				creeps[i].identIndex = i;
+				creeps[i + 1].identIndex = i + 1;
+			}
+			else
+			{
+				return;
 			}
 		}
 	}
