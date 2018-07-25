@@ -7,6 +7,7 @@ public class missile : MonoBehaviour {
 	public ant target;
 	public game g;
 	public int damage = 1;
+	public int type;
 
 	// Use this for initialization
 	void Start () {
@@ -44,7 +45,11 @@ public class missile : MonoBehaviour {
 		//collision with enemy
 		if ((transform.position - target.transform.position).magnitude < .1)
 		{
-			target.health -= damage;
+			if (type == 0)
+			{
+				target.health -= damage;
+			}
+		
 			Destroy(gameObject);
 		}
 	}

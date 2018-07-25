@@ -10,10 +10,12 @@ public class game : MonoBehaviour {
 	public tile[] tiles;
 	public int tileSpace = 1;
 	public Transform Ant;
+	public Transform Beam;
 	public tile start;
 	public tile end;
 	public ant[] creeps;
 	public tile[] route;
+	public beam[] beams;
 
 	public int[][] waves;
 	public int numWaves;
@@ -23,7 +25,10 @@ public class game : MonoBehaviour {
 	public int spawnCD;
 	public bool waveActive;
 	public int spawnHealth;
+	public int spawnMaxProgress;
 	public int MaxLives;
+	public int sortCD;
+	public int maxSortCD;
 
 	public tile lastTowerSelected;
 
@@ -78,36 +83,35 @@ public class game : MonoBehaviour {
 		MaxLives = 20;
 		lives = MaxLives;
 		gold = 2500;
-		numWaves = 15;
+		numWaves = 20;
 		waveIndex = -1;
 		waves = new int[numWaves][];
-		waves[0] = new int[] { 10, 10, 1 };//1
-		waves[1] = new int[] { 10, 6, 1 };//2
-		waves[2] = new int[] { 15, 10, 1 };//3
-		waves[3] = new int[] { 20, 10, 2 };//4
-		waves[4] = new int[] { 20, 12, 3 }; //5
-		waves[5] = new int[] { 30, 10, 5 };//6
-		waves[6] = new int[] { 30, 8, 6 };//7
-		waves[7] = new int[] { 50, 10, 7 };//8
-		waves[8] = new int[] { 50, 10, 10 };//9
-		waves[9] = new int[] { 100, 10, 15 };//10
-		waves[10] = new int[] { 50, 12, 25 };//11
-		waves[11] = new int[] { 50, 10, 30 };//12
-		waves[12] = new int[] { 50, 6, 30 };//13
-		waves[13] = new int[] { 50, 10, 35 };//14
-		waves[14] = new int[] { 100, 10, 40 };//15
-		//waves[15] = new int[] { 1, 0, 1000 };//16
+		// these numbers mean: # of creeps, spacing, health, speed(high means slow)
+		waves[0] = new int[] { 10, 10, 1, 10 };//1
+		waves[1] = new int[] { 10, 6, 1, 10 };//2
+		waves[2] = new int[] { 15, 10, 1, 10 };//3
+		waves[3] = new int[] { 20, 10, 2, 10 };//4
+		waves[4] = new int[] { 20, 12, 3, 10 }; //5
+		waves[5] = new int[] { 30, 10, 5, 10 };//6
+		waves[6] = new int[] { 30, 8, 6, 10 };//7
+		waves[7] = new int[] { 50, 10, 7, 10 };//8
+		waves[8] = new int[] { 50, 10, 10, 10 };//9
+		waves[9] = new int[] { 100, 10, 15, 10 };//10
+		waves[10] = new int[] { 50, 12, 25, 10 };//11
+		waves[11] = new int[] { 50, 10, 30, 10 };//12
+		waves[12] = new int[] { 50, 6, 30, 10 };//13
+		waves[13] = new int[] { 50, 10, 35, 10 };//14
+		waves[14] = new int[] { 100, 10, 40, 10 };//15
+		waves[15] = new int[] { 200, 5, 50, 10 };//16
+		waves[16] = new int[] { 10, 50, 150, 10 };//17
+		waves[17] = new int[] { 100, 10, 80, 10 };//18
+		waves[18] = new int[] { 100, 8, 80, 8 };//19
+		waves[19] = new int[] { 100, 10, 100, 10 };//20
 
 
 
-		
+
 		currButtonActive = 0;
-		start = GameObject.Find("StartTile").GetComponent<tile>();
-		end = GameObject.Find("EndTile").GetComponent<tile>();
-		start.GetComponent<SpriteRenderer>().sprite = start.startSprite;
-		end.GetComponent<SpriteRenderer>().sprite = end.endSprite;
-		route = new tile[200];//max route length < width * height < 200
-		FindPath(start, end);
 		toSpawnCount = 0;
 		spawnSpacing = 10;
 		waveActive = false;
@@ -122,6 +126,21 @@ public class game : MonoBehaviour {
 		}
 		CreateGraph(tiles);
 		SetText();
+
+		maxSortCD = 10;
+		sortCD = maxSortCD;
+		tile centTile = GameObject.Find("centerTile").GetComponent<tile>();
+		start = randomTile(centTile);
+		end = start;
+		while (end == start || end.north == start || end.south == start || end.east == start || end.west == start)
+		{
+			end = randomTile(centTile);
+		}
+		start.GetComponent<SpriteRenderer>().sprite = start.startSprite;
+		end.GetComponent<SpriteRenderer>().sprite = end.endSprite;
+		route = new tile[200];//max route length < width * height < 200
+		beams = new beam[200];
+		FindPath(start, end);
 	}
 	
 	// Update is called once per frame
@@ -144,6 +163,7 @@ public class game : MonoBehaviour {
 				creeps[tempIndex] = Instantiate(Ant, start.transform.position, Quaternion.identity).gameObject.GetComponent<ant>();
 				creeps[tempIndex].maxHealth = spawnHealth;
 				creeps[tempIndex].health = spawnHealth;
+				creeps[tempIndex].maxProgress = spawnMaxProgress;
 				creeps[tempIndex].identIndex = tempIndex;
 				spawnCD = spawnSpacing;
 				toSpawnCount -= 1;
@@ -168,7 +188,18 @@ public class game : MonoBehaviour {
 			}
 		}
 
-
+		if (waveActive)
+		{
+			if (sortCD <= 0)
+			{
+				SortCreeps();
+				sortCD = maxSortCD;
+			}
+			else
+			{
+				sortCD--;
+			}
+		}
 
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
@@ -180,7 +211,7 @@ public class game : MonoBehaviour {
 				}
 				//SpawnCreeps(10, 10, 3);
 				route = new tile[200];//max route length < width * height < 200
-				SpawnCreeps(waves[waveIndex][0], waves[waveIndex][1], waves[waveIndex][2]);
+				SpawnCreeps(waves[waveIndex][0], waves[waveIndex][1], waves[waveIndex][2], waves[waveIndex][3]);
 				for(int i=0;i<tiles.Length;i++)
 				{
 					tiles[i].refund = false;
@@ -292,13 +323,14 @@ public class game : MonoBehaviour {
 
 	//sets conditions for enemies to be spawned over time
 	//actual instantiation happens in update
-	void SpawnCreeps (int count, int spacing, int health)
+	void SpawnCreeps (int count, int spacing, int health, int progression)
 	{
 		creeps = new ant[count];
 		toSpawnCount = count;
 		spawnSpacing = spacing;
 		waveActive = true;
 		spawnHealth = health;
+		spawnMaxProgress = progression;
 	}
 
 	//Create edges in tile graph
@@ -361,10 +393,30 @@ public class game : MonoBehaviour {
 			if (current == to)
 			{
 				//fill in correct path in route
-				//wont change route if no path is found
+				//wont reach this code if no path is found
+
+				//clear path display beams
+				for (int i = 0; i < beams.Length; i++)
+				{
+					if (beams[i] != null)
+					{
+						Destroy(beams[i].gameObject);
+					}
+				}
+
 				tile backTemp = current;
 				while (backTemp != null)
 				{
+					if (backTemp.prev != null)
+					{
+						beam temp = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
+						temp.source = backTemp.transform;
+						temp.target = backTemp.prev.transform;
+						temp.beamType = 4;
+						temp.GetComponent<SpriteRenderer>().sprite = temp.orangeBeam;
+						temp.setBeam(temp.beamType);
+						beams[backTemp.dist] = temp;
+					}
 					route[backTemp.dist] = backTemp;
 					backTemp = backTemp.prev;
 				}
@@ -411,6 +463,16 @@ public class game : MonoBehaviour {
 	//insetion/bubble sort to correct the placement of element wrongIndex
 	public void insertCreep (int wrongIndex)
 	{
+		int endIndex = -1;
+		for (int i = 0;i<route.Length;i++)
+		{
+			if (route[i] != null && route[i] == end)
+			{
+				endIndex = i;
+				break;
+			}
+		}
+
 		for (int i = wrongIndex;i<(creeps.Length -1);i++)
 		{
 			if (creeps[i+1]==null)
@@ -418,10 +480,10 @@ public class game : MonoBehaviour {
 				return;
 			}
 			//compare i and i+1
-			int score1 = creeps[i].routeIndex * creeps[i].MAX_PROGRESS - creeps[i].progress;
-			int score2 = creeps[i+1].routeIndex * creeps[i+1].MAX_PROGRESS - creeps[i+1].progress;
+			int score1 = ((endIndex - creeps[i].routeIndex) * creeps[i].maxProgress) + creeps[i].progress;
+			int score2 = ((endIndex - creeps[i+1].routeIndex) * creeps[i+1].maxProgress) + creeps[i+1].progress;
 
-			if (score1 < score2)
+			if (score1 > score2)
 			{
 				ant holder = creeps[i];
 				creeps[i] = creeps[i + 1];
@@ -434,5 +496,116 @@ public class game : MonoBehaviour {
 				return;
 			}
 		}
+	}
+
+	public void SortCreeps ()
+	{
+		int endIndex = -1;
+		for (int i = 0; i < route.Length; i++)
+		{
+			if (route[i] != null && route[i] == end)
+			{
+				endIndex = i;
+				break;
+			}
+		}
+
+		for (int i=0;i<creeps.Length;i++)
+		{
+			int j = i;
+			while (j > 0)
+			{
+				int score1 = 0;
+				int score2 = 0;
+				if (creeps[j] != null)
+				{
+					score1 = ((endIndex - creeps[j].routeIndex) * creeps[j].maxProgress) + creeps[j].progress;
+				}
+				else
+				{
+					score1 = 100000;
+
+				}
+
+				if (creeps[j-1] != null)
+				{
+					score2 = ((endIndex - creeps[j - 1].routeIndex) * creeps[j - 1].maxProgress) + creeps[j - 1].progress;
+				}
+				else
+				{
+					score2 = 100000;
+
+				}
+
+				if (score1 < score2)
+				{
+					ant holder = creeps[j];
+					creeps[j] = creeps[j - 1];
+					creeps[j - 1] = holder;
+					creeps[j].identIndex = j;
+					creeps[j - 1].identIndex = j - 1;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+	}
+
+	public tile randomTile (tile current)
+	{
+		float num = 0;
+		int i = 0;
+		while (i < 200)
+		{
+			num = Random.Range(0, 4);
+			if (num < 1)
+			{
+				if (current.north != null)
+				{
+					current = current.north;
+				}
+				else
+				{
+					i--;
+				}
+			}
+			else if (num < 2)
+			{
+				if (current.south != null)
+				{
+					current = current.south;
+				}
+				else
+				{
+					i--;
+				}
+			}
+			else if (num < 3)
+			{
+				if (current.east != null)
+				{
+					current = current.east;
+				}
+				else
+				{
+					i--;
+				}
+			}
+			else
+			{
+				if (current.west != null)
+				{
+					current = current.west;
+				}
+				else
+				{
+					i--;
+				}
+			}
+			i++;
+		}
+		return current;
 	}
 }

@@ -98,6 +98,8 @@ MonoBehaviour:
   BEAM: 4
   COIL: 5
   TESLA: 6
+  BRIDGE: 7
+  TAG: 8
   beamDirection: 0
   maxCooldown: 0
   cooldown: 0
@@ -109,7 +111,10 @@ MonoBehaviour:
   splashRadius: 0
   targeting: []
   webbed: 0
+  vertBridge: 0
   unchanged: 0
+  bridgeStart: {fileID: 0}
+  bridgeEnd: {fileID: 0}
   emptySprite: {fileID: 21300000, guid: 965471a8c011fa840a9264639f4c3a4d, type: 3}
   startSprite: {fileID: 21300000, guid: e3d84f5dddfacdd4eb02b9761a904032, type: 3}
   endSprite: {fileID: 21300000, guid: 796a19e75b1a7bf4c8c04794314cf1a9, type: 3}
@@ -122,7 +127,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 673240998bf1a1644bdf038d5646c112, type: 3}
   - {fileID: 21300000, guid: e48e9ff8e74f5f24fb5af14da4e8811c, type: 3}
   - {fileID: 21300000, guid: 6e729779548bdf441898bbf12cef8af8, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 328ed64b9b92f064cb1fbb51c81bd7fb, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
@@ -173,7 +178,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 06553babf1ecaa34aa201b73d13ff667, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 965471a8c011fa840a9264639f4c3a4d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

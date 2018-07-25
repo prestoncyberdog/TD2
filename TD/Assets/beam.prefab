@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
+  g: {fileID: 0}
   target: {fileID: 0}
   source: {fileID: 0}
   lifetime: 0
@@ -64,6 +65,8 @@ MonoBehaviour:
   redBeam: {fileID: 21300000, guid: 19f83592a00ca114f8a82d22ddd4684b, type: 3}
   blueBeam: {fileID: 21300000, guid: b889ec242e406db4ebec089d551e6d97, type: 3}
   weirdBeam: {fileID: 21300000, guid: 157242a05d4a7e646bff480646f1db54, type: 3}
+  purpleBeam: {fileID: 21300000, guid: 9c4716c8f82f0634eadb861b472bc9dd, type: 3}
+  orangeBeam: {fileID: 21300000, guid: da4704e7306b02a4996bd6697171f980, type: 3}
 --- !u!212 &212369598986395466
 SpriteRenderer:
   m_ObjectHideFlags: 1

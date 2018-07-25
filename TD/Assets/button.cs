@@ -28,7 +28,7 @@ public class button : MonoBehaviour {
 		temp.transform.SetParent(FindObjectOfType<Canvas>().transform);
 		buttonInfo = temp.AddComponent<Text>();
 
-		buttonInfo.fontSize = 14;
+		buttonInfo.fontSize = 12;
 		buttonInfo.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
 		temp.layer = 5;
 		buttonInfo.color = Color.black;
@@ -70,6 +70,9 @@ public class button : MonoBehaviour {
 				break;
 			case 7:
 				buttonText = "Bridge-" + sample.towerCosts[buttonType];
+				break;
+			case 8:
+				buttonText = "Tag-" + sample.towerCosts[buttonType];
 				break;
 			default:
 				//cover boost buttons

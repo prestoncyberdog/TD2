@@ -5,6 +5,7 @@ using UnityEngine;
 public class beam : MonoBehaviour {
 
 	public ant enemy;
+	public game g;
 	public Transform target;
 	public Transform source;
 	public int lifetime;
@@ -18,12 +19,16 @@ public class beam : MonoBehaviour {
 	public Sprite redBeam;
 	public Sprite blueBeam;
 	public Sprite weirdBeam;
+	public Sprite purpleBeam;
+	public Sprite orangeBeam;
 
 	// Use this for initialization
 	void Start () {
 		angle = 0;
+		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
+
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if (beamType == 0)//splash or shock tower
@@ -78,13 +83,13 @@ public class beam : MonoBehaviour {
 			else if (source.gameObject.GetComponent<tile>().status == source.gameObject.GetComponent<tile>().EMPTY)
 			{
 				//enemy.health -= damage*lifetime/10;
-				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow(lifetime, 3)) + 0.0f) / 84375.0f);
+				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow(lifetime, 1.5f)) + 0.0f) / 130.0f);
 				Destroy(gameObject);
 			}
 			else if ((target.transform.position - source.transform.position).magnitude > maxRange || enemy.next == enemy.end)//range check
 			{
 				//enemy.health -= damage*lifetime/10;
-				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow(lifetime, 3)) + 0.0f) / 84375.0f);
+				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow(lifetime, 1.5f)) + 0.0f) / 130.0f);
 				source.gameObject.GetComponent<tile>().targeting.Remove(enemy);
 				Destroy(gameObject);
 			}
@@ -92,6 +97,32 @@ public class beam : MonoBehaviour {
 			{
 				setBeam(beamType);
 			}
+		}
+		else if (beamType == 3)//tag tower
+		{
+			lifetime--;
+			if (target == null)
+			{
+				Destroy(gameObject);
+			}
+			else if (source.gameObject.GetComponent<tile>().status == source.gameObject.GetComponent<tile>().EMPTY)
+			{
+				enemy.health -= damage;
+				Destroy(gameObject);
+			}
+			else if (lifetime <= 0)
+			{
+				enemy.health -= damage;
+				Destroy(gameObject);
+			}
+			else
+			{
+				setBeam(beamType);
+			}
+		}
+		else if (beamType == 4)//path display
+		{
+			//do nothing
 		}
 	}
 
@@ -102,6 +133,10 @@ public class beam : MonoBehaviour {
 		if (type == 1)
 		{
 			end = end + ((end - start).normalized * 0.5f);
+		}
+		else if (type == 4)
+		{
+			start = start + new Vector3(0, 0, 0.002f);
 		}
 		transform.position = (start + end) / 2;
 		float dist = (start - end).magnitude / 5;

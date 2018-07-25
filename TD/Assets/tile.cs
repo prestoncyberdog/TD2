@@ -24,6 +24,7 @@ public class tile : MonoBehaviour {
 	public int COIL = 5;
 	public int TESLA = 6;
 	public int BRIDGE = 7;
+	public int TAG = 8;
 	public int beamDirection;
 	public int maxCooldown;
 	public int cooldown = 0;
@@ -53,14 +54,14 @@ public class tile : MonoBehaviour {
 
 	// Use this for initialization 
 	void Start() {
-		towerCosts = new int[] {1, 10, 20, 30, 40, 50, 40, 80};
-		cooldowns = new int[] {0, 20, 45, 150, 80, 0, 0, 200};
-		ranges = new double[] {0, 5.2, 3.2, 1.8, 0, 1.8, 0, 0};
-		damages = new int[] { 0, 1, 1, 5, 4, 1, 30, 0};
+		towerCosts = new int[] {1, 10, 20, 30, 50, 50, 40, 50, 50};
+		cooldowns = new int[] {0, 20, 45, 150, 80, 0, 0, 150, 17};
+		ranges = new double[] {0, 5.2, 3.2, 1.8, 0, 1.8, 0, 0, 2.2};
+		damages = new int[] { 0, 1, 1, 5, 5, 1, 30, 0, 1};
 		splashRadius = 3.2f;//for splash tower only
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		status = EMPTY;
-		this.GetComponent<SpriteRenderer>().sprite = emptySprite;
+		//this.GetComponent<SpriteRenderer>().sprite = emptySprite;
 
 		beamDirection = 0;//defaults to up
 		targeting = new List<ant>();
@@ -83,6 +84,7 @@ public class tile : MonoBehaviour {
 						missile temp = Instantiate(Missile, transform.position, Quaternion.identity).gameObject.GetComponent<missile>();
 						temp.target = g.creeps[i];
 						temp.damage = damage;
+						temp.type = 0;
 						fired = true;
 						break;
 					}
@@ -172,7 +174,7 @@ public class tile : MonoBehaviour {
 						//if front enemy will soon be out of range, fire
 						if (decided == false)
 						{
-							if (g.creeps[i].next != null && (g.creeps[i].next == g.end || (g.creeps[i].next.transform.position - transform.position).magnitude > range))
+							if (g.creeps[i].next != null && ((g.creeps[i].next == g.end || (g.creeps[i].next.transform.position - transform.position).magnitude > range) || g.creeps[i].maxHealth > damage))
 							{
 								fired = true;
 							}
@@ -222,7 +224,7 @@ public class tile : MonoBehaviour {
 					while (i < g.creeps.Length)
 					{
 						//hits creeps if they are going to the tile
-						if (g.creeps[i] != null && ((g.creeps[i].next == beamPathTile && g.creeps[i].progress <= g.creeps[i].MAX_PROGRESS/2) || (g.creeps[i].previous == beamPathTile && g.creeps[i].progress >= g.creeps[i].MAX_PROGRESS/2)) )
+						if (g.creeps[i] != null && ((g.creeps[i].next == beamPathTile && g.creeps[i].progress <= g.creeps[i].maxProgress / 2) || (g.creeps[i].previous == beamPathTile && g.creeps[i].progress >= g.creeps[i].maxProgress / 2)) )
 						{
 							g.creeps[i].health -= damage;
 							fired = true;
@@ -329,7 +331,7 @@ public class tile : MonoBehaviour {
 					//choose enemy
 					for (int i = 0; i < g.creeps.Length; i++)
 					{
-						if (g.creeps[i] != null && g.creeps[i].next == bridgeStart && g.creeps[i].progress <= 1)
+						if (g.creeps[i] != null && g.creeps[i].next == bridgeStart && g.creeps[i].progress <= 1 && g.creeps[i].bridgeCount < 3)
 						{
 							fired = true;
 							//move target ant
@@ -342,10 +344,11 @@ public class tile : MonoBehaviour {
 									break;
 								}
 							}
+							g.creeps[i].bridgeCount++;
 							g.creeps[i].next = bridgeEnd;
 							g.creeps[i].previous = bridgeStart;
 							g.creeps[i].routeIndex = endIndex;
-							g.creeps[i].progress = g.creeps[i].MAX_PROGRESS * 2;
+							g.creeps[i].progress = g.creeps[i].maxProgress * 2;
 							g.insertCreep(i);//resorts creep
 						}
 					}
@@ -359,6 +362,54 @@ public class tile : MonoBehaviour {
 			{
 				cooldown -= 1;
 			}
+		}
+		if (status == FILLED && towerType == TAG)
+		{
+			//same behavior as missile except for slow
+			if (cooldown == 0)
+			{
+				bool fired = false;
+				//choose enemy
+				int targetIndex = 0;
+				int minProgress = 1000;
+				for (int i = 0; i < g.creeps.Length; i++)
+				{
+					if (g.creeps[i] != null && (g.creeps[i].transform.position - transform.position).magnitude <= range)
+					{
+
+						if (g.creeps[i].maxProgress < minProgress)
+						{
+							targetIndex = i;
+							minProgress = g.creeps[i].maxProgress;
+						}
+						
+						fired = true;
+					}
+				}
+				if (fired)
+				{
+					cooldown = maxCooldown;
+					//shock enemy
+					beam temp = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
+					temp.source = this.transform;
+					temp.damage = damage;
+					temp.target = g.creeps[targetIndex].transform;
+					temp.enemy = g.creeps[targetIndex];
+					temp.beamType = 3;
+					temp.GetComponent<SpriteRenderer>().sprite = temp.purpleBeam;
+					temp.lifetime = 5;
+					temp.setBeam(temp.beamType);
+
+					g.creeps[targetIndex].maxProgress += damage * 1;
+					g.creeps[targetIndex].progress += damage * 1;
+					g.insertCreep(g.creeps[targetIndex].identIndex);
+				}
+			}
+			else
+			{
+				cooldown -= 1;
+			}
+
 		}
 	}
 
@@ -556,6 +607,10 @@ public class tile : MonoBehaviour {
 				{
 					bridgeStart = null;
 					bridgeEnd = null;
+				}
+				if (g.waveActive == false)
+				{
+					g.FindPath(g.start, g.end);
 				}
 			}
 		}

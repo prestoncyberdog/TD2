@@ -11,11 +11,12 @@ public class ant : MonoBehaviour {
 	public tile previous;
 	public tile next;
 	public int progress;
-	public int MAX_PROGRESS;
+	public int maxProgress;
 	public int routeIndex;
 	public int health = 1;
 	public int maxHealth = 1;
 	public int identIndex = 0;
+	public int bridgeCount;
 
 	public bar healthBar;
 	public Transform Bar;
@@ -27,15 +28,13 @@ public class ant : MonoBehaviour {
 	Vector3 zboy = new Vector3(0, 0, -.01f);
 	// Use this for initialization
 	void Start () {
-		MAX_PROGRESS = 10;
-		
 		healthBar = Instantiate(Bar, transform.position, Quaternion.identity).gameObject.GetComponent<bar>();
 		healthBar.parent = this;
 
 		transform.position = new Vector3(transform.position.x, transform.position.y, -.01f);
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
-		start = GameObject.Find("StartTile").GetComponent<tile>();
-		end = GameObject.Find("EndTile").GetComponent<tile>();
+		start = g.start;
+		end = g.end;
 		route = new tile[200];//max route length < width * height < 200
 
 		//keep all creeps on the same route for the round
@@ -45,17 +44,18 @@ public class ant : MonoBehaviour {
 		}
 		
 		route = g.route;
-		progress = MAX_PROGRESS;
+		progress = maxProgress;
 		routeIndex = 1;
 		previous = route[0];
 		next = route[1];
+		bridgeCount = 0;
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
 		route = g.route;
-		if (health <= 0)
+		if (health <= 0 || maxProgress > 100)
 		{
 			progress = 100000;
 			g.insertCreep(identIndex);
@@ -72,7 +72,7 @@ public class ant : MonoBehaviour {
 				Destroy(gameObject);
 				return;
 			}
-			progress = MAX_PROGRESS;
+			progress = maxProgress;
 			//check for webbing
 			if (next.webbed > 0)
 			{
