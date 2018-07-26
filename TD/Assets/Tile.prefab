@@ -100,6 +100,7 @@ MonoBehaviour:
   TESLA: 6
   BRIDGE: 7
   TAG: 8
+  MISSILE2: 9
   beamDirection: 0
   maxCooldown: 0
   cooldown: 0
@@ -116,6 +117,7 @@ MonoBehaviour:
   bridgeStart: {fileID: 0}
   bridgeEnd: {fileID: 0}
   emptySprite: {fileID: 21300000, guid: 965471a8c011fa840a9264639f4c3a4d, type: 3}
+  blockedSprite: {fileID: 21300000, guid: 8cc619d5c9637844f81ac44c44486a3d, type: 3}
   startSprite: {fileID: 21300000, guid: e3d84f5dddfacdd4eb02b9761a904032, type: 3}
   endSprite: {fileID: 21300000, guid: 796a19e75b1a7bf4c8c04794314cf1a9, type: 3}
   towerSprites:
@@ -128,7 +130,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e48e9ff8e74f5f24fb5af14da4e8811c, type: 3}
   - {fileID: 21300000, guid: 6e729779548bdf441898bbf12cef8af8, type: 3}
   - {fileID: 21300000, guid: 328ed64b9b92f064cb1fbb51c81bd7fb, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: b41c844967c9bf548ad5342d1a3f6e32, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}

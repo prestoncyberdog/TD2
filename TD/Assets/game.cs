@@ -29,6 +29,7 @@ public class game : MonoBehaviour {
 	public int MaxLives;
 	public int sortCD;
 	public int maxSortCD;
+	public int currBlockerSize;
 
 	public tile lastTowerSelected;
 
@@ -39,6 +40,7 @@ public class game : MonoBehaviour {
 	public Text livesText;
 	public int gold;
 	public Text goldText;
+	public Text bodyText;
 
 	//special boosts
 	public double damageBoost;
@@ -82,8 +84,8 @@ public class game : MonoBehaviour {
 		speedBoost = 1;//this multiplies cooldown
 		MaxLives = 20;
 		lives = MaxLives;
-		gold = 2500;
-		numWaves = 20;
+		gold = 30;
+		numWaves = 30;
 		waveIndex = -1;
 		waves = new int[numWaves][];
 		// these numbers mean: # of creeps, spacing, health, speed(high means slow)
@@ -95,18 +97,28 @@ public class game : MonoBehaviour {
 		waves[5] = new int[] { 30, 10, 5, 10 };//6
 		waves[6] = new int[] { 30, 8, 6, 10 };//7
 		waves[7] = new int[] { 50, 10, 7, 10 };//8
-		waves[8] = new int[] { 50, 10, 10, 10 };//9
+		waves[8] = new int[] { 50, 5, 10, 12 };//9
 		waves[9] = new int[] { 100, 10, 15, 10 };//10
 		waves[10] = new int[] { 50, 12, 25, 10 };//11
 		waves[11] = new int[] { 50, 10, 30, 10 };//12
 		waves[12] = new int[] { 50, 6, 30, 10 };//13
 		waves[13] = new int[] { 50, 10, 35, 10 };//14
-		waves[14] = new int[] { 100, 10, 40, 10 };//15
+		waves[14] = new int[] { 100, 8, 40, 10 };//15
 		waves[15] = new int[] { 200, 5, 50, 10 };//16
 		waves[16] = new int[] { 10, 50, 150, 10 };//17
 		waves[17] = new int[] { 100, 10, 80, 10 };//18
-		waves[18] = new int[] { 100, 8, 80, 8 };//19
-		waves[19] = new int[] { 100, 10, 100, 10 };//20
+		waves[18] = new int[] { 100, 6, 80, 8 };//19
+		waves[19] = new int[] { 100, 8, 100, 10 };//20
+		waves[20] = new int[] { 30, 2, 120, 10 };//21
+		waves[21] = new int[] { 150, 10, 130, 10 };//22
+		waves[22] = new int[] { 50, 8, 50, 4 };//23
+		waves[23] = new int[] { 150, 10, 140, 10 };//24
+		waves[24] = new int[] { 100, 8, 160, 10 };//25
+		waves[25] = new int[] { 150, 10, 170, 10 };//26
+		waves[26] = new int[] { 50, 15, 180, 9 };//27
+		waves[27] = new int[] { 100, 7, 180, 8 };//28
+		waves[28] = new int[] { 50, 10, 190, 10 };//29
+		waves[29] = new int[] { 500, 10, 200, 10 };//30
 
 
 
@@ -129,18 +141,11 @@ public class game : MonoBehaviour {
 
 		maxSortCD = 10;
 		sortCD = maxSortCD;
-		tile centTile = GameObject.Find("centerTile").GetComponent<tile>();
-		start = randomTile(centTile);
-		end = start;
-		while (end == start || end.north == start || end.south == start || end.east == start || end.west == start)
-		{
-			end = randomTile(centTile);
-		}
-		start.GetComponent<SpriteRenderer>().sprite = start.startSprite;
-		end.GetComponent<SpriteRenderer>().sprite = end.endSprite;
 		route = new tile[200];//max route length < width * height < 200
 		beams = new beam[200];
-		FindPath(start, end);
+		randomizeBoard();
+		start.GetComponent<SpriteRenderer>().sprite = start.startSprite;
+		end.GetComponent<SpriteRenderer>().sprite = end.endSprite;
 	}
 	
 	// Update is called once per frame
@@ -255,71 +260,20 @@ public class game : MonoBehaviour {
 
 	void SetText ()
 	{
-		waveText.text = "Round: " + (waveIndex+1)  + "/" + numWaves;
+		waveText.text = "Wave : " + (waveIndex+1)  + "/" + numWaves;
 		livesText.text = "Lives: " + lives;
 		goldText.text = "Gold: " + gold;
+		if (waveIndex < numWaves -1)
+		{
+			bodyText.text = "Next: Wave " + (waveIndex + 2) + "\n# of creeps: " + waves[waveIndex + 1][0] + "\nHealth: " + waves[waveIndex + 1][2] + "\nSpacing: " + waves[waveIndex + 1][1] + "\nSpeed: " + Mathf.Round(100*(10.0f / (waves[waveIndex + 1][3]+0.0f)))/100f;
+
+		}
+		else
+		{
+			bodyText.text = "Next: Wave " + (waveIndex + 1) + "\n# of creeps: " + waves[waveIndex][0] + "\nHealth: " + waves[waveIndex][2] + "\nSpacing: " + waves[waveIndex][1] + "\nSpeed: " + Mathf.Round(100 * (10.0f / (waves[waveIndex][3] + 0.0f))) / 100f;
+		}
 	}
 
-	//this code has been improved upon elsewhere but is still here in case i find a bug later
-	/*//returns true if there is a valid path, false if not
-	public bool CheckLegal ()
-	{
-		tile current;
-		//set all tiles to unvisited, prev to null, dist to 10000
-		for (int i = 0; i < tiles.Length; i++)
-		{
-			tiles[i].visited = false;
-			tiles[i].prev = null;
-			tiles[i].dist = 10000;
-		}
-
-		//enqueue from
-		Queue q = new Queue();
-		start.dist = 0;
-		start.visited = true;
-		q.Enqueue(start);
-
-		//while queue is not empty
-		while (q.Count > 0)
-		{
-			current = (tile)q.Dequeue();//dequeue, check for end, return 1 if so
-			if (current == end)
-			{
-				return true;
-			}
-
-			//enqueue valid neighbors
-			if (current.north != null && current.north.visited == false && current.north.status == current.EMPTY)
-			{
-				current.north.visited = true;
-				current.north.dist = current.dist + 1;
-				current.north.prev = current;
-				q.Enqueue(current.north);
-			}
-			if (current.south != null && current.south.visited == false && current.south.status == current.EMPTY)
-			{
-				current.south.visited = true;
-				current.south.dist = current.dist + 1;
-				current.south.prev = current;
-				q.Enqueue(current.south);
-			}
-			if (current.east != null && current.east.visited == false && current.east.status == current.EMPTY)
-			{
-				current.east.visited = true;
-				current.east.dist = current.dist + 1;
-				current.east.prev = current;
-				q.Enqueue(current.east);
-			}
-			if (current.west != null && current.west.visited == false && current.west.status == current.EMPTY)
-			{
-				current.west.visited = true;
-				current.west.dist = current.dist + 1;
-				current.west.prev = current;
-				q.Enqueue(current.west);
-			}
-		}
-		return false ;
-	}*/
 
 	//sets conditions for enemies to be spawned over time
 	//actual instantiation happens in update
@@ -607,5 +561,109 @@ public class game : MonoBehaviour {
 			i++;
 		}
 		return current;
+	}
+
+	public void randomizeBoard()
+	{
+		tile centTile = GameObject.Find("centerTile").GetComponent<tile>();
+		//createBlocker(15, 5, randomTile(centTile));
+		createBlocker(Random.Range(8, 12), Random.Range(3, 8), randomTile(centTile));
+		createBlocker(Random.Range(3, 8), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(3, 8), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(3, 8), Random.Range(1, 2), randomTile(centTile));
+		for (int i = 0;i<tiles.Length;i++)
+		{
+			if (tiles[i].north == null || tiles[i].south == null || tiles[i].east == null || tiles[i].west == null)
+			{
+				tiles[i].status = tiles[i].EMPTY;
+				tiles[i].GetComponent<SpriteRenderer>().sprite = tiles[i].emptySprite;
+			}
+		}
+
+		start = randomTile(centTile);
+		end = start;
+		while (end == start || end.north == start || end.south == start || end.east == start || end.west == start)
+		{
+			end = randomTile(centTile);
+		}
+
+		while (FindPath(start, end) == 0)
+		{
+			start = randomTile(centTile);
+			end = start;
+			while (end == start || end.north == start || end.south == start || end.east == start || end.west == start)
+			{
+				end = randomTile(centTile);
+			}
+		}
+	}
+
+	public void createBlocker(int maxSize, int minSize, tile baseTile)
+	{
+		currBlockerSize = 0;
+		while (currBlockerSize < minSize)
+		{
+			for (int i = 0;i<tiles.Length;i++)
+			{
+				tiles[i].visited = false;
+			}
+			baseTile.visited = true;
+			createBlockerRecur(maxSize, baseTile);
+		}
+	}
+
+	public void createBlockerRecur (int maxSize, tile baseTile)
+	{
+		if (baseTile.status == baseTile.BLOCKED)
+		{
+			if (baseTile.north != null && baseTile.north.status == baseTile.BLOCKED && currBlockerSize < maxSize - 1 && baseTile.north.visited == false)
+			{
+				baseTile.north.visited = true;
+				createBlockerRecur(maxSize, baseTile.north);
+			}
+			if (baseTile.south != null && baseTile.south.status == baseTile.BLOCKED && currBlockerSize < maxSize - 1 && baseTile.south.visited == false)
+			{
+				baseTile.south.visited = true;
+				createBlockerRecur(maxSize, baseTile.south);
+			}
+			if (baseTile.east != null && baseTile.east.status == baseTile.BLOCKED && currBlockerSize < maxSize - 1 && baseTile.east.visited == false)
+			{
+				baseTile.east.visited = true;
+				createBlockerRecur(maxSize, baseTile.east);
+			}
+			if (baseTile.west != null && baseTile.west.status == baseTile.BLOCKED && currBlockerSize < maxSize - 1 && baseTile.west.visited == false)
+			{
+				baseTile.west.visited = true;
+				createBlockerRecur(maxSize, baseTile.west);
+			}
+		}
+
+		baseTile.status = baseTile.BLOCKED;
+		baseTile.GetComponent<SpriteRenderer>().sprite = baseTile.blockedSprite;
+		if (baseTile.north != null && baseTile.north.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
+		{
+			baseTile.north.visited = true;
+			currBlockerSize += 1;
+			createBlockerRecur(maxSize, baseTile.north);
+		}
+		if (baseTile.south != null && baseTile.south.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
+		{
+			baseTile.south.visited = true;
+			currBlockerSize += 1;
+			createBlockerRecur(maxSize, baseTile.south);
+		}
+		if (baseTile.east != null && baseTile.east.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
+		{
+			baseTile.east.visited = true;
+			currBlockerSize += 1;
+			createBlockerRecur(maxSize, baseTile.east);
+		}
+		if (baseTile.west != null && baseTile.west.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
+		{
+			baseTile.west.visited = true;
+			currBlockerSize += 1;
+			createBlockerRecur(maxSize, baseTile.west);
+		}
+		
 	}
 }

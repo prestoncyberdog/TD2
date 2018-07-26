@@ -55,12 +55,17 @@ public class ant : MonoBehaviour {
 	void Update ()
 	{
 		route = g.route;
-		if (health <= 0 || maxProgress > 100)
+		if (health <= 0)
 		{
 			progress = 100000;
 			g.insertCreep(identIndex);
 			kill();
 			return;
+		}
+
+		if (maxProgress > g.spawnMaxProgress * 5)
+		{
+			maxProgress = g.spawnMaxProgress * 5;
 		}
 
 		//movement of creeps

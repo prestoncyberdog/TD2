@@ -25,6 +25,7 @@ public class tile : MonoBehaviour {
 	public int TESLA = 6;
 	public int BRIDGE = 7;
 	public int TAG = 8;
+	public int MISSILE2 = 9;
 	public int beamDirection;
 	public int maxCooldown;
 	public int cooldown = 0;
@@ -42,6 +43,7 @@ public class tile : MonoBehaviour {
 	public tile bridgeEnd;
 
 	public Sprite emptySprite;
+	public Sprite blockedSprite;
 	public Sprite startSprite;
 	public Sprite endSprite;
 	public Sprite[] towerSprites = new Sprite[20];
@@ -54,13 +56,16 @@ public class tile : MonoBehaviour {
 
 	// Use this for initialization 
 	void Start() {
-		towerCosts = new int[] {1, 10, 20, 30, 50, 50, 40, 50, 50};
-		cooldowns = new int[] {0, 20, 45, 150, 80, 0, 0, 150, 17};
-		ranges = new double[] {0, 5.2, 3.2, 1.8, 0, 1.8, 0, 0, 2.2};
-		damages = new int[] { 0, 1, 1, 5, 5, 1, 30, 0, 1};
-		splashRadius = 3.2f;//for splash tower only
+		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2
+		towerCosts = new int[] {1, 10, 25, 35, 40, 50, 40, 50, 50, 50};
+		cooldowns = new int[] {0, 20, 45, 150, 80, 0, 0, 80, 20, 20};
+		ranges = new double[] {0, 5.2, 2.8, 1.8, 0, 1.8, 0, 0, 2.2, 5.2};
+		damages = new int[] { 0, 1, 1, 10, 5, 1, 30, 0, 1, 10};
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
-		status = EMPTY;
+		if (status != BLOCKED)
+		{
+			status = EMPTY;
+		}
 		//this.GetComponent<SpriteRenderer>().sprite = emptySprite;
 
 		beamDirection = 0;//defaults to up
@@ -70,7 +75,7 @@ public class tile : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-		if (status == FILLED && towerType == MISSILE)
+		if (status == FILLED && (towerType == MISSILE || towerType == MISSILE2))
 		{
 			if (cooldown == 0)
 			{
@@ -115,7 +120,7 @@ public class tile : MonoBehaviour {
 						Vector3 currPos = g.creeps[i].transform.position;
 						for (int j=0;j<g.creeps.Length;j++)
 						{
-							if (g.creeps[j] != null && (g.creeps[j].transform.position - currPos).magnitude < splashRadius)
+							if (g.creeps[j] != null && (g.creeps[j].transform.position - currPos).magnitude < range)
 							{
 								hits.Add(g.creeps[j]);
 							}
@@ -331,7 +336,7 @@ public class tile : MonoBehaviour {
 					//choose enemy
 					for (int i = 0; i < g.creeps.Length; i++)
 					{
-						if (g.creeps[i] != null && g.creeps[i].next == bridgeStart && g.creeps[i].progress <= 1 && g.creeps[i].bridgeCount < 3)
+						if (g.creeps[i] != null && g.creeps[i].next == bridgeStart && g.creeps[i].progress <= 1 && g.creeps[i].bridgeCount < 1)
 						{
 							fired = true;
 							//move target ant
@@ -454,55 +459,51 @@ public class tile : MonoBehaviour {
 			//handle boost buttons
 			//for each one, must remove boost from any other tower first
 			
-			if (g.currButtonActive == sample2.DBoostCode)
+			if (g.currButtonActive == sample2.DBoostCode && status == FILLED)
 			{
-				if (status == FILLED)
+				
+				if (g.damageBoostedTower != null)
 				{
-					if (g.damageBoostedTower != null)
+					g.damageBoostedTower.damage = damages[g.damageBoostedTower.towerType];
+					if (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA)
 					{
-						g.damageBoostedTower.damage = damages[g.damageBoostedTower.towerType];
-						if (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA)
-						{
-							g.damageBoostedTower.makeWebs();
-						}
-					}
-					g.damageBoostedTower = this;
-					g.damageIndicator.transform.position = transform.position + new Vector3(-.3f, .3f, -.001f);
-					damage = (int)(damage * g.damageBoost);
-					if (towerType == TESLA)
-					{
-						makeWebs();
+						g.damageBoostedTower.makeWebs();
 					}
 				}
+				g.damageBoostedTower = this;
+				g.damageIndicator.transform.position = transform.position + new Vector3(-.3f, .3f, -.001f);
+				damage = (int)(damage * g.damageBoost);
+				if (towerType == TESLA)
+				{
+					makeWebs();
+				}
+				
 			}
-			else if (g.currButtonActive == sample2.RBoostCode)
+			else if (g.currButtonActive == sample2.RBoostCode && status == FILLED)
 			{
-				if (status == FILLED)
-				{
-					if (g.rangeBoostedTower != null)
-					{ 
-						g.rangeBoostedTower.range = ranges[g.rangeBoostedTower.towerType];
-					}
-					g.rangeBoostedTower = this;
-					g.rangeIndicator.transform.position = transform.position + new Vector3(.3f, .3f, -.001f);
-					range = range + g.rangeBoost;
+				
+				if (g.rangeBoostedTower != null)
+				{ 
+					g.rangeBoostedTower.range = ranges[g.rangeBoostedTower.towerType];
 				}
+				g.rangeBoostedTower = this;
+				g.rangeIndicator.transform.position = transform.position + new Vector3(.3f, .3f, -.001f);
+				range = range + g.rangeBoost;
+			
 			}
-			else if (g.currButtonActive == sample2.SBoostCode)
+			else if (g.currButtonActive == sample2.SBoostCode && status == FILLED)
 			{
-				if (status == FILLED)
+				if (g.speedBoostedTower != null)
 				{
-					if (g.speedBoostedTower != null)
-					{
-						g.speedBoostedTower.maxCooldown = cooldowns[g.speedBoostedTower.towerType];
-					}
-					g.speedBoostedTower = this;
-					g.speedIndicator.transform.position = transform.position + new Vector3 (-.3f, -.3f, -.001f);
-					maxCooldown = (int)(maxCooldown * g.speedBoost);
+					g.speedBoostedTower.maxCooldown = cooldowns[g.speedBoostedTower.towerType];
 				}
+				g.speedBoostedTower = this;
+				g.speedIndicator.transform.position = transform.position + new Vector3 (-.3f, -.3f, -.001f);
+				maxCooldown = (int)(maxCooldown * g.speedBoost);
+				
 			}
 			//handle tower buttons
-			else if (status == EMPTY && (g.gold - towerCosts[g.currButtonActive] >= 0))
+			else if (status == EMPTY && g.currButtonActive < sample2.DBoostCode && (g.gold - towerCosts[g.currButtonActive] >= 0))
 			{
 				status = FILLED;
 
@@ -554,7 +555,7 @@ public class tile : MonoBehaviour {
 				}
 			}
 		}
-		else if (Input.GetMouseButtonDown(1))//delete anything
+		else if (Input.GetMouseButtonDown(1))//delete any tower
 		{
 			if (status == FILLED)
 			{
@@ -575,6 +576,11 @@ public class tile : MonoBehaviour {
 				if (refund)
 				{
 					g.gold += towerCosts[towerType];
+				}
+				else
+				{
+					g.gold += towerCosts[towerType]/2;
+
 				}
 				if (towerType == TESLA)
 				{

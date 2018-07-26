@@ -74,6 +74,9 @@ public class button : MonoBehaviour {
 			case 8:
 				buttonText = "Tag-" + sample.towerCosts[buttonType];
 				break;
+			case 9:
+				buttonText = "Missile2-" + sample.towerCosts[buttonType];
+				break;
 			default:
 				//cover boost buttons
 				if (buttonType == DBoostCode)
@@ -107,7 +110,7 @@ public class button : MonoBehaviour {
 				if (g.gold >= g.damageCost)
 				{
 					g.gold -= g.damageCost;
-					g.damageCost *= 2;
+					g.damageCost = (int)(g.damageCost * 1.5);
 					g.damageBoost += g.dBoostGain;
 					if (g.damageBoostedTower != null)
 					{
@@ -124,7 +127,7 @@ public class button : MonoBehaviour {
 				if (g.gold >= g.rangeCost)
 				{
 					g.gold -= g.rangeCost;
-					g.rangeCost *= 2;
+					g.rangeCost = (int)(g.rangeCost * 1.5);
 					g.rangeBoost += g.rBoostGain;
 					if (g.rangeBoostedTower != null)
 					{
@@ -137,7 +140,7 @@ public class button : MonoBehaviour {
 				if (g.gold >= g.speedCost)
 				{
 					g.gold -= g.speedCost;
-					g.speedCost *= 2;
+					g.speedCost  = (int)(g.speedCost * 1.5);
 					g.speedBoost *= g.sBoostGain;
 					if (g.speedBoostedTower != null)
 					{
