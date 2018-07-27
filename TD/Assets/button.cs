@@ -44,6 +44,11 @@ public class button : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
+		if (g.paused)
+		{
+			return;
+		}
+
 		tile sample = FindObjectOfType<tile>();
 		switch (buttonType)
 		{
@@ -77,6 +82,9 @@ public class button : MonoBehaviour {
 			case 9:
 				buttonText = "Missile2-" + sample.towerCosts[buttonType];
 				break;
+			case 10:
+				buttonText = "Splash2-" + sample.towerCosts[buttonType];
+				break;
 			default:
 				//cover boost buttons
 				if (buttonType == DBoostCode)
@@ -99,6 +107,11 @@ public class button : MonoBehaviour {
 
 	void OnMouseOver()
 	{
+		if (g.paused)
+		{
+			return;
+		}
+
 		if (Input.GetMouseButtonDown(0))
 		{
 			g.currButtonActive = buttonType;

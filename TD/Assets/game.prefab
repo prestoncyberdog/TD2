@@ -60,6 +60,7 @@ MonoBehaviour:
   end: {fileID: 0}
   creeps: []
   route: []
+  beams: []
   numWaves: 0
   waveIndex: 0
   toSpawnCount: 0
@@ -71,13 +72,16 @@ MonoBehaviour:
   MaxLives: 0
   sortCD: 0
   maxSortCD: 0
+  currBlockerSize: 0
   lastTowerSelected: {fileID: 0}
+  paused: 0
   currButtonActive: 0
   waveText: {fileID: 0}
   lives: 0
   livesText: {fileID: 0}
   gold: 0
   goldText: {fileID: 0}
+  bodyText: {fileID: 0}
   damageBoost: 0
   rangeBoost: 0
   speedBoost: 0
@@ -94,3 +98,5 @@ MonoBehaviour:
   dBoostGain: 0
   rBoostGain: 0
   sBoostGain: 0
+  bonusCoords: 
+  Bonus: {fileID: 4650647113119270, guid: 58c08198798c46a42b8c0bc6b30795bb, type: 2}

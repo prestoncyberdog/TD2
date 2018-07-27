@@ -26,6 +26,7 @@ public class tile : MonoBehaviour {
 	public int BRIDGE = 7;
 	public int TAG = 8;
 	public int MISSILE2 = 9;
+	public int SPLASH2 = 10;
 	public int beamDirection;
 	public int maxCooldown;
 	public int cooldown = 0;
@@ -57,10 +58,10 @@ public class tile : MonoBehaviour {
 	// Use this for initialization 
 	void Start() {
 		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2
-		towerCosts = new int[] {1, 10, 25, 35, 40, 50, 40, 50, 50, 50};
-		cooldowns = new int[] {0, 20, 45, 150, 80, 0, 0, 80, 20, 20};
-		ranges = new double[] {0, 5.2, 2.8, 1.8, 0, 1.8, 0, 0, 2.2, 5.2};
-		damages = new int[] { 0, 1, 1, 10, 5, 1, 30, 0, 1, 10};
+		towerCosts = new int[] {1, 10, 15, 35, 40, 50, 40, 50, 50, 50, 50};
+		cooldowns = new int[] {0, 20, 45, 150, 80, 0, 0, 80, 20, 20, 45};
+		ranges = new double[] {0, 5.2, 2.3, 1.8, 0, 1.8, 0, 0, 2.2, 5.2, 3.3};
+		damages = new int[] { 0, 1, 1, 10, 5, 1, 30, 0, 1, 10, 2};
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		if (status != BLOCKED)
 		{
@@ -75,6 +76,12 @@ public class tile : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
+
+		if (g.paused)
+		{
+			return;
+		}
+
 		if (status == FILLED && (towerType == MISSILE || towerType == MISSILE2))
 		{
 			if (cooldown == 0)
@@ -105,7 +112,7 @@ public class tile : MonoBehaviour {
 			}
 
 		}
-		else if (status == FILLED && towerType == SPLASH)
+		else if (status == FILLED && (towerType == SPLASH || towerType == SPLASH2))
 		{
 			if (cooldown == 0)
 			{
@@ -420,13 +427,18 @@ public class tile : MonoBehaviour {
 
 	void OnMouseOver()
 	{
+		if (g.paused)
+		{
+			return;
+		}
+
 		button sample2 = FindObjectOfType<button>();
 		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
 		{
 			g.lastTowerSelected = this;
 		}
 		//prevents building during waves on creep paths
-			if (this == g.start || this == g.end)
+		if (this == g.start || this == g.end)
 		{
 			return;
 		}
@@ -447,7 +459,7 @@ public class tile : MonoBehaviour {
 			
 
 			//you cant move boosts during a round
-			if (g.currButtonActive == sample2.DBoostCode || g.currButtonActive == sample2.RBoostCode || g.currButtonActive == sample2.SBoostCode)
+			if ((g.currButtonActive == sample2.DBoostCode || g.currButtonActive == sample2.RBoostCode || g.currButtonActive == sample2.SBoostCode) && Input.GetMouseButtonDown(0))
 			{
 				return;
 			}
@@ -509,16 +521,24 @@ public class tile : MonoBehaviour {
 
 				//if the blocks the path, do nothing
 				//bool valid = g.CheckLegal();
-				tile[] routeHolder = new tile[200]; 
+				/*tile[] routeHolder = new tile[200]; 
 				for (int i =0;i<routeHolder.Length;i++)
 				{
 					routeHolder[i] = g.route[i];
+				}*/
+				int valid;
+				if (g.waveActive)
+				{
+					valid = g.FindPath(g.start, g.end, false);
 				}
-				int valid = g.FindPath(g.start, g.end);
-				for (int i = 0; i < routeHolder.Length; i++)
+				else
+				{
+					valid = g.FindPath(g.start, g.end, true);
+				}
+				/*for (int i = 0; i < routeHolder.Length; i++)
 				{
 					g.route[i] = routeHolder[i];
-				}
+				}*/
 				if (valid == 0)
 				{
 					status = EMPTY;
@@ -616,7 +636,7 @@ public class tile : MonoBehaviour {
 				}
 				if (g.waveActive == false)
 				{
-					g.FindPath(g.start, g.end);
+					g.FindPath(g.start, g.end, true);
 				}
 			}
 		}
@@ -647,7 +667,7 @@ public class tile : MonoBehaviour {
 	{
 		if (g.waveActive == false)
 		{
-			g.FindPath(g.start, g.end);
+			g.FindPath(g.start, g.end, true);
 		}
 		bridgeStart = null;
 		bridgeEnd = null;

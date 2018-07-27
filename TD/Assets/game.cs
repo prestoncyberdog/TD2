@@ -16,6 +16,7 @@ public class game : MonoBehaviour {
 	public ant[] creeps;
 	public tile[] route;
 	public beam[] beams;
+	public menu sideMenu;
 
 	public int[][] waves;
 	public int numWaves;
@@ -32,15 +33,12 @@ public class game : MonoBehaviour {
 	public int currBlockerSize;
 
 	public tile lastTowerSelected;
+	public bool paused;
 
 	//menu stuff
 	public int currButtonActive;
-	public Text waveText;
 	public int lives;
-	public Text livesText;
 	public int gold;
-	public Text goldText;
-	public Text bodyText;
 
 	//special boosts
 	public double damageBoost;
@@ -59,7 +57,19 @@ public class game : MonoBehaviour {
 	public double dBoostGain;
 	public double rBoostGain;
 	public double sBoostGain;
-	//assumed: all boosts scale consistently at doubling cost
+	//assumed: all boosts scale consistently at multiplying cost
+
+	//bonuses (mayors)
+	public int[] bonusCoords;
+	public bool[][] bonuses;
+	public Transform Bonus;
+	bonus option1;
+	bonus option2;
+	public int bonusFrequency;
+	public int[] bonusTiers;
+	public int bonusIndex;
+
+	public int gameMode;
 
 
 	// Use this for initialization
@@ -78,6 +88,20 @@ public class game : MonoBehaviour {
 		dBoostGain = 1;
 		rBoostGain = 0.5;
 		sBoostGain = .75;
+
+		bonusCoords = new int[2];
+		bonuses = new bool[5][];
+		bonuses[0] = new bool[] {};
+		bonuses[1] = new bool[] {};
+		bonuses[2] = new bool[] { false, false, false, false, false, false, false, false};
+		bonuses[3] = new bool[] { false, false, false};
+		bonuses[4] = new bool[] {};
+
+		bonusFrequency = 5;
+		bonusTiers = new int[] { 2, 2, 3, 3, 3, 3};
+		bonusIndex = 0;
+		gameMode = 1;//This determines whether bonuses are enabled
+		//0 means start with all towers, 1 means play with bonuses
 
 		damageBoost = 1;//multiplicative
 		rangeBoost = 0;//additive
@@ -137,7 +161,6 @@ public class game : MonoBehaviour {
 			tiles[i] = (allTiles[i].GetComponent<tile>());
 		}
 		CreateGraph(tiles);
-		SetText();
 
 		maxSortCD = 10;
 		sortCD = maxSortCD;
@@ -146,10 +169,16 @@ public class game : MonoBehaviour {
 		randomizeBoard();
 		start.GetComponent<SpriteRenderer>().sprite = start.startSprite;
 		end.GetComponent<SpriteRenderer>().sprite = end.endSprite;
+		paused = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (paused)
+		{
+			return;
+		}
 
 		//manage spawning of enemies
 		if (toSpawnCount > 0)
@@ -180,7 +209,8 @@ public class game : MonoBehaviour {
 		}
 
 		//check if a wave is in progress
-		//if so, map cannot be edited
+		//if so, tile on path cannot be edited
+		bool waveWasWactive = waveActive;
 		if (toSpawnCount == 0)
 		{
 			waveActive = false;
@@ -189,6 +219,20 @@ public class game : MonoBehaviour {
 				if (creeps[i] != null)
 				{
 					waveActive = true;
+				}
+			}
+
+			//here is the border between a wave and an in-between time
+			if (waveActive == false && waveWasWactive)
+			{
+				FindPath(start, end, true);
+				if (gameMode == 1 && (waveIndex+1)%bonusFrequency == 0)
+				{
+					if ((bonusTiers.Length >= (waveIndex + 1) / bonusFrequency) && bonusIndex < bonusTiers.Length)
+					{
+						offerBonuses(bonusTiers[bonusIndex]);
+						bonusIndex++;
+					}
 				}
 			}
 		}
@@ -254,24 +298,6 @@ public class game : MonoBehaviour {
 			}
 		}
 
-		//manage info board
-		SetText();
-	}
-
-	void SetText ()
-	{
-		waveText.text = "Wave : " + (waveIndex+1)  + "/" + numWaves;
-		livesText.text = "Lives: " + lives;
-		goldText.text = "Gold: " + gold;
-		if (waveIndex < numWaves -1)
-		{
-			bodyText.text = "Next: Wave " + (waveIndex + 2) + "\n# of creeps: " + waves[waveIndex + 1][0] + "\nHealth: " + waves[waveIndex + 1][2] + "\nSpacing: " + waves[waveIndex + 1][1] + "\nSpeed: " + Mathf.Round(100*(10.0f / (waves[waveIndex + 1][3]+0.0f)))/100f;
-
-		}
-		else
-		{
-			bodyText.text = "Next: Wave " + (waveIndex + 1) + "\n# of creeps: " + waves[waveIndex][0] + "\nHealth: " + waves[waveIndex][2] + "\nSpacing: " + waves[waveIndex][1] + "\nSpeed: " + Mathf.Round(100 * (10.0f / (waves[waveIndex][3] + 0.0f))) / 100f;
-		}
 	}
 
 
@@ -323,7 +349,7 @@ public class game : MonoBehaviour {
 	//plan a path from location 'from' to location 'to'
 	//returns 1 if successful, 0 if no path was found
 	//updates route as it goes
-	public int FindPath(tile from, tile to)
+	public int FindPath(tile from, tile to, bool changeRoute)
 	{
 		tile current;
 		//set all tiles to unvisited, prev to null, dist to 10000
@@ -348,6 +374,13 @@ public class game : MonoBehaviour {
 			{
 				//fill in correct path in route
 				//wont reach this code if no path is found
+
+				//dont mess with visual beams if display is active
+				//dont change route either
+				if(changeRoute == false)
+				{
+					return 1;
+				}
 
 				//clear path display beams
 				for (int i = 0; i < beams.Length; i++)
@@ -374,7 +407,6 @@ public class game : MonoBehaviour {
 					route[backTemp.dist] = backTemp;
 					backTemp = backTemp.prev;
 				}
-
 				return 1;
 			}
 
@@ -587,7 +619,7 @@ public class game : MonoBehaviour {
 			end = randomTile(centTile);
 		}
 
-		while (FindPath(start, end) == 0)
+		while (FindPath(start, end, true) == 0)
 		{
 			start = randomTile(centTile);
 			end = start;
@@ -665,5 +697,72 @@ public class game : MonoBehaviour {
 			createBlockerRecur(maxSize, baseTile.west);
 		}
 		
+	}
+
+	public void offerBonuses (int tier)
+	{
+		paused = true;
+		randomBonus(tier);
+		//bonusCoords[0] = 2;
+		//bonusCoords[1] = 4;
+		option1 = Instantiate(Bonus, new Vector3(-3, 0, -2), Quaternion.identity).gameObject.GetComponent<bonus>();
+		option1.coords = new int[2];
+		option1.coords[0] = bonusCoords[0];
+		option1.coords[1] = bonusCoords[1];
+		bonuses[bonusCoords[0]][bonusCoords[1]] = true;
+
+		randomBonus(tier);
+		//bonusCoords[0] = 2;
+		//bonusCoords[1] = 4;
+		option2 = Instantiate(Bonus, new Vector3(3, 0, -2), Quaternion.identity).gameObject.GetComponent<bonus>();
+		option2.coords = new int[2];
+		option2.coords[0] = bonusCoords[0];
+		option2.coords[1] = bonusCoords[1];
+		bonuses[bonusCoords[0]][bonusCoords[1]] = true;
+	}
+
+
+	//takes a tier and chooses a bonus from that tier or the one below it
+	public void randomBonus (int tier)
+	{
+		int options = bonuses[tier].Length + bonuses[tier - 1].Length;
+		int choice = Random.Range(0, options);
+		if (choice < bonuses[tier - 1].Length)
+		{
+			bonusCoords[0] = tier -1;
+			bonusCoords[1] = choice;
+		}
+		else
+		{
+			choice -= bonuses[tier - 1].Length;
+			bonusCoords[0] = tier;
+			bonusCoords[1] = choice;
+		}
+
+		//creates infinite loop if not enough options
+		if (bonuses[bonusCoords[0]][bonusCoords[1]] == true)
+		{
+			randomBonus(tier);
+		}
+
+	}
+
+	public void resume()
+	{
+		if (option1.chosen)
+		{
+			bonuses[option2.coords[0]][option2.coords[1]] = false;
+		}
+		else
+		{
+			bonuses[option1.coords[0]][option1.coords[1]] = false;
+		}
+		Destroy(option1.temp.gameObject);
+		Destroy(option2.temp.gameObject);
+		Destroy(option1.image);
+		Destroy(option2.image);
+		Destroy(option1.gameObject);
+		Destroy(option2.gameObject);
+		paused = false;
 	}
 }

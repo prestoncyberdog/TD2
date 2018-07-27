@@ -40,7 +40,7 @@ public class ant : MonoBehaviour {
 		//keep all creeps on the same route for the round
 		if (g.route[0] == null)
 		{
-			g.FindPath(start, end);
+			g.FindPath(start, end, true);
 		}
 		
 		route = g.route;
@@ -54,6 +54,11 @@ public class ant : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
+		if (g.paused)
+		{
+			return;
+		}
+
 		route = g.route;
 		if (health <= 0)
 		{
