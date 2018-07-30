@@ -36,8 +36,8 @@ public class button : MonoBehaviour {
 		buttonInfo.alignment = TextAnchor.MiddleCenter;
 		//buttonInfo.rectTransform.anchorMin = new Vector3(0, 0, 0);
 		//buttonInfo.rectTransform.anchorMax = new Vector3(0, 0, 0);
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 20), (Screen.height * transform.position.y / 14), 0);
-		buttonInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -42, 0);
+		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
+		buttonInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 42f / 894f, 0);
 	
 
 	}
@@ -54,55 +54,55 @@ public class button : MonoBehaviour {
 		switch (buttonType)
 		{
 			case 0:
-				buttonText = "Blocker-" + sample.towerCosts[buttonType];
+				buttonText = "Blocker-" + g.towerCosts[buttonType];
 				break;
 			case 1:
-				buttonText = "Missile-" + sample.towerCosts[buttonType];
+				buttonText = "Missile-" + g.towerCosts[buttonType];
 				break;
 			case 2:
-				buttonText = "Splash-" + sample.towerCosts[buttonType];
+				buttonText = "Splash-" + g.towerCosts[buttonType];
 				break;
 			case 3:
-				buttonText = "Shock-" + sample.towerCosts[buttonType];
+				buttonText = "Shock-" + g.towerCosts[buttonType];
 				break;
 			case 4:
-				buttonText = "Beam-" + sample.towerCosts[buttonType];
+				buttonText = "Beam-" + g.towerCosts[buttonType];
 				break;
 			case 5:
-				buttonText = "Coil-" + sample.towerCosts[buttonType];
+				buttonText = "Coil-" + g.towerCosts[buttonType];
 				break;
 			case 6:
-				buttonText = "Tesla-" + sample.towerCosts[buttonType];
+				buttonText = "Tesla-" + g.towerCosts[buttonType];
 				break;
 			case 7:
-				buttonText = "Bridge-" + sample.towerCosts[buttonType];
+				buttonText = "Bridge-" + g.towerCosts[buttonType];
 				break;
 			case 8:
-				buttonText = "Tag-" + sample.towerCosts[buttonType];
+				buttonText = "Tag-" + g.towerCosts[buttonType];
 				break;
 			case 9:
-				buttonText = "Missile2-" + sample.towerCosts[buttonType];
+				buttonText = "Missile2-" + g.towerCosts[buttonType];
 				break;
 			case 10:
-				buttonText = "Splash2-" + sample.towerCosts[buttonType];
+				buttonText = "Splash2-" + g.towerCosts[buttonType];
 				break;
 			case 11:
-				buttonText = "Shock2-" + sample.towerCosts[buttonType];
+				buttonText = "Shock2-" + g.towerCosts[buttonType];
 				break;
 			case 12:
-				buttonText = "Beam2-" + sample.towerCosts[buttonType];
+				buttonText = "Beam2-" + g.towerCosts[buttonType];
 				break;
 			case 13:
-				buttonText = "Coil2-" + sample.towerCosts[buttonType];
+				buttonText = "Coil2-" + g.towerCosts[buttonType];
 				break;
 			case 14:
-				buttonText = "Tesla2-" + sample.towerCosts[buttonType];
+				buttonText = "Tesla2-" + g.towerCosts[buttonType];
 				break;
 			case 15:
-				buttonText = "Bridge2-" + sample.towerCosts[buttonType];
+				buttonText = "Bridge2-" + g.towerCosts[buttonType];
 				break;
 			case 16:
-				buttonText = "Tag2-" + sample.towerCosts[buttonType];
+				buttonText = "Tag2-" + g.towerCosts[buttonType];
 				break;
 			default:
 				//cover boost buttons

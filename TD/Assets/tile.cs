@@ -64,12 +64,11 @@ public class tile : MonoBehaviour {
 
 	// Use this for initialization 
 	void Start() {
-		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2, shock2, beam2, coil2, tesla2, bridge2, tag2
-		towerCosts = new int[] {2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 200, 200, 200 ,200};
-		cooldowns = new int[] {0, 20, 45, 75, 80, 0, 0, 80, 30, 20, 45, 70, 80, 0, 0, 40, 25};
-		ranges = new double[] {0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2};
-		damages = new int[] { 0, 1, 1, 8, 5, 8, 30, 0, 2, 10, 2, 15, 20, 12, 60, 0, 3};
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
+		towerCosts = g.towerCosts;
+		cooldowns = g.cooldowns;
+		ranges = g.ranges;
+		damages = g.damages;
 		if (status != BLOCKED)
 		{
 			status = EMPTY;
@@ -522,7 +521,7 @@ public class tile : MonoBehaviour {
 				
 			}
 			//handle tower buttons
-			else if (((status == FILLED && towerType == BLOCKER && g.currButtonActive != BLOCKER) || (g.currButtonActive == BLOCKER && status == EMPTY))&& g.currButtonActive < sample2.DBoostCode && (g.gold - towerCosts[g.currButtonActive] >= 0))
+			else if (((status == FILLED && towerType == BLOCKER && g.currButtonActive != BLOCKER) || (g.currButtonActive == BLOCKER && status == EMPTY))&& g.currButtonActive < sample2.DBoostCode && (g.gold - g.towerCosts[g.currButtonActive] >= 0))
 			{
 				status = FILLED;
 
@@ -554,10 +553,10 @@ public class tile : MonoBehaviour {
 
 				towerType = g.currButtonActive;
 				this.GetComponent<SpriteRenderer>().sprite = towerSprites[g.currButtonActive];
-				g.gold -= towerCosts[towerType];
-				damage = damages[towerType];
-				range = ranges[towerType];
-				maxCooldown = cooldowns[towerType];
+				g.gold -= g.towerCosts[towerType];
+				damage = g.damages[towerType];
+				range = g.ranges[towerType];
+				maxCooldown = g.cooldowns[towerType];
 				if (g.waveActive == false)
 				{
 					refund = true;

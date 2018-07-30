@@ -69,6 +69,11 @@ public class game : MonoBehaviour {
 
 	public int gameMode;
 
+	public int[] towerCosts;
+	public int[] cooldowns;
+	public double[] ranges;
+	public int[] damages;
+
 
 	// Use this for initialization
 	void Start () {
@@ -119,6 +124,7 @@ public class game : MonoBehaviour {
 		numWaves = 50;
 		waveIndex = -1;
 		waves = new int[numWaves][];
+
 		// these numbers mean: # of creeps, spacing, health, speed(high means slow)
 		waves[0] = new int[] { 10, 10, 1, 10 };//1
 		waves[1] = new int[] { 10, 6, 1, 10 };//2
@@ -188,6 +194,12 @@ public class game : MonoBehaviour {
 			tiles[i] = (allTiles[i].GetComponent<tile>());
 		}
 		CreateGraph(tiles);
+
+		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2, shock2, beam2, coil2, tesla2, bridge2, tag2
+		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 200, 200, 200, 200 };
+		cooldowns = new int[] { 0, 20, 45, 75, 80, 0, 0, 80, 30, 20, 45, 70, 80, 0, 0, 40, 25 };
+		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2 };
+		damages = new int[] { 0, 1, 1, 8, 5, 8, 30, 0, 2, 10, 2, 15, 20, 12, 60, 0, 3 };
 
 		maxSortCD = 10;
 		sortCD = maxSortCD;
