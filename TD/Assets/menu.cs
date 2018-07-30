@@ -22,7 +22,7 @@ public class menu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 20), (Screen.height * transform.position.y / 14), 0);
+		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 31), (Screen.height * transform.position.y / 14), 0);
 
 		overall = new GameObject("overall");
 		overall.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -36,7 +36,7 @@ public class menu : MonoBehaviour {
 		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
 		overallInfo.rectTransform.anchoredPosition = pos + new Vector3(0, 330, 0);
 
-		wave = new GameObject("overall");
+		wave = new GameObject("waveinfo");
 		wave.transform.SetParent(FindObjectOfType<Canvas>().transform);
 		waveInfo = wave.AddComponent<Text>();
 		waveInfo.fontSize = 20;
@@ -48,7 +48,7 @@ public class menu : MonoBehaviour {
 		waveInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
 		waveInfo.rectTransform.anchoredPosition = pos + new Vector3(0, 210, 0);
 
-		tower = new GameObject("overall");
+		tower = new GameObject("towerinfo");
 		tower.transform.SetParent(FindObjectOfType<Canvas>().transform);
 		towerInfo = tower.AddComponent<Text>();
 		towerInfo.fontSize = 16;

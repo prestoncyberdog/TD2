@@ -35,7 +35,7 @@ public class button : MonoBehaviour {
 		buttonInfo.alignment = TextAnchor.MiddleCenter;
 		//buttonInfo.rectTransform.anchorMin = new Vector3(0, 0, 0);
 		//buttonInfo.rectTransform.anchorMax = new Vector3(0, 0, 0);
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 20), (Screen.height * transform.position.y / 14), 0);
+		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 31), (Screen.height * transform.position.y / 14), 0);
 		buttonInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -42, 0);
 	
 

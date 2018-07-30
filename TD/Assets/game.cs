@@ -60,14 +60,11 @@ public class game : MonoBehaviour {
 	//assumed: all boosts scale consistently at multiplying cost
 
 	//bonuses (mayors)
-	public int[] bonusCoords;
-	public bool[][] bonuses;
+	public int[][] bonuses;
 	public Transform Bonus;
 	bonus option1;
 	bonus option2;
 	public int bonusFrequency;
-	public int[] bonusTiers;
-	public int bonusIndex;
 
 	public int gameMode;
 
@@ -89,17 +86,19 @@ public class game : MonoBehaviour {
 		rBoostGain = 0.5;
 		sBoostGain = .75;
 
-		bonusCoords = new int[2];
-		bonuses = new bool[5][];
-		bonuses[0] = new bool[] {};
-		bonuses[1] = new bool[] {};
-		bonuses[2] = new bool[] { false, false, false, false, false, false, false, false};
-		bonuses[3] = new bool[] { false, false, false};
-		bonuses[4] = new bool[] {};
-
+		bonuses = new int [11][];
+		bonuses[0] = new int[] { 5, 15, 0 };//shock (doubles as default)
+		bonuses[1] = new int[] { 5, 15, 0 };//beam
+		bonuses[2] = new int[] { 5, 15, 0 };//coil
+		bonuses[3] = new int[] { 10, 30, 0 };//damage boost
+		bonuses[4] = new int[] { 15, 30, 0 };//range boost
+		bonuses[5] = new int[] { 10, 30, 0 };//speed boost
+		bonuses[6] = new int[] { 5, 15, 0 };//missile2
+		bonuses[7] = new int[] { 5, 15, 0 };//splash2
+		bonuses[8] = new int[] { 15, 30, 0 };//tesla
+		bonuses[9] = new int[] { 15, 30, 0 };//bridge
+		bonuses[10] = new int[] { 5, 15, 0 };//tag
 		bonusFrequency = 5;
-		bonusTiers = new int[] { 2, 2, 3, 3, 3, 3};
-		bonusIndex = 0;
 		gameMode = 1;//This determines whether bonuses are enabled
 		//0 means start with all towers, 1 means play with bonuses
 
@@ -228,11 +227,9 @@ public class game : MonoBehaviour {
 				FindPath(start, end, true);
 				if (gameMode == 1 && (waveIndex+1)%bonusFrequency == 0)
 				{
-					if ((bonusTiers.Length >= (waveIndex + 1) / bonusFrequency) && bonusIndex < bonusTiers.Length)
-					{
-						offerBonuses(bonusTiers[bonusIndex]);
-						bonusIndex++;
-					}
+					
+					offerBonuses();
+					
 				}
 			}
 		}
@@ -264,6 +261,7 @@ public class game : MonoBehaviour {
 				for(int i=0;i<tiles.Length;i++)
 				{
 					tiles[i].refund = false;
+					tiles[i].blockerRefund = false;
 					tiles[i].cooldown = 0;
 				}
 			}
@@ -599,10 +597,20 @@ public class game : MonoBehaviour {
 	{
 		tile centTile = GameObject.Find("centerTile").GetComponent<tile>();
 		//createBlocker(15, 5, randomTile(centTile));
-		createBlocker(Random.Range(8, 12), Random.Range(3, 8), randomTile(centTile));
+		/*createBlocker(Random.Range(8, 12), Random.Range(3, 8), randomTile(centTile));
 		createBlocker(Random.Range(3, 8), Random.Range(1, 2), randomTile(centTile));
 		createBlocker(Random.Range(3, 8), Random.Range(1, 2), randomTile(centTile));
-		createBlocker(Random.Range(3, 8), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(3, 8), Random.Range(1, 2), randomTile(centTile));*/
+		createBlocker(Random.Range(2, 4), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(2, 4), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(2, 4), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(2, 4), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(2, 4), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(2, 4), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(2, 4), Random.Range(1, 2), randomTile(centTile));
+		createBlocker(Random.Range(6, 10), Random.Range(1, 2), randomTile(centTile));
+
+
 		for (int i = 0;i<tiles.Length;i++)
 		{
 			if (tiles[i].north == null || tiles[i].south == null || tiles[i].east == null || tiles[i].west == null)
@@ -699,63 +707,62 @@ public class game : MonoBehaviour {
 		
 	}
 
-	public void offerBonuses (int tier)
+	public void offerBonuses ()
 	{
 		paused = true;
-		randomBonus(tier);
-		//bonusCoords[0] = 2;
-		//bonusCoords[1] = 4;
-		option1 = Instantiate(Bonus, new Vector3(-3, 0, -2), Quaternion.identity).gameObject.GetComponent<bonus>();
-		option1.coords = new int[2];
-		option1.coords[0] = bonusCoords[0];
-		option1.coords[1] = bonusCoords[1];
-		bonuses[bonusCoords[0]][bonusCoords[1]] = true;
+		int choice;
 
-		randomBonus(tier);
-		//bonusCoords[0] = 2;
-		//bonusCoords[1] = 4;
+		choice = randomBonus();
+		option1 = Instantiate(Bonus, new Vector3(-3, 0, -2), Quaternion.identity).gameObject.GetComponent<bonus>();
+		option1.bonusIndex = choice;
+		bonuses[choice][2] = 1;
+
+		choice = randomBonus();
 		option2 = Instantiate(Bonus, new Vector3(3, 0, -2), Quaternion.identity).gameObject.GetComponent<bonus>();
-		option2.coords = new int[2];
-		option2.coords[0] = bonusCoords[0];
-		option2.coords[1] = bonusCoords[1];
-		bonuses[bonusCoords[0]][bonusCoords[1]] = true;
+		option2.bonusIndex = choice;
+		bonuses[choice][2] = 1;
 	}
 
 
-	//takes a tier and chooses a bonus from that tier or the one below it
-	public void randomBonus (int tier)
+	//chooses a bonus based on waveindex
+	public int randomBonus ()
 	{
-		int options = bonuses[tier].Length + bonuses[tier - 1].Length;
+		int options = 0;
+		for (int i =0;i<bonuses.Length;i++)
+		{
+			if (bonuses[i][0] <= waveIndex+1 && bonuses[i][1] >= waveIndex+1 && bonuses[i][2] == 0)
+			{
+				options++;
+			}
+		}
 		int choice = Random.Range(0, options);
-		if (choice < bonuses[tier - 1].Length)
-		{
-			bonusCoords[0] = tier -1;
-			bonusCoords[1] = choice;
-		}
-		else
-		{
-			choice -= bonuses[tier - 1].Length;
-			bonusCoords[0] = tier;
-			bonusCoords[1] = choice;
-		}
 
-		//creates infinite loop if not enough options
-		if (bonuses[bonusCoords[0]][bonusCoords[1]] == true)
+		for(int j = 0;j<bonuses.Length;j++)
 		{
-			randomBonus(tier);
+			if (bonuses[j][0] <= waveIndex+1 && bonuses[j][1] >= waveIndex+1 && bonuses[j][2] == 0)
+			{
+				if (choice < 1)
+				{
+					return j;
+				}
+				else
+				{
+					choice--;
+				}
+			}
 		}
-
+		return choice;//should never happen
 	}
 
 	public void resume()
 	{
 		if (option1.chosen)
 		{
-			bonuses[option2.coords[0]][option2.coords[1]] = false;
+			bonuses[option2.bonusIndex][2] = 0;
 		}
 		else
 		{
-			bonuses[option1.coords[0]][option1.coords[1]] = false;
+			bonuses[option1.bonusIndex][2] = 0;
 		}
 		Destroy(option1.temp.gameObject);
 		Destroy(option2.temp.gameObject);

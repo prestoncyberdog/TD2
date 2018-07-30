@@ -50,6 +50,7 @@ public class tile : MonoBehaviour {
 	public Sprite[] towerSprites = new Sprite[20];
 	public int[] towerCosts;
 	public bool refund;
+	public bool blockerRefund;
 
 	public Transform Missile;
 	public Transform Beam;
@@ -57,11 +58,11 @@ public class tile : MonoBehaviour {
 
 	// Use this for initialization 
 	void Start() {
-		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2
-		towerCosts = new int[] {1, 10, 15, 35, 40, 50, 40, 50, 50, 50, 50};
-		cooldowns = new int[] {0, 20, 45, 150, 80, 0, 0, 80, 20, 20, 45};
+		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2
+		towerCosts = new int[] {2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50};
+		cooldowns = new int[] {0, 20, 45, 75, 80, 0, 0, 70, 20, 20, 45};
 		ranges = new double[] {0, 5.2, 2.3, 1.8, 0, 1.8, 0, 0, 2.2, 5.2, 3.3};
-		damages = new int[] { 0, 1, 1, 10, 5, 1, 30, 0, 1, 10, 2};
+		damages = new int[] { 0, 1, 1, 8, 5, 8, 30, 0, 2, 10, 2};
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		if (status != BLOCKED)
 		{
@@ -515,7 +516,7 @@ public class tile : MonoBehaviour {
 				
 			}
 			//handle tower buttons
-			else if (status == EMPTY && g.currButtonActive < sample2.DBoostCode && (g.gold - towerCosts[g.currButtonActive] >= 0))
+			else if (((status == FILLED && towerType == BLOCKER && g.currButtonActive != BLOCKER) || (g.currButtonActive == BLOCKER && status == EMPTY))&& g.currButtonActive < sample2.DBoostCode && (g.gold - towerCosts[g.currButtonActive] >= 0))
 			{
 				status = FILLED;
 
@@ -554,6 +555,10 @@ public class tile : MonoBehaviour {
 				if (g.waveActive == false)
 				{
 					refund = true;
+					if (towerType == BLOCKER)
+					{
+						blockerRefund = true;
+					}
 				}
 
 				//handle beam
@@ -579,7 +584,6 @@ public class tile : MonoBehaviour {
 		{
 			if (status == FILLED)
 			{
-				status = EMPTY;
 				if(g.damageBoostedTower == this)
 				{
 					g.damageIndicator.transform.position = new Vector3(100, 100, 0);
@@ -592,16 +596,15 @@ public class tile : MonoBehaviour {
 				{
 					g.speedIndicator.transform.position = new Vector3(100, 100, 0);
 				}
-				this.GetComponent<SpriteRenderer>().sprite = emptySprite;
-				if (refund)
+				if ((refund && towerType != BLOCKER) || (towerType == BLOCKER && blockerRefund))
 				{
 					g.gold += towerCosts[towerType];
 				}
 				else
 				{
 					g.gold += towerCosts[towerType]/2;
-
 				}
+
 				if (towerType == TESLA)
 				{
 					if (north != null)
@@ -634,6 +637,20 @@ public class tile : MonoBehaviour {
 					bridgeStart = null;
 					bridgeEnd = null;
 				}
+
+				if (towerType == BLOCKER)
+				{
+					status = EMPTY;
+					this.GetComponent<SpriteRenderer>().sprite = emptySprite;
+				}
+				else
+				{
+					status = FILLED;
+					towerType = BLOCKER;
+					this.GetComponent<SpriteRenderer>().sprite = towerSprites[0];
+
+				}
+
 				if (g.waveActive == false)
 				{
 					g.FindPath(g.start, g.end, true);
