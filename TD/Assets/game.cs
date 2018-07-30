@@ -57,6 +57,7 @@ public class game : MonoBehaviour {
 	public double dBoostGain;
 	public double rBoostGain;
 	public double sBoostGain;
+	public double boostCostMultiplier;
 	//assumed: all boosts scale consistently at multiplying cost
 
 	//bonuses (mayors)
@@ -79,25 +80,32 @@ public class game : MonoBehaviour {
 		damageIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
 		rangeIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
 		speedIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
-		damageCost = 50;
-		rangeCost = 50;
+		damageCost = 60;
+		rangeCost = 30;
 		speedCost = 30;
 		dBoostGain = 1;
 		rBoostGain = 0.5;
 		sBoostGain = .75;
+		boostCostMultiplier = 2;
 
-		bonuses = new int [11][];
-		bonuses[0] = new int[] { 5, 15, 0 };//shock (doubles as default)
-		bonuses[1] = new int[] { 5, 15, 0 };//beam
-		bonuses[2] = new int[] { 5, 15, 0 };//coil
-		bonuses[3] = new int[] { 10, 30, 0 };//damage boost
-		bonuses[4] = new int[] { 15, 30, 0 };//range boost
-		bonuses[5] = new int[] { 10, 30, 0 };//speed boost
-		bonuses[6] = new int[] { 5, 15, 0 };//missile2
-		bonuses[7] = new int[] { 5, 15, 0 };//splash2
-		bonuses[8] = new int[] { 15, 30, 0 };//tesla
-		bonuses[9] = new int[] { 15, 30, 0 };//bridge
-		bonuses[10] = new int[] { 5, 15, 0 };//tag
+		bonuses = new int [17][];
+		bonuses[0] = new int[] { 5, 20, 0 };//shock (doubles as default)
+		bonuses[1] = new int[] { 5, 20, 0 };//beam
+		bonuses[2] = new int[] { 5, 20, 0 };//coil
+		bonuses[3] = new int[] { 10, 50, 0 };//damage boost
+		bonuses[4] = new int[] { 15, 50, 0 };//range boost
+		bonuses[5] = new int[] { 10, 50, 0 };//speed boost
+		bonuses[6] = new int[] { 5, 20, 0 };//missile2
+		bonuses[7] = new int[] { 5, 20, 0 };//splash2
+		bonuses[8] = new int[] { 20, 35, 0 };//tesla
+		bonuses[9] = new int[] { 20, 35, 0 };//bridge
+		bonuses[10] = new int[] { 5, 20, 0 };//tag
+		bonuses[11] = new int[] { 20, 35, 0 };//shock2
+		bonuses[12] = new int[] { 20, 35, 0 };//beam2
+		bonuses[13] = new int[] { 20, 35, 0 };//coil2
+		bonuses[14] = new int[] { 35, 50, 0 };//tesla2
+		bonuses[15] = new int[] { 35, 50, 0 };//bridge2 
+		bonuses[16] = new int[] { 20, 35, 0 };//tag2
 		bonusFrequency = 5;
 		gameMode = 1;//This determines whether bonuses are enabled
 		//0 means start with all towers, 1 means play with bonuses
@@ -108,7 +116,7 @@ public class game : MonoBehaviour {
 		MaxLives = 20;
 		lives = MaxLives;
 		gold = 30;
-		numWaves = 30;
+		numWaves = 50;
 		waveIndex = -1;
 		waves = new int[numWaves][];
 		// these numbers mean: # of creeps, spacing, health, speed(high means slow)
@@ -116,7 +124,7 @@ public class game : MonoBehaviour {
 		waves[1] = new int[] { 10, 6, 1, 10 };//2
 		waves[2] = new int[] { 15, 10, 1, 10 };//3
 		waves[3] = new int[] { 20, 10, 2, 10 };//4
-		waves[4] = new int[] { 20, 12, 3, 10 }; //5
+		waves[4] = new int[] { 50, 12, 3, 12 }; //5
 		waves[5] = new int[] { 30, 10, 5, 10 };//6
 		waves[6] = new int[] { 30, 8, 6, 10 };//7
 		waves[7] = new int[] { 50, 10, 7, 10 };//8
@@ -126,22 +134,42 @@ public class game : MonoBehaviour {
 		waves[11] = new int[] { 50, 10, 30, 10 };//12
 		waves[12] = new int[] { 50, 6, 30, 10 };//13
 		waves[13] = new int[] { 50, 10, 35, 10 };//14
-		waves[14] = new int[] { 100, 8, 40, 10 };//15
-		waves[15] = new int[] { 200, 5, 50, 10 };//16
+		waves[14] = new int[] { 150, 8, 40, 10 };//15
+		waves[15] = new int[] { 100, 5, 50, 10 };//16
 		waves[16] = new int[] { 10, 50, 150, 10 };//17
 		waves[17] = new int[] { 100, 10, 80, 10 };//18
 		waves[18] = new int[] { 100, 6, 80, 8 };//19
-		waves[19] = new int[] { 100, 8, 100, 10 };//20
+		waves[19] = new int[] { 200, 8, 100, 10 };//20
 		waves[20] = new int[] { 30, 2, 120, 10 };//21
 		waves[21] = new int[] { 150, 10, 130, 10 };//22
 		waves[22] = new int[] { 50, 8, 50, 4 };//23
 		waves[23] = new int[] { 150, 10, 140, 10 };//24
-		waves[24] = new int[] { 100, 8, 160, 10 };//25
-		waves[25] = new int[] { 150, 10, 170, 10 };//26
+		waves[24] = new int[] { 250, 8, 160, 10 };//25
+		waves[25] = new int[] { 100, 10, 170, 10 };//26
 		waves[26] = new int[] { 50, 15, 180, 9 };//27
-		waves[27] = new int[] { 100, 7, 180, 8 };//28
-		waves[28] = new int[] { 50, 10, 190, 10 };//29
-		waves[29] = new int[] { 500, 10, 200, 10 };//30
+		waves[27] = new int[] { 150, 5, 180, 10 };//28
+		waves[28] = new int[] { 50, 7, 180, 8 };//29
+		waves[29] = new int[] { 300, 9, 220, 10 };//30
+		waves[30] = new int[] { 100, 15, 150, 5 };//31
+		waves[31] = new int[] { 150, 8, 250, 10 };//32
+		waves[32] = new int[] { 100, 40, 800, 12 };//33
+		waves[33] = new int[] { 100, 10, 280, 9 };//34
+		waves[34] = new int[] { 350, 6, 320, 11 };//35
+		waves[35] = new int[] { 100, 10, 350, 10 };//36
+		waves[36] = new int[] { 100, 10, 365, 9 };//37
+		waves[37] = new int[] { 100, 10, 380, 8 };//38
+		waves[38] = new int[] { 150, 5, 400, 10 };//39
+		waves[39] = new int[] { 400, 8, 450, 10 };//40
+		waves[40] = new int[] { 100, 10, 500, 8 };//41
+		waves[41] = new int[] { 150, 6, 550, 10 };//42
+		waves[42] = new int[] { 100, 10, 580, 10 };//43
+		waves[43] = new int[] { 100, 10, 700, 11 };//44
+		waves[44] = new int[] { 450, 10, 720, 10 };//45
+		waves[45] = new int[] { 150, 10, 780, 10 };//46
+		waves[46] = new int[] { 150, 10, 800, 9 };//47
+		waves[47] = new int[] { 150, 10, 850, 8 };//48
+		waves[48] = new int[] { 100, 2, 850, 10 };//49
+		waves[49] = new int[] { 500, 5, 900, 10 };//50
 
 
 
@@ -269,28 +297,28 @@ public class game : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.UpArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2) && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(0);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.RightArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2) && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(1);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.DownArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2) && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(2);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.LeftArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && lastTowerSelected.towerType == lastTowerSelected.BEAM && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2) && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(3);
 			}
@@ -654,6 +682,7 @@ public class game : MonoBehaviour {
 
 	public void createBlockerRecur (int maxSize, tile baseTile)
 	{
+		//move to edge of blocked area to expand it
 		if (baseTile.status == baseTile.BLOCKED)
 		{
 			if (baseTile.north != null && baseTile.north.status == baseTile.BLOCKED && currBlockerSize < maxSize - 1 && baseTile.north.visited == false)
@@ -678,27 +707,29 @@ public class game : MonoBehaviour {
 			}
 		}
 
+
+		//expand area if possible
 		baseTile.status = baseTile.BLOCKED;
 		baseTile.GetComponent<SpriteRenderer>().sprite = baseTile.blockedSprite;
-		if (baseTile.north != null && baseTile.north.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
+		if (baseTile.north != null && baseTile.north.north != null && baseTile.north.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
 		{
 			baseTile.north.visited = true;
 			currBlockerSize += 1;
 			createBlockerRecur(maxSize, baseTile.north);
 		}
-		if (baseTile.south != null && baseTile.south.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
+		if (baseTile.south != null && baseTile.south.south != null && baseTile.south.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
 		{
 			baseTile.south.visited = true;
 			currBlockerSize += 1;
 			createBlockerRecur(maxSize, baseTile.south);
 		}
-		if (baseTile.east != null && baseTile.east.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
+		if (baseTile.east != null && baseTile.east.east != null && baseTile.east.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
 		{
 			baseTile.east.visited = true;
 			currBlockerSize += 1;
 			createBlockerRecur(maxSize, baseTile.east);
 		}
-		if (baseTile.west != null && baseTile.west.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
+		if (baseTile.west != null && baseTile.west.west != null && baseTile.west.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
 		{
 			baseTile.west.visited = true;
 			currBlockerSize += 1;

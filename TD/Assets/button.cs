@@ -9,7 +9,7 @@ public class button : MonoBehaviour {
 	public game g;
 	public Sprite blockerSprite;
 	public Sprite missileTowerSprite;
-	public Sprite[] towerSprites = new Sprite[20];
+	public Sprite[] towerSprites;
 	public GameObject temp;
 	public Text buttonInfo;
 	public string buttonText;
@@ -23,6 +23,7 @@ public class button : MonoBehaviour {
 		RBoostCode = 18;
 		SBoostCode = 19;
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
+		towerSprites = g.tiles[0].towerSprites;
 		this.GetComponent<SpriteRenderer>().sprite = towerSprites[buttonType];
 		temp = new GameObject("temp");
 		temp.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -35,7 +36,7 @@ public class button : MonoBehaviour {
 		buttonInfo.alignment = TextAnchor.MiddleCenter;
 		//buttonInfo.rectTransform.anchorMin = new Vector3(0, 0, 0);
 		//buttonInfo.rectTransform.anchorMax = new Vector3(0, 0, 0);
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 31), (Screen.height * transform.position.y / 14), 0);
+		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 20), (Screen.height * transform.position.y / 14), 0);
 		buttonInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -42, 0);
 	
 
@@ -85,6 +86,24 @@ public class button : MonoBehaviour {
 			case 10:
 				buttonText = "Splash2-" + sample.towerCosts[buttonType];
 				break;
+			case 11:
+				buttonText = "Shock2-" + sample.towerCosts[buttonType];
+				break;
+			case 12:
+				buttonText = "Beam2-" + sample.towerCosts[buttonType];
+				break;
+			case 13:
+				buttonText = "Coil2-" + sample.towerCosts[buttonType];
+				break;
+			case 14:
+				buttonText = "Tesla2-" + sample.towerCosts[buttonType];
+				break;
+			case 15:
+				buttonText = "Bridge2-" + sample.towerCosts[buttonType];
+				break;
+			case 16:
+				buttonText = "Tag2-" + sample.towerCosts[buttonType];
+				break;
 			default:
 				//cover boost buttons
 				if (buttonType == DBoostCode)
@@ -123,7 +142,7 @@ public class button : MonoBehaviour {
 				if (g.gold >= g.damageCost)
 				{
 					g.gold -= g.damageCost;
-					g.damageCost = (int)(g.damageCost * 1.5);
+					g.damageCost = (int)(g.damageCost * g.boostCostMultiplier);
 					g.damageBoost += g.dBoostGain;
 					if (g.damageBoostedTower != null)
 					{
@@ -140,7 +159,7 @@ public class button : MonoBehaviour {
 				if (g.gold >= g.rangeCost)
 				{
 					g.gold -= g.rangeCost;
-					g.rangeCost = (int)(g.rangeCost * 1.5);
+					g.rangeCost = (int)(g.rangeCost * g.boostCostMultiplier);
 					g.rangeBoost += g.rBoostGain;
 					if (g.rangeBoostedTower != null)
 					{
@@ -153,7 +172,7 @@ public class button : MonoBehaviour {
 				if (g.gold >= g.speedCost)
 				{
 					g.gold -= g.speedCost;
-					g.speedCost  = (int)(g.speedCost * 1.5);
+					g.speedCost  = (int)(g.speedCost * g.boostCostMultiplier);
 					g.speedBoost *= g.sBoostGain;
 					if (g.speedBoostedTower != null)
 					{

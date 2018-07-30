@@ -26,7 +26,7 @@ public class bonus : MonoBehaviour
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		imageObject = new GameObject();
 		image = imageObject.AddComponent<SpriteRenderer>();
-		image.transform.position = transform.position + new Vector3(0, 2, 0);
+		image.transform.position = transform.position + new Vector3(0, 2, -0.1f);
 		image.transform.localScale = new Vector3(3, 3, 1);
 
 		temp = new GameObject("temp");
@@ -43,7 +43,7 @@ public class bonus : MonoBehaviour
 		bonusInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
 
 
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 31), (Screen.height * transform.position.y / 14), 0);
+		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 20), (Screen.height * transform.position.y / 14), 0);
 		bonusInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -150, 0);
 
 	}
@@ -116,6 +116,30 @@ public class bonus : MonoBehaviour
 			case 10://tag tower
 				bonusInfo.text = "Tag Tower\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.tiles[0].damages[8] + "\nRange: " + g.tiles[0].ranges[8] + "\nCooldown: " + g.tiles[0].cooldowns[8] + "\nCost: " + g.tiles[0].towerCosts[8];
 				image.sprite = g.tiles[0].towerSprites[8];
+				break;
+			case 11://shock2 tower
+				bonusInfo.text = "Shock Tower 2\nShoots all enemies within its range\nDamage: = " + g.tiles[0].damages[11] + "\nRange: " + g.tiles[0].ranges[11] + "\nCooldown: " + g.tiles[0].cooldowns[11] + "\nCost: " + g.tiles[0].towerCosts[11];
+				image.sprite = g.tiles[0].towerSprites[11];
+				break;
+			case 12://beam2 tower
+				bonusInfo.text = "Beam Tower 2\nShoots all enemies in the direction its facing\nDamage: " + g.tiles[0].damages[12] + "\nCooldown: " + g.tiles[0].cooldowns[12] + "\nCost: " + g.tiles[0].towerCosts[12];
+				image.sprite = g.tiles[0].towerSprites[12];
+				break;
+			case 13://coil2 tower
+				bonusInfo.text = "Coil Tower 2\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: = " + g.tiles[0].damages[13] + "\nRange: " + g.tiles[0].ranges[13] + "\nCost: " + g.tiles[0].towerCosts[13];
+				image.sprite = g.tiles[0].towerSprites[13];
+				break;
+			case 14://tesla2 tower
+				bonusInfo.text = "Tesla Tower 2\nSlows enemies that pass between it and another Tesla\nSlow Power: = " + g.tiles[0].damages[14] + "\nCost: " + g.tiles[0].towerCosts[14];
+				image.sprite = g.tiles[0].towerSprites[14];
+				break;
+			case 15://bridge2 tower
+				bonusInfo.text = "Bridge Tower 2\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.tiles[0].cooldowns[15] + "\nCost: " + g.tiles[0].towerCosts[15];
+				image.sprite = g.tiles[0].towerSprites[15];
+				break;
+			case 16://tag2 tower
+				bonusInfo.text = "Tag Tower 2\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.tiles[0].damages[16] + "\nRange: " + g.tiles[0].ranges[16] + "\nCooldown: " + g.tiles[0].cooldowns[16] + "\nCost: " + g.tiles[0].towerCosts[16];
+				image.sprite = g.tiles[0].towerSprites[16];
 				break;
 		}
 
@@ -194,6 +218,42 @@ public class bonus : MonoBehaviour
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 8;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[8];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 11://shock2 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 11;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[11];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 12://beam2 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 12;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[12];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 13://coil2 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 13;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[13];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 14://tesla2 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 14;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[14];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 15://bridge2 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 15;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[15];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 16://tag2 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 16;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[16];
 				g.sideMenu.buttonsUsed++;
 				break;
 		}

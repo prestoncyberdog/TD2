@@ -27,6 +27,12 @@ public class tile : MonoBehaviour {
 	public int TAG = 8;
 	public int MISSILE2 = 9;
 	public int SPLASH2 = 10;
+	public int SHOCK2 = 11;
+	public int BEAM2 = 12;
+	public int COIL2 = 13;
+	public int TESLA2 = 14;
+	public int BRIDGE2 = 15;
+	public int TAG2 = 16;
 	public int beamDirection;
 	public int maxCooldown;
 	public int cooldown = 0;
@@ -47,7 +53,7 @@ public class tile : MonoBehaviour {
 	public Sprite blockedSprite;
 	public Sprite startSprite;
 	public Sprite endSprite;
-	public Sprite[] towerSprites = new Sprite[20];
+	public Sprite[] towerSprites = new Sprite[50];
 	public int[] towerCosts;
 	public bool refund;
 	public bool blockerRefund;
@@ -58,11 +64,11 @@ public class tile : MonoBehaviour {
 
 	// Use this for initialization 
 	void Start() {
-		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2
-		towerCosts = new int[] {2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50};
-		cooldowns = new int[] {0, 20, 45, 75, 80, 0, 0, 70, 20, 20, 45};
-		ranges = new double[] {0, 5.2, 2.3, 1.8, 0, 1.8, 0, 0, 2.2, 5.2, 3.3};
-		damages = new int[] { 0, 1, 1, 8, 5, 8, 30, 0, 2, 10, 2};
+		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2, shock2, beam2, coil2, tesla2, bridge2, tag2
+		towerCosts = new int[] {2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 200, 200, 200 ,200};
+		cooldowns = new int[] {0, 20, 45, 75, 80, 0, 0, 80, 30, 20, 45, 70, 80, 0, 0, 40, 25};
+		ranges = new double[] {0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2};
+		damages = new int[] { 0, 1, 1, 8, 5, 8, 30, 0, 2, 10, 2, 15, 20, 12, 60, 0, 3};
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		if (status != BLOCKED)
 		{
@@ -173,7 +179,7 @@ public class tile : MonoBehaviour {
 				cooldown -= 1;
 			}
 		}
-		else if (status == FILLED && towerType == SHOCK)
+		else if (status == FILLED && (towerType == SHOCK || towerType == SHOCK2))
 		{
 			if (cooldown == 0)
 			{
@@ -221,7 +227,7 @@ public class tile : MonoBehaviour {
 				cooldown -= 1;
 			}
 		}
-		else if (status == FILLED && towerType == BEAM)
+		else if (status == FILLED && (towerType == BEAM || towerType == BEAM2))
 		{
 			if (cooldown == 0)
 			{
@@ -290,7 +296,7 @@ public class tile : MonoBehaviour {
 				cooldown -= 1;
 			}
 		}
-		else if (status == FILLED && towerType == COIL)
+		else if (status == FILLED && (towerType == COIL || towerType == COIL2))
 		{
 			for (int i=0;i<g.creeps.Length;i++)
 			{
@@ -323,11 +329,11 @@ public class tile : MonoBehaviour {
 				}
 			}
 		}
-		else if (status == FILLED && towerType == TESLA)
+		else if (status == FILLED && (towerType == TESLA || towerType == TESLA2))
 		{
 			//do nothing 
 		}
-		else if (status == FILLED && towerType == BRIDGE)
+		else if (status == FILLED && (towerType == BRIDGE || towerType == BRIDGE2))
 		{
 			if (cooldown == 0)
 			{
@@ -376,7 +382,7 @@ public class tile : MonoBehaviour {
 				cooldown -= 1;
 			}
 		}
-		if (status == FILLED && towerType == TAG)
+		if (status == FILLED && (towerType == TAG || towerType == TAG2))
 		{
 			//same behavior as missile except for slow
 			if (cooldown == 0)
@@ -562,19 +568,19 @@ public class tile : MonoBehaviour {
 				}
 
 				//handle beam
-				if (towerType == BEAM)
+				if (towerType == BEAM || towerType == BEAM2)
 				{
 					unchanged = true;
 				}
 
 				//handle tesla
-				if (towerType == TESLA)
+				if (towerType == TESLA || towerType == TESLA2)
 				{
 					makeWebs();
 				}
 
 				//handle bridge
-				if (towerType == BRIDGE)
+				if (towerType == BRIDGE || towerType == BRIDGE2)
 				{
 					configureBridge();
 				}
@@ -605,7 +611,7 @@ public class tile : MonoBehaviour {
 					g.gold += towerCosts[towerType]/2;
 				}
 
-				if (towerType == TESLA)
+				if (towerType == TESLA || towerType == TESLA2)
 				{
 					if (north != null)
 					{
@@ -628,11 +634,11 @@ public class tile : MonoBehaviour {
 
 					}
 				}
-				else if (towerType == BEAM)
+				else if (towerType == BEAM || towerType == BEAM2)
 				{
 					orient(0);
 				}
-				else if (towerType == BRIDGE)
+				else if (towerType == BRIDGE || towerType == BRIDGE2)
 				{
 					bridgeStart = null;
 					bridgeEnd = null;
@@ -662,19 +668,19 @@ public class tile : MonoBehaviour {
 
 	public void makeWebs()
 	{
-		if (north != null && north.north != null && north.north.status == FILLED && north.north.towerType == TESLA)
+		if (north != null && north.north != null && north.north.status == FILLED && (north.north.towerType == TESLA || north.north.towerType == TESLA2))
 		{
 			north.webbed = Mathf.Max(north.north.damage, damage);
 		}
-		if (south != null && south.south != null && south.south.status == FILLED && south.south.towerType == TESLA)
+		if (south != null && south.south != null && south.south.status == FILLED && (south.south.towerType == TESLA || south.south.towerType == TESLA2))
 		{
 			south.webbed = Mathf.Max(south.south.damage, damage);
 		}
-		if (east != null && east.east != null && east.east.status == FILLED && east.east.towerType == TESLA)
+		if (east != null && east.east != null && east.east.status == FILLED && (east.east.towerType == TESLA || east.east.towerType == TESLA2))
 		{
 			east.webbed = Mathf.Max(east.east.damage, damage);
 		}
-		if (west != null && west.west != null && west.west.status == FILLED && west.west.towerType == TESLA)
+		if (west != null && west.west != null && west.west.status == FILLED && (west.west.towerType == TESLA || west.west.towerType == TESLA2))
 		{
 			west.webbed = Mathf.Max(west.west.damage, damage);
 		}

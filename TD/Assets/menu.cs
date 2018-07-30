@@ -22,7 +22,7 @@ public class menu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 31), (Screen.height * transform.position.y / 14), 0);
+		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / 20), (Screen.height * transform.position.y / 14), 0);
 
 		overall = new GameObject("overall");
 		overall.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -144,6 +144,24 @@ public class menu : MonoBehaviour {
 				break;
 			case 10://splash2
 				towerInfo.text = "Splash Tower 2\nShoots enemy and splashes onto other nearby enemies\nDamage: = " + g.tiles[0].damages[10] + "\nRange/Radius: " + g.tiles[0].ranges[10] + "\nCooldown: " + g.tiles[0].cooldowns[10] + "\nCost: " + g.tiles[0].towerCosts[10];
+				break;
+			case 11://shock2
+				towerInfo.text = "Shock Tower 2\nShoots all enemies within its range\nDamage: = " + g.tiles[0].damages[11] + "\nRange: " + g.tiles[0].ranges[11] + "\nCooldown: " + g.tiles[0].cooldowns[11] + "\nCost: " + g.tiles[0].towerCosts[11];
+				break;
+			case 12://beam2
+				towerInfo.text = "Beam Tower 2\nShoots all enemies in the direction its facing\nDamage: " + g.tiles[0].damages[12] + "\nCooldown: " + g.tiles[0].cooldowns[12] + "\nCost: " + g.tiles[0].towerCosts[12];
+				break;
+			case 13://coil2
+				towerInfo.text = "Coil Tower 2\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: = " + g.tiles[0].damages[13] + "\nRange: " + g.tiles[0].ranges[13] + "\nCost: " + g.tiles[0].towerCosts[13];
+				break;
+			case 14://tesla2
+				towerInfo.text = "Tesla Tower 2\nSlows enemies that pass between it and another Tesla\nSlow Power: = " + g.tiles[0].damages[14] + "\nCost: " + g.tiles[0].towerCosts[14];
+				break;
+			case 15://bridge
+				towerInfo.text = "Bridge Tower 2\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.tiles[0].cooldowns[15] + "\nCost: " + g.tiles[0].towerCosts[15];
+				break;
+			case 16://tag
+				towerInfo.text = "Tag Tower 2\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.tiles[0].damages[16] + "\nRange: " + g.tiles[0].ranges[16] + "\nCooldown: " + g.tiles[0].cooldowns[16] + "\nCost: " + g.tiles[0].towerCosts[16];
 				break;
 			case 17://damage boost
 				towerInfo.text = "Damage Boost\nIncreases damage of a single tower" + "\nDamage Multiplier: " + g.damageBoost + "\nUpgrade amount: " + g.dBoostGain + "\nCost to upgrade: " + g.damageCost;

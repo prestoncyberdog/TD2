@@ -101,6 +101,13 @@ MonoBehaviour:
   BRIDGE: 7
   TAG: 8
   MISSILE2: 9
+  SPLASH2: 10
+  SHOCK2: 11
+  BEAM2: 12
+  COIL2: 13
+  TESLA2: 14
+  BRIDGE2: 15
+  TAG2: 16
   beamDirection: 0
   maxCooldown: 0
   cooldown: 0
@@ -126,23 +133,54 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4e923973d56ed4a45a351cc48aa04828, type: 3}
   - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
   - {fileID: 21300000, guid: 616850e41901fbc409f17d569fd396a4, type: 3}
-  - {fileID: 21300000, guid: 673240998bf1a1644bdf038d5646c112, type: 3}
-  - {fileID: 21300000, guid: e48e9ff8e74f5f24fb5af14da4e8811c, type: 3}
+  - {fileID: 21300000, guid: a62a2c225c190d744a6c8913d7b71bc3, type: 3}
+  - {fileID: 21300000, guid: c2dde79918f792e4d9ee8ccfa54d0964, type: 3}
   - {fileID: 21300000, guid: 6e729779548bdf441898bbf12cef8af8, type: 3}
   - {fileID: 21300000, guid: 328ed64b9b92f064cb1fbb51c81bd7fb, type: 3}
   - {fileID: 21300000, guid: b41c844967c9bf548ad5342d1a3f6e32, type: 3}
   - {fileID: 21300000, guid: d8602e384a1bdd1439597012a3d0f413, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
-  - {fileID: 21300000, guid: 0af52462283b79a439f5e7612246dc54, type: 3}
+  - {fileID: 21300000, guid: 5e777a1420c00f144acafc9efe03af33, type: 3}
+  - {fileID: 21300000, guid: 6de7b0b24184f834099d7730252e6907, type: 3}
+  - {fileID: 21300000, guid: f56466ef3cf1a7a4ea83f91fdd1c0f90, type: 3}
+  - {fileID: 21300000, guid: b635a52d7a899e845831925964f11dd7, type: 3}
+  - {fileID: 21300000, guid: ce1c83eae8a155f43aefaa51ecb107c2, type: 3}
+  - {fileID: 21300000, guid: 1a156e9725524554a87ac3ae2cea8f2e, type: 3}
   - {fileID: 21300000, guid: b405d2dc316c30f42901101db6de2c3c, type: 3}
   - {fileID: 21300000, guid: 4064fa3df08b823419216a4dcf19aef8, type: 3}
   - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
   towerCosts: 
   refund: 0
+  blockerRefund: 0
   Missile: {fileID: 4954611194299990, guid: cfc6f7ca3ce9c8247b8e82e40e0380ec, type: 2}
   Beam: {fileID: 4169319785508466, guid: 644104a5154153c49bec71e12807a27f, type: 2}
 --- !u!212 &212574097314647884
