@@ -13,6 +13,7 @@ public class beam : MonoBehaviour {
 	public float angle;
 	public int beamType;
 	public double maxRange;
+	public int effect;
 
 	//default is green
 	public Sprite whiteBeam;
@@ -83,13 +84,13 @@ public class beam : MonoBehaviour {
 			else if (source.gameObject.GetComponent<tile>().status == source.gameObject.GetComponent<tile>().EMPTY)
 			{
 				//enemy.health -= damage*lifetime/10;
-				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow(lifetime, 2f)) + 0.0f) / 5625.0f);
+				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow(lifetime, 2f + (effect - 1.0f)*.1f)) + 0.0f) / 5625.0f);
 				Destroy(gameObject);
 			}
 			else if ((target.transform.position - source.transform.position).magnitude > maxRange || enemy.next == enemy.end)//range check
 			{
 				//enemy.health -= damage*lifetime/10;
-				enemy.health -= Mathf.CeilToInt(damage * ((Mathf.Pow(lifetime, 2f)) + 0.0f) / 5625.0f);
+				enemy.health -= Mathf.CeilToInt(damage * ((Mathf.Pow(lifetime, 2f + (effect - 1.0f) * .1f)) + 0.0f) / 5625.0f);
 				source.gameObject.GetComponent<tile>().targeting.Remove(enemy);
 				Destroy(gameObject);
 			}

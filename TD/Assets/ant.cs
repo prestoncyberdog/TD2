@@ -68,9 +68,9 @@ public class ant : MonoBehaviour {
 			return;
 		}
 
-		if (maxProgress > g.spawnMaxProgress * 5)
+		if (maxProgress > g.spawnMaxProgress * 10)
 		{
-			maxProgress = g.spawnMaxProgress * 5;
+			maxProgress = g.spawnMaxProgress * 10;
 		}
 
 		//movement of creeps
@@ -106,7 +106,7 @@ public class ant : MonoBehaviour {
 				temp2.lifetime = progress;
 
 				//north-south or east-west
-				if (next.north != null && next.north.status == next.FILLED && (next.north.towerType == next.TESLA || next.north.towerType == next.TESLA2))
+				if (next.north != null && next.north.status == next.FILLED && (next.north.towerType == next.TESLA || next.north.towerType == next.TESLA2 || next.north.towerType == next.TESLA3))
 				{
 					temp.source = next.north.transform;
 					temp2.source = next.south.transform;

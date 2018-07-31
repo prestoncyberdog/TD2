@@ -7,8 +7,6 @@ public class button : MonoBehaviour {
 
 	public int buttonType;
 	public game g;
-	public Sprite blockerSprite;
-	public Sprite missileTowerSprite;
 	public Sprite[] towerSprites;
 	public GameObject temp;
 	public Text buttonInfo;
@@ -16,12 +14,14 @@ public class button : MonoBehaviour {
 	public int DBoostCode; 
 	public int RBoostCode; 
 	public int SBoostCode;
+	public int EBoostCode;
 
 	// Use this for initialization
 	void Start () {
-		DBoostCode = 17;
-		RBoostCode = 18;
-		SBoostCode = 19;
+		EBoostCode = 46;
+		DBoostCode = 47;
+		RBoostCode = 48;
+		SBoostCode = 49;
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		towerSprites = g.tiles[0].towerSprites;
 		this.GetComponent<SpriteRenderer>().sprite = towerSprites[buttonType];
@@ -50,7 +50,6 @@ public class button : MonoBehaviour {
 			return;
 		}
 
-		tile sample = FindObjectOfType<tile>();
 		switch (buttonType)
 		{
 			case 0:
@@ -104,6 +103,30 @@ public class button : MonoBehaviour {
 			case 16:
 				buttonText = "Tag2-" + g.towerCosts[buttonType];
 				break;
+			case 17:
+				buttonText = "Missile3-" + g.towerCosts[buttonType];
+				break;
+			case 18:
+				buttonText = "Splash3-" + g.towerCosts[buttonType];
+				break;
+			case 19:
+				buttonText = "Shock3-" + g.towerCosts[buttonType];
+				break;
+			case 20:
+				buttonText = "Beam3-" + g.towerCosts[buttonType];
+				break;
+			case 21:
+				buttonText = "Coil3-" + g.towerCosts[buttonType];
+				break;
+			case 22:
+				buttonText = "Tesla3-" + g.towerCosts[buttonType];
+				break;
+			case 23:
+				buttonText = "Bridge3-" + g.towerCosts[buttonType];
+				break;
+			case 24:
+				buttonText = "Tag3-" + g.towerCosts[buttonType];
+				break;
 			default:
 				//cover boost buttons
 				if (buttonType == DBoostCode)
@@ -117,6 +140,10 @@ public class button : MonoBehaviour {
 				else if (buttonType == SBoostCode)
 				{
 					buttonText = "Speed-" + g.speedCost;
+				}
+				else if (buttonType == EBoostCode)
+				{
+					buttonText = "Effect-" + g.effectCost;
 				}
 				break;
 		}
@@ -137,6 +164,7 @@ public class button : MonoBehaviour {
 		}
 		if (Input.GetMouseButtonDown(1))
 		{
+			//this handles when boosts are upgraded
 			if(buttonType == DBoostCode)
 			{
 				if (g.gold >= g.damageCost)
@@ -146,11 +174,7 @@ public class button : MonoBehaviour {
 					g.damageBoost += g.dBoostGain;
 					if (g.damageBoostedTower != null)
 					{
-						g.damageBoostedTower.damage = (int)(g.damageBoostedTower.damages[g.damageBoostedTower.towerType] * g.damageBoost);
-						if (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA)
-						{
-							g.damageBoostedTower.makeWebs();
-						}
+						g.damageBoostedTower.damage = (int)(g.damages[g.damageBoostedTower.towerType] * g.damageBoost);
 					}
 				}
 			}
@@ -163,7 +187,7 @@ public class button : MonoBehaviour {
 					g.rangeBoost += g.rBoostGain;
 					if (g.rangeBoostedTower != null)
 					{
-						g.rangeBoostedTower.range = (g.rangeBoostedTower.ranges[g.rangeBoostedTower.towerType] + g.rangeBoost);
+						g.rangeBoostedTower.range = (g.ranges[g.rangeBoostedTower.towerType] + g.rangeBoost);
 					}
 				}
 			}
@@ -176,11 +200,28 @@ public class button : MonoBehaviour {
 					g.speedBoost *= g.sBoostGain;
 					if (g.speedBoostedTower != null)
 					{
-						g.speedBoostedTower.maxCooldown = (int)(g.speedBoostedTower.cooldowns[g.speedBoostedTower.towerType] * g.speedBoost);
+						g.speedBoostedTower.maxCooldown = (int)(g.cooldowns[g.speedBoostedTower.towerType] * g.speedBoost);
 					}
 				}
 			}
-			
+			else if (buttonType == EBoostCode)
+			{
+				if (g.gold >= g.effectCost)
+				{
+					g.gold -= g.effectCost;
+					g.effectCost = (int)(g.effectCost * g.boostCostMultiplier);
+					g.effectBoost += g.eBoostGain;
+					if (g.effectBoostedTower != null)
+					{
+						g.effectBoostedTower.effect = 1+ (int)g.effectBoost;//(g.ranges[g.rangeBoostedTower.towerType] + g.rangeBoost);
+						if ((g.effectBoostedTower.towerType == g.effectBoostedTower.TESLA) || (g.effectBoostedTower.towerType == g.effectBoostedTower.TESLA2)|| (g.effectBoostedTower.towerType == g.effectBoostedTower.TESLA3))
+						{
+							g.effectBoostedTower.makeWebs();
+						}
+					}
+				}
+			}
+
 			g.currButtonActive = buttonType;
 		}
 	}

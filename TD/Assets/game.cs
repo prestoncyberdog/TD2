@@ -41,19 +41,24 @@ public class game : MonoBehaviour {
 	public int gold;
 
 	//special boosts
+	public double effectBoost;
 	public double damageBoost;
 	public double rangeBoost;
 	public double speedBoost;
+	public tile effectBoostedTower;
 	public tile damageBoostedTower;
 	public tile rangeBoostedTower;
 	public tile speedBoostedTower;
+	public boostIndicator effectIndicator;
 	public boostIndicator damageIndicator;
 	public boostIndicator rangeIndicator;
 	public boostIndicator speedIndicator;
 	public Transform Indicator;
+	public int effectCost;
 	public int damageCost;
 	public int rangeCost;
 	public int speedCost;
+	public int eBoostGain;
 	public double dBoostGain;
 	public double rBoostGain;
 	public double sBoostGain;
@@ -73,33 +78,40 @@ public class game : MonoBehaviour {
 	public int[] cooldowns;
 	public double[] ranges;
 	public int[] damages;
+	public int[] effects;
 
 
 	// Use this for initialization
 	void Start () {
+		effectIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
 		damageIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
 		rangeIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
 		speedIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
 		rangeIndicator.GetComponent<SpriteRenderer>().sprite = rangeIndicator.range;
 		speedIndicator.GetComponent<SpriteRenderer>().sprite = speedIndicator.speed;
+		effectIndicator.GetComponent<SpriteRenderer>().sprite = speedIndicator.effect;
+		effectIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
 		damageIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
 		rangeIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
 		speedIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
+		effectCost = 30;
 		damageCost = 60;
 		rangeCost = 30;
 		speedCost = 30;
+		eBoostGain = 1;
 		dBoostGain = 1;
 		rBoostGain = 0.5;
 		sBoostGain = .75;
 		boostCostMultiplier = 2;
 
-		bonuses = new int [17][];
+		//for the final number, 0 means available, 1 means unavailable
+		bonuses = new int [26][];
 		bonuses[0] = new int[] { 5, 20, 0 };//shock (doubles as default)
 		bonuses[1] = new int[] { 5, 20, 0 };//beam
 		bonuses[2] = new int[] { 5, 20, 0 };//coil
-		bonuses[3] = new int[] { 10, 50, 0 };//damage boost
+		bonuses[3] = new int[] { 15, 50, 0 };//damage boost
 		bonuses[4] = new int[] { 15, 50, 0 };//range boost
-		bonuses[5] = new int[] { 10, 50, 0 };//speed boost
+		bonuses[5] = new int[] { 15, 50, 0 };//speed boost
 		bonuses[6] = new int[] { 5, 20, 0 };//missile2
 		bonuses[7] = new int[] { 5, 20, 0 };//splash2
 		bonuses[8] = new int[] { 20, 35, 0 };//tesla
@@ -111,10 +123,21 @@ public class game : MonoBehaviour {
 		bonuses[14] = new int[] { 35, 50, 0 };//tesla2
 		bonuses[15] = new int[] { 35, 50, 0 };//bridge2 
 		bonuses[16] = new int[] { 20, 35, 0 };//tag2
+		bonuses[17] = new int[] { 35, 50, 0 };//missile3 
+		bonuses[18] = new int[] { 35, 50, 0 };//splash3
+		bonuses[19] = new int[] { 35, 50, 1 };//shock3 requires shock 1 or 2
+		bonuses[20] = new int[] { 35, 50, 1 };//beam3 requires beam 1 or 2
+		bonuses[21] = new int[] { 35, 50, 1 };//coil3 requires coil 1 or 2
+		bonuses[22] = new int[] { 35, 50, 1 };//tesla3 requires tesla 1 or 2
+		bonuses[23] = new int[] { 35, 50, 1 };//bridge3  requires bridge 1 or 2
+		bonuses[24] = new int[] { 35, 50, 1 };//tag3 requires tag 1 or 2
+		bonuses[25] = new int[] { 15, 50, 0 };//effect boost
+
 		bonusFrequency = 5;
 		gameMode = 1;//This determines whether bonuses are enabled
-		//0 means start with all towers, 1 means play with bonuses
+					 //0 means start with all towers, 1 means play with bonuses
 
+		effectBoost = 0;//additive
 		damageBoost = 1;//multiplicative
 		rangeBoost = 0;//additive
 		speedBoost = 1;//this multiplies cooldown
@@ -195,11 +218,13 @@ public class game : MonoBehaviour {
 		}
 		CreateGraph(tiles);
 
-		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2, shock2, beam2, coil2, tesla2, bridge2, tag2
-		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 200, 200, 200, 200 };
-		cooldowns = new int[] { 0, 20, 45, 75, 80, 0, 0, 80, 30, 20, 45, 70, 80, 0, 0, 40, 25 };
-		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2 };
-		damages = new int[] { 0, 1, 1, 8, 5, 8, 30, 0, 2, 10, 2, 15, 20, 12, 60, 0, 3 };
+		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2 
+		//shock2, beam2, coil2, tesla2, bridge2, tag2, missile3, splash3, shock3, beam3, coil3, tesla3, bridge3, tag3
+		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 200, 200, 200, 200, 400, 400, 400, 400, 400, 400, 400, 400 };
+		cooldowns = new int[] { 0, 20, 45, 75, 80, 0, 0, 80, 30, 20, 45, 70, 80, 0, 0, 40, 25, 20, 40, 60, 80, 0, 0, 20, 15 };
+		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2 };
+		damages = new int[] { 0, 1, 1, 8, 5, 8, 0, 0, 2, 10, 2, 15, 20, 12, 0, 0, 6, 25, 4, 22, 40, 16, 0, 0, 10 };
+		effects = new int[] { 0, 0, 0, 0, 0, 0, 30, 0, 2, 0, 0, 0, 0, 0, 60, 0, 3, 0, 0, 0, 0, 0, 90, 0, 4 };
 
 		maxSortCD = 10;
 		sortCD = maxSortCD;
@@ -265,7 +290,7 @@ public class game : MonoBehaviour {
 			if (waveActive == false && waveWasWactive)
 			{
 				FindPath(start, end, true);
-				if (gameMode == 1 && (waveIndex+1)%bonusFrequency == 0)
+				if (gameMode == 1 && (waveIndex+1)%bonusFrequency == 0 && waveIndex < numWaves - 1)
 				{
 					
 					offerBonuses();
@@ -309,28 +334,28 @@ public class game : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.UpArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2) && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3) && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(0);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.RightArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2) && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3) && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(1);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.DownArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2) && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3) && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(2);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.LeftArrow))
 		{
-			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2) && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3) && (waveActive == false || lastTowerSelected.unchanged == true))
 			{
 				lastTowerSelected.orient(3);
 			}

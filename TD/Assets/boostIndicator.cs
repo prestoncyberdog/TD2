@@ -7,6 +7,8 @@ public class boostIndicator : MonoBehaviour {
 	public Sprite damage;
 	public Sprite speed;
 	public Sprite range;
+	public Sprite effect;
+
 
 	// Use this for initialization
 	void Start () {

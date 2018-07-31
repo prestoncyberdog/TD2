@@ -77,9 +77,9 @@ public class menu : MonoBehaviour {
 
 		if (g.gameMode == 0)
 		{
-			buttons[9].buttonType = 17;
-			buttons[10].buttonType = 18;
-			buttons[11].buttonType = 19;
+			buttons[9].buttonType = buttons[9].DBoostCode;
+			buttons[10].buttonType = buttons[10].RBoostCode;
+			buttons[11].buttonType = buttons[11].SBoostCode;
 		}
 		else if (g.gameMode == 1)
 		{
@@ -101,12 +101,12 @@ public class menu : MonoBehaviour {
 		overallInfo.text = "Wave : " + (g.waveIndex + 1) + "/" + g.numWaves + "\nLives: " + g.lives + "\nGold: " + g.gold;
 		if (g.waveIndex < g.numWaves - 1)
 		{
-			waveInfo.text = "Next: Wave " + (g.waveIndex + 2) + "\n# of creeps: " + g.waves[g.waveIndex + 1][0] + "\nHealth: " + g.waves[g.waveIndex + 1][2] + "\nSpacing: " + g.waves[g.waveIndex + 1][1] + "\nSpeed: " + Mathf.Round(100 * (10.0f / (g.waves[g.waveIndex + 1][3] + 0.0f))) / 100f;
+			waveInfo.text = "Next: Wave " + (g.waveIndex + 2) + "\n# of creeps: " + g.waves[g.waveIndex + 1][0] + "\nHealth: " + g.waves[g.waveIndex + 1][2] + "\nSpacing: " + g.waves[g.waveIndex + 1][1] + "\nTravel Time: " + g.waves[g.waveIndex+1][3];
 
 		}
 		else
 		{
-			waveInfo.text = "Next: Wave " + (g.waveIndex + 1) + "\n# of creeps: " + g.waves[g.waveIndex][0] + "\nHealth: " + g.waves[g.waveIndex][2] + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nSpeed: " + Mathf.Round(100 * (10.0f / (g.waves[g.waveIndex][3] + 0.0f))) / 100f;
+			waveInfo.text = "Next: Wave " + (g.waveIndex + 1) + "\n# of creeps: " + g.waves[g.waveIndex][0] + "\nHealth: " + g.waves[g.waveIndex][2] + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nTravel Time: " + g.waves[g.waveIndex][3];
 		}
 
 		switch (g.currButtonActive)
@@ -156,19 +156,46 @@ public class menu : MonoBehaviour {
 			case 14://tesla2
 				towerInfo.text = "Tesla Tower 2\nSlows enemies that pass between it and another Tesla\nSlow Power: = " + g.damages[14] + "\nCost: " + g.towerCosts[14];
 				break;
-			case 15://bridge
+			case 15://bridge2
 				towerInfo.text = "Bridge Tower 2\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[15] + "\nCost: " + g.towerCosts[15];
 				break;
-			case 16://tag
+			case 16://tag2
 				towerInfo.text = "Tag Tower 2\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.damages[16] + "\nRange: " + g.ranges[16] + "\nCooldown: " + g.cooldowns[16] + "\nCost: " + g.towerCosts[16];
 				break;
-			case 17://damage boost
+			case 17://missile3
+				towerInfo.text = "Missile Tower 3\nShoots damaging missiles\nDamage: " + g.damages[17] + "\nRange: " + g.ranges[17] + "\nCooldown: " + g.cooldowns[17] + "\nCost: " + g.towerCosts[17];
+				break;
+			case 18://splash3
+				towerInfo.text = "Splash Tower 3\nShoots enemy and splashes onto other nearby enemies\nDamage: = " + g.damages[18] + "\nRange/Radius: " + g.ranges[18] + "\nCooldown: " + g.cooldowns[18] + "\nCost: " + g.towerCosts[18];
+				break;
+			case 19://shock3
+				towerInfo.text = "Shock Tower 3\nShoots all enemies within its range\nDamage: = " + g.damages[19] + "\nRange: " + g.ranges[19] + "\nCooldown: " + g.cooldowns[19] + "\nCost: " + g.towerCosts[19];
+				break;
+			case 20://beam3
+				towerInfo.text = "Beam Tower 3\nShoots all enemies in the direction its facing\nDamage: " + g.damages[20] + "\nCooldown: " + g.cooldowns[20] + "\nCost: " + g.towerCosts[20];
+				break;
+			case 21://coil3
+				towerInfo.text = "Coil Tower 3\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: = " + g.damages[21] + "\nRange: " + g.ranges[21] + "\nCost: " + g.towerCosts[21];
+				break;
+			case 22://tesla3
+				towerInfo.text = "Tesla Tower 3\nSlows enemies that pass between it and another Tesla\nSlow Power: = " + g.damages[22] + "\nCost: " + g.towerCosts[22];
+				break;
+			case 23://bridge3
+				towerInfo.text = "Bridge Tower 3\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[23] + "\nCost: " + g.towerCosts[23];
+				break;
+			case 24://tag3
+				towerInfo.text = "Tag Tower 3\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.damages[24] + "\nRange: " + g.ranges[24] + "\nCooldown: " + g.cooldowns[24] + "\nCost: " + g.towerCosts[24];
+				break;
+			case 46://effect boost
+				towerInfo.text = "Effect Boost\nIncreases special effect of a single tower" + "\nAdded Effect Multiplier: " + g.effectBoost + "\nUpgrade amount: " + g.eBoostGain + "\nCost to upgrade: " + g.effectCost;
+				break;
+			case 47://damage boost
 				towerInfo.text = "Damage Boost\nIncreases damage of a single tower" + "\nDamage Multiplier: " + g.damageBoost + "\nUpgrade amount: " + g.dBoostGain + "\nCost to upgrade: " + g.damageCost;
 				break;
-			case 18://range boost
+			case 48://range boost
 				towerInfo.text = "Range Boost\nIncreases range of a single tower" + "\nBonus Range: " + g.rangeBoost + "\nUpgrade amount: " + g.rBoostGain + "\nCost to upgrade: " + g.rangeCost;
 				break;
-			case 19://speed boost
+			case 49://speed boost
 				towerInfo.text = "Speed Boost\nDecreases cooldown of a single tower" + "\nCooldown Multiplier: " + g.speedBoost + "\nUpgrade amount(multiplies): " + g.sBoostGain + "\nCost to upgrade: " + g.speedCost;
 				break;
 		}

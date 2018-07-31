@@ -108,11 +108,20 @@ MonoBehaviour:
   TESLA2: 14
   BRIDGE2: 15
   TAG2: 16
+  MISSILE3: 17
+  SPLASH3: 18
+  SHOCK3: 19
+  BEAM3: 20
+  COIL3: 21
+  TESLA3: 22
+  BRIDGE3: 23
+  TAG3: 24
   beamDirection: 0
   maxCooldown: 0
   cooldown: 0
   damage: 0
   range: 0
+  effect: 0
   cooldowns: 
   ranges: []
   damages: 
@@ -145,38 +154,38 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b635a52d7a899e845831925964f11dd7, type: 3}
   - {fileID: 21300000, guid: ce1c83eae8a155f43aefaa51ecb107c2, type: 3}
   - {fileID: 21300000, guid: 1a156e9725524554a87ac3ae2cea8f2e, type: 3}
+  - {fileID: 21300000, guid: 476d3cff74f03414b9ee805f2a6b6221, type: 3}
+  - {fileID: 21300000, guid: 11f519cc17a6f0e419b7aaa991c37339, type: 3}
+  - {fileID: 21300000, guid: c501f430297c0554289687597a2b7333, type: 3}
+  - {fileID: 21300000, guid: 3b1e589c925899d4fb2b2b3434b9b6b5, type: 3}
+  - {fileID: 21300000, guid: fca128088470cd94cbbcd7e2598b1c2e, type: 3}
+  - {fileID: 21300000, guid: 1456683694587984e9a24f59959ca8fe, type: 3}
+  - {fileID: 21300000, guid: e179b9491788495458a74c8f2f372d9f, type: 3}
+  - {fileID: 21300000, guid: 6eb0b04887299304c9bb818ca67a578d, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
+  - {fileID: 21300000, guid: c770dbad608acf448942fa98381c5c9a, type: 3}
   - {fileID: 21300000, guid: b405d2dc316c30f42901101db6de2c3c, type: 3}
   - {fileID: 21300000, guid: 4064fa3df08b823419216a4dcf19aef8, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
-  - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
   - {fileID: 21300000, guid: c1010cfa33a165a4b924941a0d4a409b, type: 3}
   towerCosts: 
   refund: 0

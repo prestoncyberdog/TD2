@@ -74,72 +74,108 @@ public class bonus : MonoBehaviour
 		switch (bonusIndex)
 		{
 			case 0://shock tower
-				bonusInfo.text = "Shock Tower\nShoots all enemies within its range\nDamage: = " + g.tiles[0].damages[3] + "\nRange: " + g.tiles[0].ranges[3] + "\nCooldown: " + g.tiles[0].cooldowns[3] + "\nCost: " + g.tiles[0].towerCosts[3];
+				bonusInfo.text = "Shock Tower\nShoots all enemies within its range\nDamage: = " + g.damages[3] + "\nRange: " + g.ranges[3] + "\nCooldown: " + g.cooldowns[3] + "\nCost: " + g.towerCosts[3];
 				image.sprite = g.tiles[0].towerSprites[3];
 				break;
 			case 1://beam tower
-				bonusInfo.text = "Beam Tower\nShoots all enemies in the direction its facing\nDamage: " + g.tiles[0].damages[4] + "\nCooldown: " + g.tiles[0].cooldowns[4] + "\nCost: " + g.tiles[0].towerCosts[4];
+				bonusInfo.text = "Beam Tower\nShoots all enemies in the direction its facing\nDamage: " + g.damages[4] + "\nCooldown: " + g.cooldowns[4] + "\nCost: " + g.towerCosts[4];
 				image.sprite = g.tiles[0].towerSprites[4];
 				break;
 			case 2://coil tower
-				bonusInfo.text = "Coil Tower\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: = " + g.tiles[0].damages[5] + "\nRange: " + g.tiles[0].ranges[5] + "\nCost: " + g.tiles[0].towerCosts[5];
+				bonusInfo.text = "Coil Tower\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: = " + g.damages[5] + "\nRange: " + g.ranges[5] + "\nCost: " + g.towerCosts[5];
 				image.sprite = g.tiles[0].towerSprites[5];
 				break;
 			case 3://damage boost
 				bonusInfo.text = "Damage Boost\nIncreases damage of a single tower" + "\nDamage Multiplier: " + g.damageBoost + "\nUpgrade amount: " + g.dBoostGain + "\nCost to upgrade: " + g.damageCost;
-				image.sprite = g.tiles[0].towerSprites[17];
+				image.sprite = g.tiles[0].towerSprites[47];
 				break;
 			case 4://range boost
 				bonusInfo.text = "Range Boost\nIncreases range of a single tower" + "\nBonus Range: " + g.rangeBoost + "\nUpgrade amount: " + g.rBoostGain + "\nCost to upgrade: " + g.rangeCost;
-				image.sprite = g.tiles[0].towerSprites[18];
+				image.sprite = g.tiles[0].towerSprites[48];
 				break;
 			case 5://speed boost
 				bonusInfo.text = "Speed Boost\nDecreases cooldown of a single tower" + "\nCooldown Multiplier: " + g.speedBoost + "\nUpgrade amount(multiplies): " + g.sBoostGain + "\nCost to upgrade: " + g.speedCost;
-				image.sprite = g.tiles[0].towerSprites[19];
+				image.sprite = g.tiles[0].towerSprites[49];
 				break;
 			case 6://missile2 tower
-				bonusInfo.text = "Missile Tower 2\nShoots damaging missiles\nDamage: " + g.tiles[0].damages[9] + "\nRange: " + g.tiles[0].ranges[9] + "\nCooldown: " + g.tiles[0].cooldowns[9] + "\nCost: " + g.tiles[0].towerCosts[9];
+				bonusInfo.text = "Missile Tower 2\nShoots damaging missiles\nDamage: " + g.damages[9] + "\nRange: " + g.ranges[9] + "\nCooldown: " + g.cooldowns[9] + "\nCost: " + g.towerCosts[9];
 				image.sprite = g.tiles[0].towerSprites[9];
 				break;
 			case 7://splash2 tower
-				bonusInfo.text = "Splash Tower 2\nShoots enemy and splashes onto other nearby enemies\nDamage: = " + g.tiles[0].damages[10] + "\nRange/Radius: " + g.tiles[0].ranges[10] + "\nCooldown: " + g.tiles[0].cooldowns[10] + "\nCost: " + g.tiles[0].towerCosts[10];
+				bonusInfo.text = "Splash Tower 2\nShoots enemy and splashes onto other nearby enemies\nDamage: = " + g.damages[10] + "\nRange/Radius: " + g.ranges[10] + "\nCooldown: " + g.cooldowns[10] + "\nCost: " + g.towerCosts[10];
 				image.sprite = g.tiles[0].towerSprites[10];
 				break;
 			case 8://tesla tower
-				bonusInfo.text = "Tesla Tower\nSlows enemies that pass between it and another Tesla\nSlow Power: = " + g.tiles[0].damages[6] + "\nCost: " + g.tiles[0].towerCosts[6];
+				bonusInfo.text = "Tesla Tower\nSlows enemies that pass between it and another Tesla\nSlow Power: = " + g.damages[6] + "\nCost: " + g.towerCosts[6];
 				image.sprite = g.tiles[0].towerSprites[6];
 				break;
 			case 9://bridge tower
-				bonusInfo.text = "Bridge Tower\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.tiles[0].cooldowns[7] + "\nCost: " + g.tiles[0].towerCosts[7];
+				bonusInfo.text = "Bridge Tower\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[7] + "\nCost: " + g.towerCosts[7];
 				image.sprite = g.tiles[0].towerSprites[7];
 				break;
 			case 10://tag tower
-				bonusInfo.text = "Tag Tower\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.tiles[0].damages[8] + "\nRange: " + g.tiles[0].ranges[8] + "\nCooldown: " + g.tiles[0].cooldowns[8] + "\nCost: " + g.tiles[0].towerCosts[8];
+				bonusInfo.text = "Tag Tower\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.damages[8] + "\nRange: " + g.ranges[8] + "\nCooldown: " + g.cooldowns[8] + "\nCost: " + g.towerCosts[8];
 				image.sprite = g.tiles[0].towerSprites[8];
 				break;
 			case 11://shock2 tower
-				bonusInfo.text = "Shock Tower 2\nShoots all enemies within its range\nDamage: = " + g.tiles[0].damages[11] + "\nRange: " + g.tiles[0].ranges[11] + "\nCooldown: " + g.tiles[0].cooldowns[11] + "\nCost: " + g.tiles[0].towerCosts[11];
+				bonusInfo.text = "Shock Tower 2\nShoots all enemies within its range\nDamage: = " + g.damages[11] + "\nRange: " + g.ranges[11] + "\nCooldown: " + g.cooldowns[11] + "\nCost: " + g.towerCosts[11];
 				image.sprite = g.tiles[0].towerSprites[11];
 				break;
 			case 12://beam2 tower
-				bonusInfo.text = "Beam Tower 2\nShoots all enemies in the direction its facing\nDamage: " + g.tiles[0].damages[12] + "\nCooldown: " + g.tiles[0].cooldowns[12] + "\nCost: " + g.tiles[0].towerCosts[12];
+				bonusInfo.text = "Beam Tower 2\nShoots all enemies in the direction its facing\nDamage: " + g.damages[12] + "\nCooldown: " + g.cooldowns[12] + "\nCost: " + g.towerCosts[12];
 				image.sprite = g.tiles[0].towerSprites[12];
 				break;
 			case 13://coil2 tower
-				bonusInfo.text = "Coil Tower 2\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: = " + g.tiles[0].damages[13] + "\nRange: " + g.tiles[0].ranges[13] + "\nCost: " + g.tiles[0].towerCosts[13];
+				bonusInfo.text = "Coil Tower 2\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: = " + g.damages[13] + "\nRange: " + g.ranges[13] + "\nCost: " + g.towerCosts[13];
 				image.sprite = g.tiles[0].towerSprites[13];
 				break;
 			case 14://tesla2 tower
-				bonusInfo.text = "Tesla Tower 2\nSlows enemies that pass between it and another Tesla\nSlow Power: = " + g.tiles[0].damages[14] + "\nCost: " + g.tiles[0].towerCosts[14];
+				bonusInfo.text = "Tesla Tower 2\nSlows enemies that pass between it and another Tesla\nSlow Power: = " + g.damages[14] + "\nCost: " + g.towerCosts[14];
 				image.sprite = g.tiles[0].towerSprites[14];
 				break;
 			case 15://bridge2 tower
-				bonusInfo.text = "Bridge Tower 2\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.tiles[0].cooldowns[15] + "\nCost: " + g.tiles[0].towerCosts[15];
+				bonusInfo.text = "Bridge Tower 2\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[15] + "\nCost: " + g.towerCosts[15];
 				image.sprite = g.tiles[0].towerSprites[15];
 				break;
 			case 16://tag2 tower
-				bonusInfo.text = "Tag Tower 2\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.tiles[0].damages[16] + "\nRange: " + g.tiles[0].ranges[16] + "\nCooldown: " + g.tiles[0].cooldowns[16] + "\nCost: " + g.tiles[0].towerCosts[16];
+				bonusInfo.text = "Tag Tower 2\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.damages[16] + "\nRange: " + g.ranges[16] + "\nCooldown: " + g.cooldowns[16] + "\nCost: " + g.towerCosts[16];
 				image.sprite = g.tiles[0].towerSprites[16];
+				break;
+			case 17://missile3 tower
+				bonusInfo.text = "Missile Tower 3\nShoots damaging missiles\nDamage: " + g.damages[17] + "\nRange: " + g.ranges[17] + "\nCooldown: " + g.cooldowns[17] + "\nCost: " + g.towerCosts[17];
+				image.sprite = g.tiles[0].towerSprites[17];
+				break;
+			case 18://splash3 tower
+				bonusInfo.text = "Splash Tower 3\nShoots enemy and splashes onto other nearby enemies\nDamage: = " + g.damages[18] + "\nRange/Radius: " + g.ranges[18] + "\nCooldown: " + g.cooldowns[18] + "\nCost: " + g.towerCosts[18];
+				image.sprite = g.tiles[0].towerSprites[18];
+				break;
+			case 19://shock3 tower
+				bonusInfo.text = "Shock Tower 3\nShoots all enemies within its range\nDamage: = " + g.damages[19] + "\nRange: " + g.ranges[19] + "\nCooldown: " + g.cooldowns[19] + "\nCost: " + g.towerCosts[19];
+				image.sprite = g.tiles[0].towerSprites[19];
+				break;
+			case 20://beam3 tower
+				bonusInfo.text = "Beam Tower 3\nShoots all enemies in the direction its facing\nDamage: " + g.damages[20] + "\nCooldown: " + g.cooldowns[20] + "\nCost: " + g.towerCosts[20];
+				image.sprite = g.tiles[0].towerSprites[20];
+				break;
+			case 21://coil3 tower
+				bonusInfo.text = "Coil Tower 3\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: = " + g.damages[21] + "\nRange: " + g.ranges[21] + "\nCost: " + g.towerCosts[21];
+				image.sprite = g.tiles[0].towerSprites[21];
+				break;
+			case 22://tesla3 tower
+				bonusInfo.text = "Tesla Tower 3\nSlows enemies that pass between it and another Tesla\nSlow Power: = " + g.damages[22] + "\nCost: " + g.towerCosts[22];
+				image.sprite = g.tiles[0].towerSprites[22];
+				break;
+			case 23://bridge3 tower
+				bonusInfo.text = "Bridge Tower 3\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[23] + "\nCost: " + g.towerCosts[23];
+				image.sprite = g.tiles[0].towerSprites[23];
+				break;
+			case 24://tag3 tower
+				bonusInfo.text = "Tag Tower 3\nShoots and permanently slows an enemy\nDamage/Slow Power: = " + g.damages[24] + "\nRange: " + g.ranges[24] + "\nCooldown: " + g.cooldowns[24] + "\nCost: " + g.towerCosts[24];
+				image.sprite = g.tiles[0].towerSprites[24];
+				break;
+			case 25://effect boost
+				bonusInfo.text = "Effect Boost\nIncreases special effect of a single tower" + "\nAdded Effect Multiplier: " + g.effectBoost + "\nUpgrade amount: " + g.eBoostGain + "\nCost to upgrade: " + g.effectCost;
+				image.sprite = g.tiles[0].towerSprites[46];
 				break;
 		}
 
@@ -159,35 +195,38 @@ public class bonus : MonoBehaviour
 				temp.buttonType = 3;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[3];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[19][2] = 0;//enable shock3
 				break;
 			case 1://beam tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 4;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[4];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[20][2] = 0;//enable beam3
 				break;
 			case 2://coil tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 5;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[5];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[21][2] = 0;//enable coil3
 				break;
 			case 3://damage boost
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
-				temp.buttonType = 17;
-				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[17];
+				temp.buttonType = g.sideMenu.buttons[0].DBoostCode;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[g.sideMenu.buttons[0].DBoostCode];
 				g.sideMenu.buttonsUsed++;
 				break;
 			case 4://range boost
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
-				temp.buttonType = 18;
-				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[18];
+				temp.buttonType = g.sideMenu.buttons[0].RBoostCode;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[g.sideMenu.buttons[0].RBoostCode];
 				g.sideMenu.buttonsUsed++;
 				break;
 			case 5://speed boost
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
-				temp.buttonType = 19;
-				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[19];
+				temp.buttonType = g.sideMenu.buttons[0].SBoostCode;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[g.sideMenu.buttons[0].SBoostCode];
 				g.sideMenu.buttonsUsed++;
 				break;
 			case 6://missile2 tower
@@ -207,53 +246,116 @@ public class bonus : MonoBehaviour
 				temp.buttonType = 6;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[6];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[22][2] = 0;//enable tesla
 				break;
 			case 9://bridge tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 7;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[7];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[23][2] = 0;//enable bridge3
 				break;
 			case 10://tag tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 8;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[8];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[24][2] = 0;//enable tag3
 				break;
 			case 11://shock2 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 11;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[11];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[19][2] = 0;//enable shock3
 				break;
 			case 12://beam2 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 12;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[12];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[20][2] = 0;//enable beam3
 				break;
 			case 13://coil2 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 13;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[13];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[21][2] = 0;//enable coil3
 				break;
 			case 14://tesla2 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 14;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[14];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[22][2] = 0;//enable tesla3
 				break;
 			case 15://bridge2 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 15;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[15];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[23][2] = 0;//enable bridge3
 				break;
 			case 16://tag2 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 16;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[16];
+				g.sideMenu.buttonsUsed++;
+				g.bonuses[24][2] = 0;//enable tag3
+				break;
+			case 17://missile3 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 17;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[17];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 18://splash3 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 18;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[18];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 19://shock3 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 19;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[19];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 20://beam3 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 20;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[20];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 21://coil3 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 21;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[21];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 22://tesla3 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 22;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[22];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 23://bridge3 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 23;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[23];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 24://tag3 tower
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = 24;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[24];
+				g.sideMenu.buttonsUsed++;
+				break;
+			case 25://effect boost
+				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
+				temp.buttonType = g.sideMenu.buttons[0].EBoostCode;
+				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[g.sideMenu.buttons[0].EBoostCode];
 				g.sideMenu.buttonsUsed++;
 				break;
 		}
