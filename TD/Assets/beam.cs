@@ -22,6 +22,9 @@ public class beam : MonoBehaviour {
 	public Sprite weirdBeam;
 	public Sprite purpleBeam;
 	public Sprite orangeBeam;
+	public Sprite gwBeam;
+	public Sprite rpBeam;
+	public Sprite bwBeam;
 
 	// Use this for initialization
 	void Start () {
@@ -87,7 +90,7 @@ public class beam : MonoBehaviour {
 				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow(lifetime, 2f + (effect - 1.0f)*.1f)) + 0.0f) / 5625.0f);
 				Destroy(gameObject);
 			}
-			else if ((target.transform.position - source.transform.position).magnitude > maxRange || enemy.next == enemy.end)//range check
+			else if ((target.transform.position - source.transform.position).magnitude > maxRange || (enemy.next == enemy.end && enemy.progress < 3))//range check
 			{
 				//enemy.health -= damage*lifetime/10;
 				enemy.health -= Mathf.CeilToInt(damage * ((Mathf.Pow(lifetime, 2f + (effect - 1.0f) * .1f)) + 0.0f) / 5625.0f);

@@ -127,6 +127,18 @@ public class button : MonoBehaviour {
 			case 24:
 				buttonText = "Tag3-" + g.towerCosts[buttonType];
 				break;
+			case 25:
+				buttonText = "Missile4-" + g.towerCosts[buttonType];
+				break;
+			case 26:
+				buttonText = "Shocksplash-" + g.towerCosts[buttonType];
+				break;
+			case 27:
+				buttonText = "Tagbeam-" + g.towerCosts[buttonType];
+				break;
+			case 28:
+				buttonText = "Teslacoil-" + g.towerCosts[buttonType];
+				break;
 			default:
 				//cover boost buttons
 				if (buttonType == DBoostCode)

@@ -106,7 +106,7 @@ public class ant : MonoBehaviour {
 				temp2.lifetime = progress;
 
 				//north-south or east-west
-				if (next.north != null && next.north.status == next.FILLED && (next.north.towerType == next.TESLA || next.north.towerType == next.TESLA2 || next.north.towerType == next.TESLA3))
+				if (next.north != null && next.north.status == next.FILLED && (next.north.towerType == next.TESLA || next.north.towerType == next.TESLA2 || next.north.towerType == next.TESLA3 || next.north.towerType == next.TESLACOIL))
 				{
 					temp.source = next.north.transform;
 					temp2.source = next.south.transform;

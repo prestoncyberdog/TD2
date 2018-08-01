@@ -41,6 +41,10 @@ public class tile : MonoBehaviour {
 	public int TESLA3 = 22;
 	public int BRIDGE3 = 23;
 	public int TAG3 = 24;
+	public int MISSILE4 = 25;
+	public int SHOCKSPLASH = 26;
+	public int TAGBEAM = 27;
+	public int TESLACOIL = 28;
 	public int beamDirection;
 	public int maxCooldown;
 	public int cooldown = 0;
@@ -98,7 +102,7 @@ public class tile : MonoBehaviour {
 			return;
 		}
 
-		if (status == FILLED && (towerType == MISSILE || towerType == MISSILE2 || towerType == MISSILE3))
+		if (status == FILLED && (towerType == MISSILE || towerType == MISSILE2 || towerType == MISSILE3 || towerType == MISSILE4))
 		{
 			if (cooldown == 0)
 			{
@@ -128,7 +132,7 @@ public class tile : MonoBehaviour {
 			}
 
 		}
-		else if (status == FILLED && (towerType == SPLASH || towerType == SPLASH2 || towerType == SPLASH3))
+		else if (status == FILLED && (towerType == SPLASH || towerType == SPLASH2 || towerType == SPLASH3 || towerType == SHOCKSPLASH))
 		{
 			if (cooldown == 0)
 			{
@@ -154,6 +158,11 @@ public class tile : MonoBehaviour {
 							temp.transform.position = new Vector3(100, 100, 0);
 							temp.beamType = 0;
 							temp.lifetime = 5;
+							if (towerType == SHOCKSPLASH)
+							{
+								temp.GetComponent<SpriteRenderer>().sprite = temp.gwBeam;
+							}
+
 							if (hits[k] != g.creeps[i])
 							{
 								temp.source = g.creeps[i].transform;
@@ -174,8 +183,10 @@ public class tile : MonoBehaviour {
 
 						}
 						fired = true;
-						break;
-
+						if (towerType != SHOCKSPLASH)
+						{
+							break;
+						}
 					}
 				}
 				if (fired)
@@ -236,7 +247,7 @@ public class tile : MonoBehaviour {
 				cooldown -= 1;
 			}
 		}
-		else if (status == FILLED && (towerType == BEAM || towerType == BEAM2 || towerType == BEAM3))
+		else if (status == FILLED && (towerType == BEAM || towerType == BEAM2 || towerType == BEAM3 || towerType == TAGBEAM))
 		{
 			if (cooldown == 0)
 			{
@@ -255,6 +266,12 @@ public class tile : MonoBehaviour {
 						if (g.creeps[i] != null && ((g.creeps[i].next == beamPathTile && g.creeps[i].progress <= g.creeps[i].maxProgress / 2) || (g.creeps[i].previous == beamPathTile && g.creeps[i].progress >= g.creeps[i].maxProgress / 2)) )
 						{
 							g.creeps[i].health -= damage;
+							if (towerType == TAGBEAM)
+							{
+								g.creeps[i].maxProgress += effect * g.effects[towerType] * 1;
+								g.creeps[i].progress += effect * g.effects[towerType] * 1;
+								g.insertCreep(g.creeps[i].identIndex);
+							}
 							fired = true;
 						}
 						i++;
@@ -306,6 +323,10 @@ public class tile : MonoBehaviour {
 					temp.target = lastTile.transform;
 					temp.beamType = 1;
 					temp.GetComponent<SpriteRenderer>().sprite = temp.redBeam;
+					if (towerType == TAGBEAM)
+					{
+						temp.GetComponent<SpriteRenderer>().sprite = temp.rpBeam;
+					}
 					temp.setBeam(temp.beamType);
 					temp.lifetime = 8;
 
@@ -316,7 +337,7 @@ public class tile : MonoBehaviour {
 				cooldown -= 1;
 			}
 		}
-		else if (status == FILLED && (towerType == COIL || towerType == COIL2 || towerType == COIL3))
+		else if (status == FILLED && (towerType == COIL || towerType == COIL2 || towerType == COIL3 || towerType == TESLACOIL))
 		{
 			for (int i=0;i<g.creeps.Length;i++)
 			{
@@ -345,6 +366,10 @@ public class tile : MonoBehaviour {
 						temp.beamType = 2;
 						temp.lifetime = 0;
 						temp.GetComponent<SpriteRenderer>().sprite = temp.blueBeam;
+						if (towerType == TESLACOIL)
+						{
+							temp.GetComponent<SpriteRenderer>().sprite = temp.bwBeam;
+						}
 						temp.setBeam(temp.beamType);
 					}
 				}
@@ -441,6 +466,7 @@ public class tile : MonoBehaviour {
 					temp.lifetime = 5;
 					temp.setBeam(temp.beamType);
 
+					//slow enemy
 					g.creeps[targetIndex].maxProgress += effect * g.effects[towerType] * 1;
 					g.creeps[targetIndex].progress += effect * g.effects[towerType] * 1;
 					g.insertCreep(g.creeps[targetIndex].identIndex);
@@ -506,7 +532,7 @@ public class tile : MonoBehaviour {
 				if (g.damageBoostedTower != null)
 				{
 					g.damageBoostedTower.damage = g.damages[g.damageBoostedTower.towerType];
-					if ((g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA)|| (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA2)|| (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA3))
+					if ((g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA)|| (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA2)|| (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLA3) || (g.damageBoostedTower.towerType == g.damageBoostedTower.TESLACOIL))
 					{
 						g.damageBoostedTower.makeWebs();
 					}
@@ -550,7 +576,7 @@ public class tile : MonoBehaviour {
 				g.effectBoostedTower = this;
 				g.effectIndicator.transform.position = transform.position + new Vector3(.3f, -.3f, -.001f);
 				effect = (int)(1 + g.effectBoost);
-				if ((towerType == TESLA) || (towerType == TESLA2) || (towerType == TESLA3))
+				if ((towerType == TESLA) || (towerType == TESLA2) || (towerType == TESLA3) || towerType == TESLACOIL)
 				{
 					makeWebs();
 				}
@@ -603,13 +629,13 @@ public class tile : MonoBehaviour {
 				}
 
 				//handle beam
-				if (towerType == BEAM || towerType == BEAM2 || towerType == BEAM3)
+				if (towerType == BEAM || towerType == BEAM2 || towerType == BEAM3 || towerType == TAGBEAM)
 				{
 					unchanged = true;
 				}
 
 				//handle tesla
-				if (towerType == TESLA || towerType == TESLA2 || towerType == TESLA3)
+				if (towerType == TESLA || towerType == TESLA2 || towerType == TESLA3 || towerType == TESLACOIL)
 				{
 					makeWebs();
 				}
@@ -650,7 +676,7 @@ public class tile : MonoBehaviour {
 					g.gold += g.towerCosts[towerType]/2;
 				}
 
-				if (towerType == TESLA || towerType == TESLA2 || towerType == TESLA3)
+				if (towerType == TESLA || towerType == TESLA2 || towerType == TESLA3 || towerType == TESLACOIL)
 				{
 					if (north != null)
 					{
@@ -673,7 +699,7 @@ public class tile : MonoBehaviour {
 
 					}
 				}
-				else if (towerType == BEAM || towerType == BEAM2 || towerType == BEAM3)
+				else if (towerType == BEAM || towerType == BEAM2 || towerType == BEAM3 || towerType == TAGBEAM)
 				{
 					orient(0);
 				}
@@ -707,19 +733,19 @@ public class tile : MonoBehaviour {
 
 	public void makeWebs()
 	{
-		if (north != null && north.north != null && north.north.status == FILLED && (north.north.towerType == TESLA || north.north.towerType == TESLA2 || north.north.towerType == TESLA3))
+		if (north != null && north.north != null && north.north.status == FILLED && (north.north.towerType == TESLA || north.north.towerType == TESLA2 || north.north.towerType == TESLA3 || north.north.towerType == TESLACOIL))
 		{
 			north.webbed = Mathf.Max(north.north.effect*g.effects[north.north.towerType], effect*g.effects[towerType]);
 		}
-		if (south != null && south.south != null && south.south.status == FILLED && (south.south.towerType == TESLA || south.south.towerType == TESLA2 || south.south.towerType == TESLA3))
+		if (south != null && south.south != null && south.south.status == FILLED && (south.south.towerType == TESLA || south.south.towerType == TESLA2 || south.south.towerType == TESLA3 || south.south.towerType == TESLACOIL))
 		{
 			south.webbed = Mathf.Max(south.south.effect * g.effects[south.south.towerType], effect * g.effects[towerType]);
 		}
-		if (east != null && east.east != null && east.east.status == FILLED && (east.east.towerType == TESLA || east.east.towerType == TESLA2 || east.east.towerType == TESLA3))
+		if (east != null && east.east != null && east.east.status == FILLED && (east.east.towerType == TESLA || east.east.towerType == TESLA2 || east.east.towerType == TESLA3 || east.east.towerType == TESLACOIL))
 		{
 			east.webbed = Mathf.Max(east.east.effect * g.effects[east.east.towerType], effect * g.effects[towerType]);
 		}
-		if (west != null && west.west != null && west.west.status == FILLED && (west.west.towerType == TESLA || west.west.towerType == TESLA2 || west.west.towerType == TESLA3))
+		if (west != null && west.west != null && west.west.status == FILLED && (west.west.towerType == TESLA || west.west.towerType == TESLA2 || west.west.towerType == TESLA3 || west.west.towerType == TESLACOIL))
 		{
 			west.webbed = Mathf.Max(west.west.effect * g.effects[west.west.towerType], effect * g.effects[towerType]);
 		}
