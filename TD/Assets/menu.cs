@@ -68,7 +68,7 @@ public class menu : MonoBehaviour {
 			{
 				buttons[i].buttonType = i;
 			}
-			else if (g.gameMode == 1)
+			else if (g.gameMode >= 1)
 			{
 				buttons[i].buttonType = 0;
 			}
@@ -77,11 +77,11 @@ public class menu : MonoBehaviour {
 
 		if (g.gameMode == 0)
 		{
-			buttons[9].buttonType = buttons[9].DBoostCode;
-			buttons[10].buttonType = buttons[10].RBoostCode;
-			buttons[11].buttonType = buttons[11].SBoostCode;
+			buttons[9].buttonType = 47;
+			buttons[10].buttonType = 48;
+			buttons[11].buttonType = 49;
 		}
-		else if (g.gameMode == 1)
+		else if (g.gameMode >= 1)
 		{
 			buttons[1].buttonType = 1;
 			buttons[2].buttonType = 2;
@@ -118,7 +118,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Missile Tower\nShoots damaging missiles\nDamage: " + g.damages[1] + "\nRange: " + g.ranges[1] + "\nCooldown: " + g.cooldowns[1] + "\nCost: " + g.towerCosts[1];
 				break;
 			case 2://splash
-				towerInfo.text = "Splash Tower\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[2] + "\nRange/Radius: " + g.ranges[2] + "\nCooldown: " + g.cooldowns[2] + "\nCost: " + g.towerCosts[2];
+				towerInfo.text = "Splash Tower\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[2] + "\nRange: " + g.ranges[2] + "\nSplash radius: " + (g.ranges[2] + (g.defaultEffects[2] - 1.0) * 0.5) + "\nCooldown: " + g.cooldowns[2] + "\nCost: " + g.towerCosts[2];
 				break;
 			case 3://shock
 				towerInfo.text = "Shock Tower\nShoots all enemies within its range\nDamage: " + g.damages[3] + "\nRange: " + g.ranges[3] + "\nCooldown: " + g.cooldowns[3] + "\nCost: " + g.towerCosts[3];
@@ -133,7 +133,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Tesla Tower\nSlows enemies that pass between it and another Tesla\nSlow Power: " + g.effects[6]  + "\nCost: " + g.towerCosts[6];
 				break;
 			case 7://bridge
-				towerInfo.text = "Bridge Tower\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[7] + "\nCost: " + g.towerCosts[7];
+				towerInfo.text = "Bridge Tower\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[7] + "\nMax sendbacks per enemy: " + g.defaultEffects[7] + "\nCost: " + g.towerCosts[7];
 				break;
 			case 8://tag
 				towerInfo.text = "Tag Tower\nShoots and permanently slows an enemy\nDamage: " + g.damages[8] + "\nSlow Power: " + g.effects[8] + "\nRange: " + g.ranges[8] + "\nCooldown: " + g.cooldowns[8] + "\nCost: " + g.towerCosts[8];
@@ -142,7 +142,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Missile Tower 2\nShoots damaging missiles\nDamage: " + g.damages[9] + "\nRange: " + g.ranges[9] + "\nCooldown: " + g.cooldowns[9] + "\nCost: " + g.towerCosts[9];
 				break;
 			case 10://splash2
-				towerInfo.text = "Splash Tower 2\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[10] + "\nRange/Radius: " + g.ranges[10] + "\nCooldown: " + g.cooldowns[10] + "\nCost: " + g.towerCosts[10];
+				towerInfo.text = "Splash Tower 2\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[10] + "\nRange: " + g.ranges[10] + "\nSplash radius: " + (g.ranges[10] + (g.defaultEffects[10] - 1.0) * 0.5) + "\nCooldown: " + g.cooldowns[10] + "\nCost: " + g.towerCosts[10];
 				break;
 			case 11://shock2
 				towerInfo.text = "Shock Tower 2\nShoots all enemies within its range\nDamage: " + g.damages[11] + "\nRange: " + g.ranges[11] + "\nCooldown: " + g.cooldowns[11] + "\nCost: " + g.towerCosts[11];
@@ -157,7 +157,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Tesla Tower 2\nSlows enemies that pass between it and another Tesla\nSlow Power: " + g.effects[14] + "\nCost: " + g.towerCosts[14];
 				break;
 			case 15://bridge2
-				towerInfo.text = "Bridge Tower 2\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[15] + "\nCost: " + g.towerCosts[15];
+				towerInfo.text = "Bridge Tower 2\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[15] + "\nMax sendbacks per enemy: " + g.defaultEffects[15] + "\nCost: " + g.towerCosts[15];
 				break;
 			case 16://tag2
 				towerInfo.text = "Tag Tower 2\nShoots and permanently slows an enemy\nDamage: " + g.damages[16] + "\nSlow Power: " + g.effects[16] + "\nRange: " + g.ranges[16] + "\nCooldown: " + g.cooldowns[16] + "\nCost: " + g.towerCosts[16];
@@ -166,7 +166,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Missile Tower 3\nShoots damaging missiles\nDamage: " + g.damages[17] + "\nRange: " + g.ranges[17] + "\nCooldown: " + g.cooldowns[17] + "\nCost: " + g.towerCosts[17];
 				break;
 			case 18://splash3
-				towerInfo.text = "Splash Tower 3\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[18] + "\nRange/Radius: " + g.ranges[18] + "\nCooldown: " + g.cooldowns[18] + "\nCost: " + g.towerCosts[18];
+				towerInfo.text = "Splash Tower 3\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[18] + "\nRange: " + g.ranges[18] + "\nSplash radius: " + (g.ranges[18] + (g.defaultEffects[18] - 1.0) * 0.5) + "\nCooldown: " + g.cooldowns[18] + "\nCost: " + g.towerCosts[18];
 				break;
 			case 19://shock3
 				towerInfo.text = "Shock Tower 3\nShoots all enemies within its range\nDamage: " + g.damages[19] + "\nRange: " + g.ranges[19] + "\nCooldown: " + g.cooldowns[19] + "\nCost: " + g.towerCosts[19];
@@ -181,7 +181,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Tesla Tower 3\nSlows enemies that pass between it and another Tesla\nSlow Power: " + g.effects[22] + "\nCost: " + g.towerCosts[22];
 				break;
 			case 23://bridge3
-				towerInfo.text = "Bridge Tower 3\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[23] + "\nCost: " + g.towerCosts[23];
+				towerInfo.text = "Bridge Tower 3\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[23] + "\nMax sendbacks per enemy: " + g.defaultEffects[23] + "\nCost: " + g.towerCosts[23];
 				break;
 			case 24://tag3
 				towerInfo.text = "Tag Tower 3\nShoots and permanently slows an enemy\nDamage: " + g.damages[24] + "\nSlow Power: " + g.effects[24] + "\nRange: " + g.ranges[24] + "\nCooldown: " + g.cooldowns[24] + "\nCost: " + g.towerCosts[24];

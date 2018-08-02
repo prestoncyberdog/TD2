@@ -429,9 +429,9 @@ public class tile : MonoBehaviour {
 				cooldown -= 1;
 			}
 		}
-		if (status == FILLED && (towerType == TAG || towerType == TAG2 || towerType == TAG3))
+		else if (status == FILLED && (towerType == TAG || towerType == TAG2 || towerType == TAG3))
 		{
-			//same behavior as missile except for slow
+			//same behavior as missile except for slow and with beam
 			if (cooldown == 0)
 			{
 				bool fired = false;
@@ -477,6 +477,24 @@ public class tile : MonoBehaviour {
 				cooldown -= 1;
 			}
 
+		}
+
+		//now check and update stats
+		if (g.damageBoostedTower != this)
+		{
+			damage = g.damages[towerType];
+		}
+		if (g.rangeBoostedTower != this)
+		{
+			range = g.ranges[towerType];
+		}
+		if (g.speedBoostedTower != this)
+		{
+			maxCooldown = g.cooldowns[towerType];
+		}
+		if (g.effectBoostedTower != this)
+		{
+			effect = g.defaultEffects[towerType];
 		}
 	}
 
@@ -571,11 +589,11 @@ public class tile : MonoBehaviour {
 
 				if (g.effectBoostedTower != null)
 				{
-					g.effectBoostedTower.effect = 1;
+					g.effectBoostedTower.effect = g.defaultEffects[g.effectBoostedTower.towerType];
 				}
 				g.effectBoostedTower = this;
 				g.effectIndicator.transform.position = transform.position + new Vector3(.3f, -.3f, -.001f);
-				effect = (int)(1 + g.effectBoost);
+				effect = (int)(g.defaultEffects[towerType] + g.effectBoost);
 				if ((towerType == TESLA) || (towerType == TESLA2) || (towerType == TESLA3) || towerType == TESLACOIL)
 				{
 					makeWebs();
@@ -617,7 +635,7 @@ public class tile : MonoBehaviour {
 				g.gold -= g.towerCosts[towerType];
 				damage = g.damages[towerType];
 				range = g.ranges[towerType];
-				effect = 1;
+				effect = g.defaultEffects[towerType];
 				maxCooldown = g.cooldowns[towerType];
 				if (g.waveActive == false)
 				{

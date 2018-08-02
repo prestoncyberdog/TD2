@@ -102,7 +102,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[9];
 				break;
 			case 7://splash2 tower
-				bonusInfo.text = "Splash Tower 2\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[10] + "\nRange/Radius: " + g.ranges[10] + "\nCooldown: " + g.cooldowns[10] + "\nCost: " + g.towerCosts[10];
+				bonusInfo.text = "Splash Tower 2\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[10] + "\nRange: " + g.ranges[10] + "\nSplash radius: " + (g.ranges[10] + (g.defaultEffects[10] - 1.0) * 0.5) + "\nCooldown: " + g.cooldowns[10] + "\nCost: " + g.towerCosts[10];
 				image.sprite = g.tiles[0].towerSprites[10];
 				break;
 			case 8://tesla tower
@@ -110,7 +110,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[6];
 				break;
 			case 9://bridge tower
-				bonusInfo.text = "Bridge Tower\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[7] + "\nCost: " + g.towerCosts[7];
+				bonusInfo.text = "Bridge Tower\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[7] + "\nMax sendbacks per enemy: " + g.defaultEffects[7] + "\nCost: " + g.towerCosts[7];
 				image.sprite = g.tiles[0].towerSprites[7];
 				break;
 			case 10://tag tower
@@ -134,7 +134,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[14];
 				break;
 			case 15://bridge2 tower
-				bonusInfo.text = "Bridge Tower 2\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[15] + "\nCost: " + g.towerCosts[15];
+				bonusInfo.text = "Bridge Tower 2\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[15] + "\nMax sendbacks per enemy: " + g.defaultEffects[15] + "\nCost: " + g.towerCosts[15];
 				image.sprite = g.tiles[0].towerSprites[15];
 				break;
 			case 16://tag2 tower
@@ -146,7 +146,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[17];
 				break;
 			case 18://splash3 tower
-				bonusInfo.text = "Splash Tower 3\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[18] + "\nRange/Radius: " + g.ranges[18] + "\nCooldown: " + g.cooldowns[18] + "\nCost: " + g.towerCosts[18];
+				bonusInfo.text = "Splash Tower 3\nShoots enemy and splashes onto other nearby enemies\nDamage: " + g.damages[18] + "\nRange: " + g.ranges[18] + "\nSplash radius: " + (g.ranges[18] + (g.defaultEffects[18] - 1.0) * 0.5) + "\nCooldown: " + g.cooldowns[18] + "\nCost: " + g.towerCosts[18];
 				image.sprite = g.tiles[0].towerSprites[18];
 				break;
 			case 19://shock3 tower
@@ -166,7 +166,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[22];
 				break;
 			case 23://bridge3 tower
-				bonusInfo.text = "Bridge Tower 3\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[23] + "\nCost: " + g.towerCosts[23];
+				bonusInfo.text = "Bridge Tower 3\nSends enemies across itself, if the other side is earlier on their route" + "\nCooldown: " + g.cooldowns[23] + "\nMax sendbacks per enemy: " + g.defaultEffects[23] + "\nCost: " + g.towerCosts[23];
 				image.sprite = g.tiles[0].towerSprites[23];
 				break;
 			case 24://tag3 tower
@@ -193,6 +193,102 @@ public class bonus : MonoBehaviour
 				bonusInfo.text = "Teslacoil Tower\nActs as both a powerful Coil and Tesla tower\nBase Damage: " + g.damages[28] + "\nSlow Power: " + g.effects[28] + "\nRange: " + g.ranges[28] + "\nCost: " + g.towerCosts[28];
 				image.sprite = g.tiles[0].towerSprites[28];
 				break;
+			case 30://missile damage +2
+				bonusInfo.text = "Increase damage of all missile towers by 2";
+				image.sprite = g.tiles[0].towerSprites[1];
+				break;
+			case 31://splash range +.5
+				bonusInfo.text = "Increase range/splash radius of all splash towers by 0.5";
+				image.sprite = g.tiles[0].towerSprites[2];
+				break;
+			case 32://shock cd -15
+				bonusInfo.text = "Decrease cooldown of all shock towers by 15";
+				image.sprite = g.tiles[0].towerSprites[3];
+				break;
+			case 33://beam damage +5
+				bonusInfo.text = "Increase damage of all beam towers by 5";
+				image.sprite = g.tiles[0].towerSprites[4];
+				break;
+			case 34://coil damage +4
+				bonusInfo.text = "Increase base damage of all coil towers by 4";
+				image.sprite = g.tiles[0].towerSprites[5];
+				break;
+			case 35://tag damage *2
+				bonusInfo.text = "Double damage of all tag towers";
+				image.sprite = g.tiles[0].towerSprites[8];
+				break;
+			case 36://+200 gold
+				bonusInfo.text = "Gain 200 gold";
+				image.sprite = g.tiles[0].towerSprites[0];
+				break;
+			case 37://+30 lives
+				bonusInfo.text = "Gain 30 lives";
+				image.sprite = g.tiles[0].towerSprites[0];
+				break;
+			case 38://tag +1 slow power
+				bonusInfo.text = "Increase slow power of all tag towers by 1";
+				image.sprite = g.tiles[0].towerSprites[8];
+				break;
+			case 39://tesla +15 slow power
+				bonusInfo.text = "Increase slow power of all tesla towers by 15";
+				image.sprite = g.tiles[0].towerSprites[6];
+				break;
+			case 40://bridge *.75 cooldown
+				bonusInfo.text = "Multiply cooldown of all bridge towers by 0.75";
+				image.sprite = g.tiles[0].towerSprites[7];
+				break;
+			case 41://splash +1 damage
+				bonusInfo.text = "Increase damage of all splash towers by 1";
+				image.sprite = g.tiles[0].towerSprites[2];
+				break;
+			case 42://beam +1 effect +5 damage
+				bonusInfo.text = "Increase damage of all beam towers by 5 and effect by 1 (can shoot through 1 blocked tile)";
+				image.sprite = g.tiles[0].towerSprites[4];
+				break;
+			case 43://bridge +1 effect
+				bonusInfo.text = "Increase effect of all bridge towers by 1 (enemies can be sent back an extra time)";
+				image.sprite = g.tiles[0].towerSprites[7];
+				break;
+			case 44: //missile3 +10 damage +1 range
+				bonusInfo.text = "Increase damage of all missile 3 towers by 10 and range by 1";
+				image.sprite = g.tiles[0].towerSprites[17];
+				break;
+			case 45://shock3 +10 damage
+				bonusInfo.text = "Increase damage of all shock 3 towers by 10";
+				image.sprite = g.tiles[0].towerSprites[19];
+				break;
+			case 46://damage boost +1
+				bonusInfo.text = "Increase damage boost by 1";
+				image.sprite = g.tiles[0].towerSprites[47];
+				break;
+			case 47://range boost +1
+				bonusInfo.text = "Increase range boost by 1";
+				image.sprite = g.tiles[0].towerSprites[48];
+				break;
+			case 48: //speed boost *.5
+				bonusInfo.text = "Multiply speed boost by 0.5";
+				image.sprite = g.tiles[0].towerSprites[49];
+				break;
+			case 49://effect boost +1
+				bonusInfo.text = "Increase effect boost by 1";
+				image.sprite = g.tiles[0].towerSprites[46];
+				break;
+			case 50://beam3 *.75 cd
+				bonusInfo.text = "Multiply cooldown of all beam 3 towers by 0.75";
+				image.sprite = g.tiles[0].towerSprites[20];
+				break;
+			case 51://coil +.5 range
+				bonusInfo.text = "Increase range of all coil towers by 0.5";
+				image.sprite = g.tiles[0].towerSprites[5];
+				break;
+			case 52: //tag +2 slow power
+				bonusInfo.text = "Increase slow power of all tag 3 towers by 2";
+				image.sprite = g.tiles[0].towerSprites[24];
+				break;
+			case 53://+300 gold
+				bonusInfo.text = "Gain 300 gold";
+				image.sprite = g.tiles[0].towerSprites[0];
+				break;
 		}
 
 
@@ -213,6 +309,7 @@ public class bonus : MonoBehaviour
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[19][2] = 0;//enable shock3
 				g.bonuses[27][2] = 0;//enable shocksplash
+				g.bonuses[32][2] = 0;//enable shock cd -15
 				break;
 			case 1://beam tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -220,6 +317,7 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[4];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[20][2] = 0;//enable beam3
+				g.bonuses[33][2] = 0;//enable beam damage +5
 				if (g.bonuses[24][2] == 0)//if tag3 also unlocked
 				{
 					g.bonuses[28][2] = 0;//enable tagbeam
@@ -231,6 +329,7 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[5];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[21][2] = 0;//enable coil3
+				g.bonuses[34][2] = 0;//enable coil damage +4
 				if (g.bonuses[22][2] == 0)//if tesla also unlocked
 				{
 					g.bonuses[29][2] = 0;//enable teslacoil
@@ -241,18 +340,21 @@ public class bonus : MonoBehaviour
 				temp.buttonType = g.sideMenu.buttons[0].DBoostCode;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[g.sideMenu.buttons[0].DBoostCode];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[46][2] = 0;//enable damage boost +1
 				break;
 			case 4://range boost
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = g.sideMenu.buttons[0].RBoostCode;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[g.sideMenu.buttons[0].RBoostCode];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[47][2] = 0;//enable range boost +1
 				break;
 			case 5://speed boost
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = g.sideMenu.buttons[0].SBoostCode;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[g.sideMenu.buttons[0].SBoostCode];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[48][2] = 0;//enable speed boost * .5
 				break;
 			case 6://missile2 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -266,6 +368,7 @@ public class bonus : MonoBehaviour
 				temp.buttonType = 10;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[10];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[41][2] = 0;//enable splash damage +1
 				break;
 			case 8://tesla tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -273,6 +376,7 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[6];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[22][2] = 0;//enable tesla3
+				g.bonuses[39][2] = 0;//enable tesla slow power +15
 				if (g.bonuses[21][2] == 0)//if coil3 also unlocked
 				{
 					g.bonuses[29][2] = 0;//enable teslacoil
@@ -284,6 +388,7 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[7];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[23][2] = 0;//enable bridge3
+				g.bonuses[40][2] = 0;//enable bridge cooldown * .75
 				break;
 			case 10://tag tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -291,6 +396,8 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[8];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[24][2] = 0;//enable tag3
+				g.bonuses[35][2] = 0;//enable tag damage *2
+				g.bonuses[38][2] = 0;//enable tag slow power +1
 				if (g.bonuses[20][2] == 0)//if beam3 also unlocked
 				{
 					g.bonuses[28][2] = 0;//enable tagbeam
@@ -310,6 +417,7 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[12];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[20][2] = 0;//enable beam3
+				g.bonuses[42][2] = 0;//enable beam +1 effect +5 damage
 				if (g.bonuses[24][2] == 0)//if tag3 also unlocked
 				{
 					g.bonuses[28][2] = 0;//enable tagbeam
@@ -325,6 +433,7 @@ public class bonus : MonoBehaviour
 				{
 					g.bonuses[29][2] = 0;//enable teslacoil
 				}
+				g.bonuses[51][2] = 0;//enable coil +.5 range
 				break;
 			case 14://tesla2 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -343,6 +452,7 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[15];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[23][2] = 0;//enable bridge3
+				g.bonuses[43][2] = 0;//enable bridge +1 effect
 				break;
 			case 16://tag2 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -361,30 +471,35 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[17];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[26][2] = 0;//enable missile4
+				g.bonuses[44][2] = 0;//enable missile3 +10 damage +1 range
 				break;
 			case 18://splash3 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 18;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[18];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[41][2] = 0;//enable splash damage +1
 				break;
 			case 19://shock3 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 19;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[19];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[45][2] = 0;//enable shock3 +10 damage
 				break;
 			case 20://beam3 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 20;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[20];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[50][2] = 0;//enable beam3 *.75 cooldown
 				break;
 			case 21://coil3 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = 21;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[21];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[51][2] = 0;//enable coil +.5 range
 				break;
 			case 22://tesla3 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -403,12 +518,14 @@ public class bonus : MonoBehaviour
 				temp.buttonType = 24;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[24];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[52][2] = 0;//enable tag3 +2 slow power
 				break;
 			case 25://effect boost
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
 				temp.buttonType = g.sideMenu.buttons[0].EBoostCode;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[g.sideMenu.buttons[0].EBoostCode];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[49][2] = 0;//enable effect boost +1
 				break;
 			case 26://missile4 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -433,6 +550,120 @@ public class bonus : MonoBehaviour
 				temp.buttonType = 28;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[28];
 				g.sideMenu.buttonsUsed++;
+				break;
+			case 30://missile damage +2
+				g.damages[1] += 2;
+				g.damages[9] += 2;
+				g.damages[17] += 2;
+				g.damages[25] += 2;
+				break;
+			case 31://splash range +.5
+				g.ranges[2] += .5;
+				g.ranges[10] += .5;
+				g.ranges[18] += .5;
+				g.ranges[26] += .5;
+				break;
+			case 32://shock cd -15
+				g.cooldowns[3] -= 15;
+				g.cooldowns[11] -= 15;
+				g.cooldowns[19] -= 15;
+				g.cooldowns[26] -= 15;
+				break;
+			case 33://beam damage +5
+				g.damages[4] += 5;
+				g.damages[12] += 5;
+				g.damages[20] += 5;
+				g.damages[27] += 5;
+				break;
+			case 34://coil damage +4
+				g.damages[5] += 4;
+				g.damages[13] += 4;
+				g.damages[21] += 4;
+				g.damages[28] += 4;
+				break;
+			case 35://tag damage *2
+				g.damages[8] *= 2;
+				g.damages[16] *= 2;
+				g.damages[24] *= 2;
+				g.damages[27] *= 2;
+				break;
+			case 36://+200 gold
+				g.gold += 200;
+				break;
+			case 37://+30 lives
+				g.lives += 30;
+				break;
+			case 38://tag +1 slow power
+				g.effects[8] += 1;
+				g.effects[16] += 1;
+				g.effects[24] += 1;
+				g.effects[27] += 1;
+				break;
+			case 39://tesla +15 slow power
+				g.effects[6] += 15;
+				g.effects[14] += 15;
+				g.effects[22] += 15;
+				g.effects[28] += 15;
+				break;
+			case 40://bridge *.75 cooldown
+				g.cooldowns[7] = (int)(g.cooldowns[7] * 0.75);
+				g.cooldowns[15] = (int)(g.cooldowns[15] * 0.75);
+				g.cooldowns[23] = (int)(g.cooldowns[23] * 0.75);
+				break;
+			case 41://splash +1 damage
+				g.damages[2] += 1;
+				g.damages[10] += 1;
+				g.damages[18] += 1;
+				g.damages[26] += 1;
+				break;
+			case 42://beam +1 effect +5 damage
+				g.damages[4] += 5;
+				g.damages[12] += 5;
+				g.damages[20] += 5;
+				g.damages[27] += 5;
+				g.defaultEffects[4] += 1;
+				g.defaultEffects[12] += 1;
+				g.defaultEffects[20] += 1;
+				g.defaultEffects[27] += 1;
+				break;
+			case 43://bridge +1 effect
+				g.defaultEffects[7] += 1;
+				g.defaultEffects[15] += 1;
+				g.defaultEffects[23] += 1;
+				break;
+			case 44: //missile3 +10 damage +1 range
+				g.damages[17] += 10;
+				g.ranges[17] += 1;
+				break;
+			case 45://shock3 +10 damage
+				g.damages[19] += 10;
+				break;
+			case 46://damage boost +1
+				g.damageBoost += 1;
+				break;
+			case 47://range boost +1
+				g.rangeBoost += 1;
+				break;
+			case 48: //speed boost *.5
+				g.speedBoost *= 0.5;
+				break;
+			case 49://effect boost +1
+				g.effectBoost += 1;
+				break;
+			case 50://beam3 *.75 cd
+				g.cooldowns[20] = (int)(g.cooldowns[20] * 0.75);
+				break;
+			case 51://coil +.5 range
+				g.ranges[5] += .5;
+				g.ranges[13] += .5;
+				g.ranges[21] += .5;
+				g.ranges[28] += .5;
+				break;
+			case 52: //tag +2 slow power
+				g.effects[24] += 2;
+				break;
+			case 53://+300 gold
+				g.gold += 300;
 				break;
 		}
 	}

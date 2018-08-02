@@ -79,6 +79,7 @@ public class game : MonoBehaviour {
 	public double[] ranges;
 	public int[] damages;
 	public int[] effects;
+	public int[] defaultEffects;
 
 
 	// Use this for initialization
@@ -105,7 +106,7 @@ public class game : MonoBehaviour {
 		boostCostMultiplier = 2;
 
 		//for the final number, 0 means available, 1 means unavailable
-		bonuses = new int [30][];
+		bonuses = new int [54][];
 		bonuses[0] = new int[] { 5, 20, 0 };//shock (doubles as default)
 		bonuses[1] = new int[] { 5, 20, 0 };//beam
 		bonuses[2] = new int[] { 5, 20, 0 };//coil
@@ -114,32 +115,58 @@ public class game : MonoBehaviour {
 		bonuses[5] = new int[] { 15, 50, 0 };//speed boost
 		bonuses[6] = new int[] { 5, 20, 0 };//missile2
 		bonuses[7] = new int[] { 5, 20, 0 };//splash2
-		bonuses[8] = new int[] { 20, 35, 0 };//tesla
-		bonuses[9] = new int[] { 20, 35, 0 };//bridge
+		bonuses[8] = new int[] { 20, 30, 0 };//tesla
+		bonuses[9] = new int[] { 20, 30, 0 };//bridge
 		bonuses[10] = new int[] { 5, 20, 0 };//tag
 		bonuses[11] = new int[] { 20, 35, 0 };//shock2
 		bonuses[12] = new int[] { 20, 35, 0 };//beam2
 		bonuses[13] = new int[] { 20, 35, 0 };//coil2
-		bonuses[14] = new int[] { 35, 50, 0 };//tesla2
-		bonuses[15] = new int[] { 35, 50, 0 };//bridge2 
+		bonuses[14] = new int[] { 30, 40, 0 };//tesla2
+		bonuses[15] = new int[] { 30, 40, 0 };//bridge2 
 		bonuses[16] = new int[] { 20, 35, 0 };//tag2
 		bonuses[17] = new int[] { 20, 35, 0 };//missile3 
 		bonuses[18] = new int[] { 20, 35, 0 };//splash3
 		bonuses[19] = new int[] { 35, 50, 1 };//shock3 requires shock 1 or 2
 		bonuses[20] = new int[] { 35, 50, 1 };//beam3 requires beam 1 or 2
 		bonuses[21] = new int[] { 35, 50, 1 };//coil3 requires coil 1 or 2
-		bonuses[22] = new int[] { 35, 50, 1 };//tesla3 requires tesla 1 or 2
-		bonuses[23] = new int[] { 35, 50, 1 };//bridge3  requires bridge 1 or 2
+		bonuses[22] = new int[] { 40, 50, 1 };//tesla3 requires tesla 1 or 2
+		bonuses[23] = new int[] { 40, 50, 1 };//bridge3  requires bridge 1 or 2
 		bonuses[24] = new int[] { 35, 50, 1 };//tag3 requires tag 1 or 2
 		bonuses[25] = new int[] { 15, 50, 0 };//effect boost
 		bonuses[26] = new int[] { 35, 50, 1 };//missile4 requires missile 2 or 3
 		bonuses[27] = new int[] { 45, 50, 1 };//shocksplash requires shock 1 or 2
 		bonuses[28] = new int[] { 45, 50, 1 };//tagbeam requires tag3 and beam3 both available (not necessarily chosen)
 		bonuses[29] = new int[] { 45, 50, 1 };//teslacoil requires tesla3 and coil3 both available (not necessarily chosen)
+		//here end tower bonuses
+		bonuses[30] = new int[] { 5, 5, 0 };//missile +2 damage
+		bonuses[31] = new int[] { 5, 5, 0 };//splash +.5 range
+		bonuses[32] = new int[] { 10, 15, 1 };//shock -15 cd requires shock1
+		bonuses[33] = new int[] { 10, 15, 1 };//beam +5 damage requires beam1
+		bonuses[34] = new int[] { 10, 15, 1 };//coil +4 damage requires coil1
+		bonuses[35] = new int[] { 10, 15, 1 };//tag *2 damage requires tag1
+		bonuses[36] = new int[] { 20, 20, 0 };//+200 gold
+		bonuses[37] = new int[] { 20, 20, 0 };//+30 lives
+		bonuses[38] = new int[] { 20, 20, 1 };//tag +1 slow power requires tag1
+		bonuses[39] = new int[] { 25, 30, 1 };//tesla +15 slow power requires tesla1
+		bonuses[40] = new int[] { 25, 30, 1 };//bridge *.75 cooldown requires bridge1
+		bonuses[41] = new int[] { 25, 30, 1 };//splash +1 damage requires splash 2 or 3
+		bonuses[42] = new int[] { 30, 35, 1 };//beam +1 effect +5 damage requires beam2
+		bonuses[43] = new int[] { 30, 35, 1 };//bridge +1 effect requires bridge2
+		bonuses[44] = new int[] { 35, 35, 1 };//missile3 +10 damage +1 range requires missile3
+		bonuses[45] = new int[] { 40, 40, 1 };//shock3 +10 damage requires shock3
+		bonuses[46] = new int[] { 30, 35, 1 };//Damage boost +1 requires damage boost
+		bonuses[47] = new int[] { 30, 35, 1 };//Range boost +1 requires range boost
+		bonuses[48] = new int[] { 30, 35, 1 };//Speed boost *.5 requires speed boost
+		bonuses[49] = new int[] { 30, 35, 1 };//Effect boost +1 requires effect boost
+		bonuses[50] = new int[] { 40, 40, 1 };//beam3 *.75 cooldown requires beam3
+		bonuses[51] = new int[] { 40, 40, 1 };//coil +.5 range requires coil 2 or 3
+		bonuses[52] = new int[] { 40, 40, 1 };//tag3 +2 slow power requires tag3
+		bonuses[53] = new int[] { 40, 40, 0 };//+300 gold
 
-		bonusFrequency = 5;
+		bonusFrequency = 1;
 		gameMode = 1;//This determines whether bonuses are enabled
-					 //0 means start with all towers, 1 means play with bonuses
+					 //0 means start with all basic towers, 1 means play with bonuses
+					 //2 means play with only tower and boost bonuses
 
 		effectBoost = 0;//additive
 		damageBoost = 1;//multiplicative
@@ -155,9 +182,9 @@ public class game : MonoBehaviour {
 		// these numbers mean: # of creeps, spacing, health, speed(high means slow)
 		waves[0] = new int[] { 10, 10, 1, 10 };//1
 		waves[1] = new int[] { 10, 6, 1, 10 };//2
-		waves[2] = new int[] { 15, 10, 1, 10 };//3
-		waves[3] = new int[] { 20, 10, 2, 10 };//4
-		waves[4] = new int[] { 50, 12, 3, 12 }; //5
+		waves[2] = new int[] { 15, 10, 2, 10 };//3
+		waves[3] = new int[] { 20, 10, 3, 10 };//4
+		waves[4] = new int[] { 50, 12, 4, 12 }; //5
 		waves[5] = new int[] { 30, 10, 5, 10 };//6
 		waves[6] = new int[] { 30, 8, 6, 10 };//7
 		waves[7] = new int[] { 50, 10, 7, 10 };//8
@@ -201,8 +228,8 @@ public class game : MonoBehaviour {
 		waves[45] = new int[] { 150, 10, 780, 10 };//46
 		waves[46] = new int[] { 150, 10, 800, 9 };//47
 		waves[47] = new int[] { 150, 10, 850, 8 };//48
-		waves[48] = new int[] { 100, 2, 850, 10 };//49
-		waves[49] = new int[] { 500, 5, 900, 10 };//50
+		waves[48] = new int[] { 100, 2, 900, 10 };//49
+		waves[49] = new int[] { 500, 5, 1100, 10 };//50
 
 
 
@@ -225,12 +252,17 @@ public class game : MonoBehaviour {
 		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2, shock2, beam2
 		//coil2, tesla2, bridge2, tag2, missile3, splash3, shock3, beam3, coil3, tesla3, bridge3, tag3, missile4
 		//shocksplash, tagbeam, teslacoil
-		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 200, 200, 200, 200, 200, 200, 400, 400, 400, 400, 400, 400, 400, 800, 800, 800 };
+		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 300, 200, 200, 200, 100, 200, 400, 500, 500, 400, 400, 400, 300, 800, 800, 800 };
 		cooldowns = new int[] { 0, 20, 45, 75, 80, 0, 0, 80, 30, 20, 45, 70, 80, 0, 0, 40, 25, 20, 40, 60, 80, 0, 0, 20, 15, 20, 75, 80, 0 };
 		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2, 6.2, 3.3, 0, 4.3 };
-		damages = new int[] { 0, 1, 1, 8, 5, 8, 0, 0, 6, 10, 2, 15, 20, 12, 0, 0, 10, 25, 4, 22, 40, 16, 0, 0, 14, 100, 5, 30, 20 };
+		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 10, 2, 15, 20, 12, 0, 0, 10, 25, 4, 22, 40, 16, 0, 0, 14, 100, 5, 30, 20 };
 		effects = new int[] { 0, 0, 0, 0, 0, 0, 30, 0, 2, 0, 0, 0, 0, 0, 60, 0, 3, 0, 0, 0, 0, 0, 90, 0, 4, 0, 0, 3, 90 };
 
+		defaultEffects = new int[effects.Length];
+		for (int i =0;i<defaultEffects.Length;i++)
+		{
+			defaultEffects[i] = 1;
+		}
 		maxSortCD = 10;
 		sortCD = maxSortCD;
 		route = new tile[200];//max route length < width * height < 200
@@ -295,7 +327,7 @@ public class game : MonoBehaviour {
 			if (waveActive == false && waveWasWactive)
 			{
 				FindPath(start, end, true);
-				if (gameMode == 1 && (waveIndex+1)%bonusFrequency == 0 && waveIndex < numWaves - 1)
+				if (gameMode >= 1 && (waveIndex+1)%bonusFrequency == 0 && waveIndex < numWaves - 1)
 				{
 					
 					offerBonuses();
@@ -303,6 +335,25 @@ public class game : MonoBehaviour {
 				}
 			}
 		}
+
+		//apply boosts every frame
+		if (damageBoostedTower != null)
+		{
+			damageBoostedTower.damage = (int)(damages[damageBoostedTower.towerType] * damageBoost);
+		}
+		if (rangeBoostedTower != null)
+		{
+			rangeBoostedTower.range = (ranges[rangeBoostedTower.towerType] + rangeBoost);
+		}
+		if (speedBoostedTower != null)
+		{
+			speedBoostedTower.maxCooldown = (int)(cooldowns[speedBoostedTower.towerType] * speedBoost);
+		}
+		if (effectBoostedTower != null)
+		{
+			effectBoostedTower.effect = (int)(defaultEffects[effectBoostedTower.towerType] + effectBoost);
+		}
+
 
 		if (waveActive)
 		{
@@ -805,7 +856,10 @@ public class game : MonoBehaviour {
 		{
 			if (bonuses[i][0] <= waveIndex+1 && bonuses[i][1] >= waveIndex+1 && bonuses[i][2] == 0)
 			{
-				options++;
+				if (gameMode == 1 || i < 30)//only offer tower and boost bonuses in mode 2
+				{
+					options++;
+				}
 			}
 		}
 		int choice = Random.Range(0, options);
@@ -814,13 +868,16 @@ public class game : MonoBehaviour {
 		{
 			if (bonuses[j][0] <= waveIndex+1 && bonuses[j][1] >= waveIndex+1 && bonuses[j][2] == 0)
 			{
-				if (choice < 1)
+				if (gameMode == 1 || j < 30)//only offer tower and boost bonuses in mode 2
 				{
-					return j;
-				}
-				else
-				{
-					choice--;
+					if (choice < 1)
+					{
+						return j;
+					}
+					else
+					{
+						choice--;
+					}
 				}
 			}
 		}
