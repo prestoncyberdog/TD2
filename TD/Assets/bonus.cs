@@ -15,7 +15,7 @@ public class bonus : MonoBehaviour
 	public GameObject imageObject;
 	public SpriteRenderer image;
 	public bool chosen;
-
+	public Sprite[] bonusSprites = new Sprite[10];
 
 
 	// Use this for initialization
@@ -219,18 +219,20 @@ public class bonus : MonoBehaviour
 				break;
 			case 36://+200 gold
 				bonusInfo.text = "Gain 200 gold";
-				image.sprite = g.tiles[0].towerSprites[0];
+				image.sprite = bonusSprites[0];
+				image.transform.localScale = new Vector3(3.0f/6.0f, 3.0f/6.0f, 1);
 				break;
 			case 37://+30 lives
 				bonusInfo.text = "Gain 30 lives";
-				image.sprite = g.tiles[0].towerSprites[0];
+				image.sprite = bonusSprites[1];
+				image.transform.localScale = new Vector3(3.0f / 8.0f, 3.0f / 8.0f, 1);
 				break;
-			case 38://tag +1 slow power
-				bonusInfo.text = "Increase slow power of all tag towers by 1";
+			case 38://tag1 +2 slow power
+				bonusInfo.text = "Increase slow power of basic tag towers by " + (int)(4 / g.timeFactor);
 				image.sprite = g.tiles[0].towerSprites[8];
 				break;
-			case 39://tesla +15 slow power
-				bonusInfo.text = "Increase slow power of all tesla towers by 15";
+			case 39://tesla +16 slow power
+				bonusInfo.text = "Increase slow power of all tesla towers by "+ (int)(32 / g.timeFactor);
 				image.sprite = g.tiles[0].towerSprites[6];
 				break;
 			case 40://bridge *.75 cooldown
@@ -277,17 +279,42 @@ public class bonus : MonoBehaviour
 				bonusInfo.text = "Multiply cooldown of all beam 3 towers by 0.75";
 				image.sprite = g.tiles[0].towerSprites[20];
 				break;
-			case 51://coil +.5 range
-				bonusInfo.text = "Increase range of all coil towers by 0.5";
+			case 51://coil +1 range
+				bonusInfo.text = "Increase range of all coil towers by 1";
 				image.sprite = g.tiles[0].towerSprites[5];
 				break;
 			case 52: //tag +2 slow power
-				bonusInfo.text = "Increase slow power of all tag 3 towers by 2";
+				bonusInfo.text = "Increase slow power of all tag towers by "+ (int)(4 / g.timeFactor) ;
 				image.sprite = g.tiles[0].towerSprites[24];
 				break;
 			case 53://+300 gold
 				bonusInfo.text = "Gain 300 gold";
-				image.sprite = g.tiles[0].towerSprites[0];
+				image.sprite = bonusSprites[0];
+				image.transform.localScale = new Vector3(3.0f / 6.0f, 3.0f / 6.0f, 1);
+				break;
+			case 54://all towers *1.2 damage * 1.5 slow power
+				bonusInfo.text = "Multiply damage of all towers by 1.2 and slow power by 1.5";
+				image.sprite = g.tiles[0].towerSprites[47];
+				break;
+			case 55://all towers +1 range
+				bonusInfo.text = "Increase range of all towers by 1";
+				image.sprite = g.tiles[0].towerSprites[48];
+				break;
+			case 56: //all towers *.8 cooldown
+				bonusInfo.text = "Multiply cooldown of all towers by .8";
+				image.sprite = g.tiles[0].towerSprites[49];
+				break;
+			case 57://all towers +1 effect
+				bonusInfo.text = "Increase effect of all towers by 1";
+				image.sprite = g.tiles[0].towerSprites[46];
+				break;
+			case 58://tesla +20 slow power 80% sell cost 
+				bonusInfo.text = "Increase slow power of all tesla towers by 20 and all tesla towers now sell for 80% of their cost";
+				image.sprite = g.tiles[0].towerSprites[6];
+				break;
+			case 59://remove all blocked tiles
+				bonusInfo.text = "Replace all dead tiles with empty spaces";
+				image.sprite = g.tiles[0].blockedSprite;
 				break;
 		}
 
@@ -397,7 +424,7 @@ public class bonus : MonoBehaviour
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[24][2] = 0;//enable tag3
 				g.bonuses[35][2] = 0;//enable tag damage *2
-				g.bonuses[38][2] = 0;//enable tag slow power +1
+				g.bonuses[38][2] = 0;//enable tag1 slow power +2
 				if (g.bonuses[20][2] == 0)//if beam3 also unlocked
 				{
 					g.bonuses[28][2] = 0;//enable tagbeam
@@ -441,6 +468,7 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[14];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[22][2] = 0;//enable tesla3
+				g.bonuses[58][2] = 0;//enable tesla +20 slow power 80% sell cost
 				if (g.bonuses[21][2] == 0)//if coil3 also unlocked
 				{
 					g.bonuses[29][2] = 0;//enable teslacoil
@@ -460,6 +488,7 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[16];
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[24][2] = 0;//enable tag3
+				g.bonuses[52][2] = 0;//enable tag +2 slow power
 				if (g.bonuses[20][2] == 0)//if beam3 also unlocked
 				{
 					g.bonuses[28][2] = 0;//enable tagbeam
@@ -506,6 +535,7 @@ public class bonus : MonoBehaviour
 				temp.buttonType = 22;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[22];
 				g.sideMenu.buttonsUsed++;
+				g.bonuses[58][2] = 0;//enable tesla +20 slow power 80% sell cost
 				break;
 			case 23://bridge3 tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -518,7 +548,7 @@ public class bonus : MonoBehaviour
 				temp.buttonType = 24;
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[24];
 				g.sideMenu.buttonsUsed++;
-				g.bonuses[52][2] = 0;//enable tag3 +2 slow power
+				g.bonuses[52][2] = 0;//enable tag +2 slow power
 				break;
 			case 25://effect boost
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -593,17 +623,14 @@ public class bonus : MonoBehaviour
 			case 37://+30 lives
 				g.lives += 30;
 				break;
-			case 38://tag +1 slow power
-				g.effects[8] += 1;
-				g.effects[16] += 1;
-				g.effects[24] += 1;
-				g.effects[27] += 1;
+			case 38://tag1 +2 slow power
+				g.effects[8] += (int)(4 / g.timeFactor);
 				break;
-			case 39://tesla +15 slow power
-				g.effects[6] += 15;
-				g.effects[14] += 15;
-				g.effects[22] += 15;
-				g.effects[28] += 15;
+			case 39://tesla +16 slow power
+				g.effects[6] += (int)(32 / g.timeFactor);
+				g.effects[14] += (int)(32 / g.timeFactor);
+				g.effects[22] += (int)(32 / g.timeFactor);
+				g.effects[28] += (int)(32 / g.timeFactor);
 				break;
 			case 40://bridge *.75 cooldown
 				g.cooldowns[7] = (int)(g.cooldowns[7] * 0.75);
@@ -653,17 +680,65 @@ public class bonus : MonoBehaviour
 			case 50://beam3 *.75 cd
 				g.cooldowns[20] = (int)(g.cooldowns[20] * 0.75);
 				break;
-			case 51://coil +.5 range
-				g.ranges[5] += .5;
-				g.ranges[13] += .5;
-				g.ranges[21] += .5;
-				g.ranges[28] += .5;
+			case 51://coil +1 range
+				g.ranges[5] += 1;
+				g.ranges[13] += 1;
+				g.ranges[21] += 1;
+				g.ranges[28] += 1;
 				break;
 			case 52: //tag +2 slow power
-				g.effects[24] += 2;
+				g.effects[8] += (int)(4 / g.timeFactor);
+				g.effects[16] += (int)(4 / g.timeFactor);
+				g.effects[24] += (int)(4 / g.timeFactor);
+				g.effects[27] += (int)(4 / g.timeFactor);
 				break;
 			case 53://+300 gold
 				g.gold += 300;
+				break;
+			case 54://all towers *1.2 damage * 1.5 slow power
+				for (int i = 0;i<g.damages.Length;i++)
+				{
+					g.damages[i] = (int)(g.damages[i] * 1.2);
+					g.effects[i] = (int)(g.effects[i] * 1.5);
+				}
+				break;
+			case 55://all towers +1 range
+				for (int i = 0; i < g.ranges.Length; i++)
+				{
+					g.ranges[i] = (g.ranges[i] + 1);
+				}
+				break;
+			case 56: //all towers *.8 cooldown
+				for (int i = 0; i < g.cooldowns.Length; i++)
+				{
+					g.cooldowns[i] = (int)(g.cooldowns[i] * .8);
+				}
+				break;
+			case 57://all towers +1 effect
+				for (int i = 0; i < g.defaultEffects.Length; i++)
+				{
+					g.defaultEffects[i] = (int)(g.defaultEffects[i] + 1);
+				}
+				break;
+			case 58://tesla +20 slow power 80% sell cost
+				g.effects[6] += (int)(40 / g.timeFactor);
+				g.effects[14] += (int)(40 / g.timeFactor);
+				g.effects[22] += (int)(40 / g.timeFactor);
+				g.effects[28] += (int)(40 / g.timeFactor);
+				g.sellCosts[6] = (int)(g.towerCosts[6] * .8);
+				g.sellCosts[14] = (int)(g.towerCosts[14] * .8);
+				g.sellCosts[22] = (int)(g.towerCosts[22] * .8);
+				g.sellCosts[28] = (int)(g.towerCosts[28] * .8);
+				break;
+			case 59://remove all blocked tiles
+				for(int i = 0;i<g.tiles.Length;i++)
+				{
+					if (g.tiles[i].status == g.tiles[i].BLOCKED)
+					{
+						g.tiles[i].status = g.tiles[i].EMPTY;
+						g.tiles[i].GetComponent<SpriteRenderer>().sprite = g.tiles[i].emptySprite;
+					}
+				}
 				break;
 		}
 	}

@@ -71,6 +71,7 @@
     <Compile Include="Assets\game.cs" />
     <Compile Include="Assets\menu.cs" />
     <Compile Include="Assets\missile.cs" />
+    <Compile Include="Assets\rangeCircle.cs" />
     <Compile Include="Assets\tile.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/elijahg/Documents/temp/TD/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>

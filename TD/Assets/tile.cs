@@ -157,7 +157,7 @@ public class tile : MonoBehaviour {
 							beam temp = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
 							temp.transform.position = new Vector3(100, 100, 0);
 							temp.beamType = 0;
-							temp.lifetime = 5;
+							temp.lifetime = (int)(12.0/g.timeFactor);
 							if (towerType == SHOCKSPLASH)
 							{
 								temp.GetComponent<SpriteRenderer>().sprite = temp.gwBeam;
@@ -230,7 +230,7 @@ public class tile : MonoBehaviour {
 							temp.enemy = g.creeps[i];
 							temp.beamType = 0;
 							temp.GetComponent<SpriteRenderer>().sprite = temp.whiteBeam;
-							temp.lifetime = 5;
+							temp.lifetime = (int)(12.0 / g.timeFactor);
 							temp.setBeam(temp.beamType);
 						}
 
@@ -328,7 +328,7 @@ public class tile : MonoBehaviour {
 						temp.GetComponent<SpriteRenderer>().sprite = temp.rpBeam;
 					}
 					temp.setBeam(temp.beamType);
-					temp.lifetime = 8;
+					temp.lifetime = (int)(16.0 / g.timeFactor);
 
 				}
 			}
@@ -463,7 +463,7 @@ public class tile : MonoBehaviour {
 					temp.enemy = g.creeps[targetIndex];
 					temp.beamType = 3;
 					temp.GetComponent<SpriteRenderer>().sprite = temp.purpleBeam;
-					temp.lifetime = 5;
+					temp.lifetime = (int)(12.0 / g.timeFactor);
 					temp.setBeam(temp.beamType);
 
 					//slow enemy
@@ -506,9 +506,11 @@ public class tile : MonoBehaviour {
 		}
 
 		button sample2 = FindObjectOfType<button>();
-		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+		if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && status == FILLED)
 		{
 			g.lastTowerSelected = this;
+			g.towerSelected = true;
+			//g.sideMenu.towerInfoString = "Test string";
 		}
 		//prevents building during waves on creep paths
 		if (this == g.start || this == g.end)
@@ -534,6 +536,7 @@ public class tile : MonoBehaviour {
 			//you cant move boosts during a round
 			if ((g.currButtonActive == sample2.DBoostCode || g.currButtonActive == sample2.RBoostCode || g.currButtonActive == sample2.SBoostCode || g.currButtonActive == sample2.EBoostCode) && Input.GetMouseButtonDown(0))
 			{
+
 				return;
 			}
 		}
@@ -691,7 +694,7 @@ public class tile : MonoBehaviour {
 				}
 				else
 				{
-					g.gold += g.towerCosts[towerType]/2;
+					g.gold += g.sellCosts[towerType];
 				}
 
 				if (towerType == TESLA || towerType == TESLA2 || towerType == TESLA3 || towerType == TESLACOIL)

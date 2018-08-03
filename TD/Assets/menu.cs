@@ -18,28 +18,32 @@ public class menu : MonoBehaviour {
 	public button[] buttons;
 	public int buttonsUsed;
 
+	public string towerInfoString;
+
 
 	// Use this for initialization
 	void Start () {
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 1280f)), 0);
 
+		transform.position = transform.position + new Vector3(0, 0, -.1f);
+
 		overall = new GameObject("overall");
 		overall.transform.SetParent(FindObjectOfType<Canvas>().transform);
 		overallInfo = overall.AddComponent<Text>();
-		overallInfo.fontSize = 30;
+		overallInfo.fontSize = 24;
 		overallInfo.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
 		overall.layer = 5;
 		overallInfo.color = Color.black;
 		overallInfo.alignment = TextAnchor.MiddleCenter;
 		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
 		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
-		overallInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * 330f / 894f, 0);
+		overallInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * 320f / 894f, 0);
 
 		wave = new GameObject("waveinfo");
 		wave.transform.SetParent(FindObjectOfType<Canvas>().transform);
 		waveInfo = wave.AddComponent<Text>();
-		waveInfo.fontSize = 20;
+		waveInfo.fontSize = 16;
 		waveInfo.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
 		wave.layer = 5;
 		waveInfo.color = Color.black;
@@ -59,6 +63,8 @@ public class menu : MonoBehaviour {
 		towerInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
 		towerInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 220);
 		towerInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 315f/894f, 0);
+
+		towerInfoString = "";
 
 		buttons = new button[12];
 		for(int i = 0;i<buttons.Length;i++)
@@ -98,7 +104,7 @@ public class menu : MonoBehaviour {
 	
 	void SetText()
 	{
-		overallInfo.text = "Wave : " + (g.waveIndex + 1) + "/" + g.numWaves + "\nLives: " + g.lives + "\nGold: " + g.gold;
+		overallInfo.text = "Wave : " + (g.waveIndex + 1) + "/" + g.numWaves + "\nLives: " + g.lives + "\nGold: " + g.gold + "\nTime Factor: " + g.timeFactor/2;
 		if (g.waveIndex < g.numWaves - 1)
 		{
 			waveInfo.text = "Next: Wave " + (g.waveIndex + 2) + "\n# of creeps: " + g.waves[g.waveIndex + 1][0] + "\nHealth: " + g.waves[g.waveIndex + 1][2] + "\nSpacing: " + g.waves[g.waveIndex + 1][1] + "\nTravel Time: " + g.waves[g.waveIndex+1][3];
@@ -210,6 +216,15 @@ public class menu : MonoBehaviour {
 			case 49://speed boost
 				towerInfo.text = "Speed Boost\nDecreases cooldown of a single tower" + "\nCooldown Multiplier: " + g.speedBoost + "\nUpgrade amount(multiplies): " + g.sBoostGain + "\nCost to upgrade: " + g.speedCost;
 				break;
+		}
+
+		g.towerRange.transform.position = new Vector3(100, 100, 0);
+		if (g.towerSelected && g.lastTowerSelected.status == g.lastTowerSelected.FILLED)
+		{
+			towerInfo.text = g.towerNames[g.lastTowerSelected.towerType] + "\nDamage: " + g.lastTowerSelected.damage + "\nRange: " + g.lastTowerSelected.range + "\nCooldown: " + g.lastTowerSelected.maxCooldown + "\nSlow Power: " + g.lastTowerSelected.effect * g.effects[g.lastTowerSelected.towerType] + "\nBonus Effect: " + (g.lastTowerSelected.effect - 1) +"\nSell cost: " + g.sellCosts[g.lastTowerSelected.towerType];
+			g.towerRange.transform.position = g.lastTowerSelected.transform.position + new Vector3(0, 0, -.01f);
+			float scaleFactor = (float)(g.lastTowerSelected.range / 2.5);
+			g.towerRange.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1);
 		}
 	}
 }

@@ -11,6 +11,7 @@ public class game : MonoBehaviour {
 	public int tileSpace = 1;
 	public Transform Ant;
 	public Transform Beam;
+	public Transform Range;
 	public tile start;
 	public tile end;
 	public ant[] creeps;
@@ -39,6 +40,8 @@ public class game : MonoBehaviour {
 	public int currButtonActive;
 	public int lives;
 	public int gold;
+	public int goldWaveMultiplier;
+	public double timeFactor;
 
 	//special boosts
 	public double effectBoost;
@@ -74,12 +77,17 @@ public class game : MonoBehaviour {
 
 	public int gameMode;
 
+	public bool towerSelected;
+	public rangeCircle towerRange;
+
 	public int[] towerCosts;
 	public int[] cooldowns;
 	public double[] ranges;
 	public int[] damages;
 	public int[] effects;
 	public int[] defaultEffects;
+	public int[] sellCosts;
+	public string[] towerNames;
 
 
 	// Use this for initialization
@@ -105,8 +113,10 @@ public class game : MonoBehaviour {
 		sBoostGain = .75;
 		boostCostMultiplier = 2;
 
+		towerRange = Instantiate(Range, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<rangeCircle>();
+
 		//for the final number, 0 means available, 1 means unavailable
-		bonuses = new int [54][];
+		bonuses = new int [60][];
 		bonuses[0] = new int[] { 5, 20, 0 };//shock (doubles as default)
 		bonuses[1] = new int[] { 5, 20, 0 };//beam
 		bonuses[2] = new int[] { 5, 20, 0 };//coil
@@ -146,7 +156,7 @@ public class game : MonoBehaviour {
 		bonuses[35] = new int[] { 10, 15, 1 };//tag *2 damage requires tag1
 		bonuses[36] = new int[] { 20, 20, 0 };//+200 gold
 		bonuses[37] = new int[] { 20, 20, 0 };//+30 lives
-		bonuses[38] = new int[] { 20, 20, 1 };//tag +1 slow power requires tag1
+		bonuses[38] = new int[] { 20, 20, 1 };//tag1 +2 slow power requires tag1
 		bonuses[39] = new int[] { 25, 30, 1 };//tesla +15 slow power requires tesla1
 		bonuses[40] = new int[] { 25, 30, 1 };//bridge *.75 cooldown requires bridge1
 		bonuses[41] = new int[] { 25, 30, 1 };//splash +1 damage requires splash 2 or 3
@@ -159,11 +169,18 @@ public class game : MonoBehaviour {
 		bonuses[48] = new int[] { 30, 35, 1 };//Speed boost *.5 requires speed boost
 		bonuses[49] = new int[] { 30, 35, 1 };//Effect boost +1 requires effect boost
 		bonuses[50] = new int[] { 40, 40, 1 };//beam3 *.75 cooldown requires beam3
-		bonuses[51] = new int[] { 40, 40, 1 };//coil +.5 range requires coil 2 or 3
-		bonuses[52] = new int[] { 40, 40, 1 };//tag3 +2 slow power requires tag3
+		bonuses[51] = new int[] { 40, 40, 1 };//coil +1 range requires coil 2 or 3
+		bonuses[52] = new int[] { 40, 40, 1 };//tag +2 slow power requires tag 2 or 3
 		bonuses[53] = new int[] { 40, 40, 0 };//+300 gold
+		bonuses[54] = new int[] { 45, 45, 0 };//all towers *1.2 damage * 1.5 slow power
+		bonuses[55] = new int[] { 45, 45, 0 };//all towers +1 range
+		bonuses[56] = new int[] { 45, 45, 0 };//all towers *.8 cooldown
+		bonuses[57] = new int[] { 45, 45, 0 };//all towers +1 effect
+		bonuses[58] = new int[] { 40, 40, 1 };//tesla +20 slow power 80% sell cost requires tesla 2 or 3
+		bonuses[59] = new int[] { 35, 40, 0 };//remove all blocked tiles
 
-		bonusFrequency = 1;
+
+		bonusFrequency = 5;
 		gameMode = 1;//This determines whether bonuses are enabled
 					 //0 means start with all basic towers, 1 means play with bonuses
 					 //2 means play with only tower and boost bonuses
@@ -174,7 +191,10 @@ public class game : MonoBehaviour {
 		speedBoost = 1;//this multiplies cooldown
 		MaxLives = 20;
 		lives = MaxLives;
+
 		gold = 30;
+
+		goldWaveMultiplier = 0;
 		numWaves = 50;
 		waveIndex = -1;
 		waves = new int[numWaves][];
@@ -188,17 +208,17 @@ public class game : MonoBehaviour {
 		waves[5] = new int[] { 30, 10, 5, 10 };//6
 		waves[6] = new int[] { 30, 8, 6, 10 };//7
 		waves[7] = new int[] { 50, 10, 7, 10 };//8
-		waves[8] = new int[] { 50, 5, 10, 12 };//9
+		waves[8] = new int[] { 50, 6, 10, 12 };//9
 		waves[9] = new int[] { 100, 10, 15, 10 };//10
 		waves[10] = new int[] { 50, 12, 25, 10 };//11
 		waves[11] = new int[] { 50, 10, 30, 10 };//12
 		waves[12] = new int[] { 50, 6, 30, 10 };//13
 		waves[13] = new int[] { 50, 10, 35, 10 };//14
 		waves[14] = new int[] { 150, 8, 40, 10 };//15
-		waves[15] = new int[] { 100, 5, 50, 10 };//16
+		waves[15] = new int[] { 100, 6, 50, 10 };//16
 		waves[16] = new int[] { 10, 50, 150, 10 };//17
 		waves[17] = new int[] { 100, 10, 80, 10 };//18
-		waves[18] = new int[] { 100, 6, 80, 9 };//19
+		waves[18] = new int[] { 100, 6, 80, 10 };//19
 		waves[19] = new int[] { 200, 8, 100, 10 };//20
 		waves[20] = new int[] { 30, 2, 120, 10 };//21
 		waves[21] = new int[] { 150, 10, 130, 10 };//22
@@ -206,30 +226,30 @@ public class game : MonoBehaviour {
 		waves[23] = new int[] { 150, 10, 140, 10 };//24
 		waves[24] = new int[] { 250, 8, 160, 10 };//25
 		waves[25] = new int[] { 100, 10, 170, 10 };//26
-		waves[26] = new int[] { 50, 15, 180, 9 };//27
+		waves[26] = new int[] { 50, 15, 180, 10 };//27
 		waves[27] = new int[] { 150, 5, 180, 10 };//28
-		waves[28] = new int[] { 50, 7, 180, 9 };//29
-		waves[29] = new int[] { 300, 9, 220, 10 };//30
+		waves[28] = new int[] { 50, 8, 180, 10 };//29
+		waves[29] = new int[] { 300, 10, 220, 10 };//30
 		waves[30] = new int[] { 100, 15, 150, 5 };//31
 		waves[31] = new int[] { 150, 8, 250, 10 };//32
 		waves[32] = new int[] { 100, 40, 800, 12 };//33
-		waves[33] = new int[] { 100, 10, 280, 9 };//34
-		waves[34] = new int[] { 350, 6, 320, 11 };//35
+		waves[33] = new int[] { 100, 10, 280, 10 };//34
+		waves[34] = new int[] { 350, 6, 320, 12 };//35
 		waves[35] = new int[] { 100, 10, 350, 10 };//36
-		waves[36] = new int[] { 100, 10, 365, 9 };//37
+		waves[36] = new int[] { 100, 10, 365, 10 };//37
 		waves[37] = new int[] { 100, 10, 380, 8 };//38
-		waves[38] = new int[] { 150, 5, 400, 10 };//39
+		waves[38] = new int[] { 150, 6, 400, 10 };//39
 		waves[39] = new int[] { 400, 8, 450, 10 };//40
-		waves[40] = new int[] { 100, 10, 500, 8 };//41
-		waves[41] = new int[] { 150, 6, 550, 10 };//42
-		waves[42] = new int[] { 100, 10, 580, 10 };//43
-		waves[43] = new int[] { 100, 10, 700, 11 };//44
-		waves[44] = new int[] { 450, 10, 720, 10 };//45
-		waves[45] = new int[] { 150, 10, 780, 10 };//46
-		waves[46] = new int[] { 150, 10, 800, 9 };//47
-		waves[47] = new int[] { 150, 10, 850, 8 };//48
-		waves[48] = new int[] { 100, 2, 900, 10 };//49
-		waves[49] = new int[] { 500, 5, 1100, 10 };//50
+		waves[40] = new int[] { 100, 10, 550, 8 };//41
+		waves[41] = new int[] { 150, 6, 700, 10 };//42
+		waves[42] = new int[] { 100, 10, 800, 10 };//43
+		waves[43] = new int[] { 100, 10, 900, 12 };//44
+		waves[44] = new int[] { 450, 10, 1000, 10 };//45
+		waves[45] = new int[] { 150, 10, 1200, 10 };//46
+		waves[46] = new int[] { 150, 10, 1300, 10 };//47
+		waves[47] = new int[] { 150, 10, 1400, 8 };//48
+		waves[48] = new int[] { 100, 2, 1500, 10 };//49
+		waves[49] = new int[] { 500, 6, 2000, 10 };//50
 
 
 
@@ -253,17 +273,23 @@ public class game : MonoBehaviour {
 		//coil2, tesla2, bridge2, tag2, missile3, splash3, shock3, beam3, coil3, tesla3, bridge3, tag3, missile4
 		//shocksplash, tagbeam, teslacoil
 		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 300, 200, 200, 200, 100, 200, 400, 500, 500, 400, 400, 400, 300, 800, 800, 800 };
-		cooldowns = new int[] { 0, 20, 45, 75, 80, 0, 0, 80, 30, 20, 45, 70, 80, 0, 0, 40, 25, 20, 40, 60, 80, 0, 0, 20, 15, 20, 75, 80, 0 };
-		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2, 6.2, 3.3, 0, 4.3 };
-		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 10, 2, 15, 20, 12, 0, 0, 10, 25, 4, 22, 40, 16, 0, 0, 14, 100, 5, 30, 20 };
-		effects = new int[] { 0, 0, 0, 0, 0, 0, 30, 0, 2, 0, 0, 0, 0, 0, 60, 0, 3, 0, 0, 0, 0, 0, 90, 0, 4, 0, 0, 3, 90 };
+		cooldowns = new int[] { 0, 20, 44, 74, 80, 0, 0, 80, 30, 20, 44, 70, 80, 0, 0, 40, 24, 20, 40, 60, 80, 0, 0, 20, 16, 20, 74, 80, 0 };
+		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2, 6.2, 3.3, 0, 3.8 };
+		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 10, 2, 15, 20, 12, 0, 0, 16, 25, 4, 22, 40, 16, 0, 0, 18, 100, 5, 30, 20 };
+		effects = new int[] { 0, 0, 0, 0, 0, 0, 30, 0, 2, 0, 0, 0, 0, 0, 60, 0, 2, 0, 0, 0, 0, 0, 90, 0, 4, 0, 0, 2, 90 };
 
+		timeFactor = 2;//to change this, call setTimeFactor here
+
+		towerNames = new string[] { "Blocker", "Missile Tower", "Splash Tower", "Shock Tower", "Beam Tower", "Coil Tower", "Tesla Tower", "Bridge Tower", "Tag Tower", "Missile Tower 2", "Splash Tower 2", "Shock Tower 2", "Beam Tower 2", "Coil Tower 2", "Tesla Tower 2", "Bridge Tower 2", "Tag Tower 2", "Missile Tower 3", "Splash Tower 3", "Shock Tower 3", "Beam Tower 3", "Coil Tower 3", "Tesla Tower 3", "Bridge Tower 3", "Tag Tower 3", "Missile Tower 4", "Shocksplash Tower", "Tagbeam Tower", "Teslacoil Tower" };
 		defaultEffects = new int[effects.Length];
+		sellCosts = new int[towerCosts.Length];
 		for (int i =0;i<defaultEffects.Length;i++)
 		{
 			defaultEffects[i] = 1;
+			sellCosts[i] = (int)(towerCosts[i] * .5);
 		}
 		maxSortCD = 10;
+		towerSelected = false;
 		sortCD = maxSortCD;
 		route = new tile[200];//max route length < width * height < 200
 		beams = new beam[200];
@@ -327,6 +353,7 @@ public class game : MonoBehaviour {
 			if (waveActive == false && waveWasWactive)
 			{
 				FindPath(start, end, true);
+				gold += (waveIndex + 1) * goldWaveMultiplier;
 				if (gameMode >= 1 && (waveIndex+1)%bonusFrequency == 0 && waveIndex < numWaves - 1)
 				{
 					
@@ -348,6 +375,10 @@ public class game : MonoBehaviour {
 		if (speedBoostedTower != null)
 		{
 			speedBoostedTower.maxCooldown = (int)(cooldowns[speedBoostedTower.towerType] * speedBoost);
+			if (speedBoostedTower.maxCooldown % (4/timeFactor) != 0)
+			{
+				speedBoostedTower.maxCooldown -= (int)(speedBoostedTower.maxCooldown % (4/timeFactor));
+			}
 		}
 		if (effectBoostedTower != null)
 		{
@@ -376,6 +407,10 @@ public class game : MonoBehaviour {
 				{
 					waveIndex += 1;
 				}
+				else
+				{
+					waves[waveIndex][2] *= 2;
+				}
 				//SpawnCreeps(10, 10, 3);
 				route = new tile[200];//max route length < width * height < 200
 				SpawnCreeps(waves[waveIndex][0], waves[waveIndex][1], waves[waveIndex][2], waves[waveIndex][3]);
@@ -384,6 +419,28 @@ public class game : MonoBehaviour {
 					tiles[i].refund = false;
 					tiles[i].blockerRefund = false;
 					tiles[i].cooldown = 0;
+				}
+			}
+		}
+
+		//handle time factor
+		if (Input.GetKeyDown(KeyCode.Z))
+		{
+			if (waveActive == false)
+			{
+				if (timeFactor > 1)
+				{
+					setTimeFactor(.5);
+				}
+			}
+		}
+		if (Input.GetKeyDown(KeyCode.X))
+		{
+			if (waveActive == false)
+			{
+				if (timeFactor < 4)
+				{
+					setTimeFactor(2);
 				}
 			}
 		}
@@ -901,5 +958,20 @@ public class game : MonoBehaviour {
 		Destroy(option1.gameObject);
 		Destroy(option2.gameObject);
 		paused = false;
+	}
+
+	public void setTimeFactor(double toMultiply)
+	{
+		timeFactor *= toMultiply;
+		for (int i = 0; i<waves.Length;i++)
+		{
+			waves[i][1] = (int)(waves[i][1] / toMultiply);
+			waves[i][3] = (int)(waves[i][3] / toMultiply);
+		}
+		for (int j = 0; j<cooldowns.Length;j++)
+		{
+			cooldowns[j] = (int)(cooldowns[j] / toMultiply);
+			effects[j] = (int)(effects[j] / toMultiply);
+		}
 	}
 }

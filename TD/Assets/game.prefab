@@ -56,11 +56,13 @@ MonoBehaviour:
   tileSpace: 1
   Ant: {fileID: 4688299442104080, guid: adeeaa9e68e615a42b2d31c4956c27ad, type: 2}
   Beam: {fileID: 4169319785508466, guid: 644104a5154153c49bec71e12807a27f, type: 2}
+  Range: {fileID: 4883823283440800, guid: 9911bbc8142d50d4c95460eaf3e06242, type: 2}
   start: {fileID: 0}
   end: {fileID: 0}
   creeps: []
   route: []
   beams: []
+  sideMenu: {fileID: 0}
   numWaves: 0
   waveIndex: 0
   toSpawnCount: 0
@@ -76,27 +78,41 @@ MonoBehaviour:
   lastTowerSelected: {fileID: 0}
   paused: 0
   currButtonActive: 0
-  waveText: {fileID: 0}
   lives: 0
-  livesText: {fileID: 0}
   gold: 0
-  goldText: {fileID: 0}
-  bodyText: {fileID: 0}
+  goldWaveMultiplier: 0
+  effectBoost: 0
   damageBoost: 0
   rangeBoost: 0
   speedBoost: 0
+  effectBoostedTower: {fileID: 0}
   damageBoostedTower: {fileID: 0}
   rangeBoostedTower: {fileID: 0}
   speedBoostedTower: {fileID: 0}
+  effectIndicator: {fileID: 0}
   damageIndicator: {fileID: 0}
   rangeIndicator: {fileID: 0}
   speedIndicator: {fileID: 0}
   Indicator: {fileID: 4873597675604376, guid: 644f2d0d0dbde354483e39b9f280fc29, type: 2}
+  effectCost: 0
   damageCost: 0
   rangeCost: 0
   speedCost: 0
+  eBoostGain: 0
   dBoostGain: 0
   rBoostGain: 0
   sBoostGain: 0
-  bonusCoords: 
+  boostCostMultiplier: 0
   Bonus: {fileID: 4650647113119270, guid: 58c08198798c46a42b8c0bc6b30795bb, type: 2}
+  bonusFrequency: 0
+  gameMode: 0
+  towerSelected: 0
+  towerRange: {fileID: 0}
+  towerCosts: 
+  cooldowns: 
+  ranges: []
+  damages: 
+  effects: 
+  defaultEffects: 
+  sellCosts: 
+  towerNames: []

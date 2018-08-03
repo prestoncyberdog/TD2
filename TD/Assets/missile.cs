@@ -38,7 +38,7 @@ public class missile : MonoBehaviour {
 		else
 		{
 			//speed controlled here
-			transform.position = transform.position + (target.transform.position - transform.position).normalized * .15f;
+			transform.position = transform.position + (target.transform.position - transform.position).normalized * (float)(.075f * g.timeFactor);
 		}
 
 

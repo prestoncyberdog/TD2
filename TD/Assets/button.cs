@@ -170,6 +170,11 @@ public class button : MonoBehaviour {
 			return;
 		}
 
+		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+		{
+			g.towerSelected = false;
+		}
+
 		if (Input.GetMouseButtonDown(0))
 		{
 			g.currButtonActive = buttonType;
