@@ -11,6 +11,8 @@ public class menu : MonoBehaviour {
 	public Text overallInfo;
 	public GameObject wave;
 	public Text waveInfo;
+	public GameObject nextWave;
+	public Text nextWaveInfo;
 	public GameObject tower;
 	public Text towerInfo;
 
@@ -50,7 +52,19 @@ public class menu : MonoBehaviour {
 		waveInfo.alignment = TextAnchor.MiddleCenter;
 		waveInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
 		waveInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
-		waveInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * 210f / 894f, 0);
+		waveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * -65f / 1280f, Screen.height * 210f / 894f, 0);
+
+		nextWave = new GameObject("nextwaveinfo");
+		nextWave.transform.SetParent(FindObjectOfType<Canvas>().transform);
+		nextWaveInfo = nextWave.AddComponent<Text>();
+		nextWaveInfo.fontSize = 16;
+		nextWaveInfo.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+		nextWave.layer = 5;
+		nextWaveInfo.color = Color.black;
+		nextWaveInfo.alignment = TextAnchor.MiddleCenter;
+		nextWaveInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
+		nextWaveInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
+		nextWaveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * 65f / 1280f, Screen.height * 210f / 894f, 0);
 
 		tower = new GameObject("towerinfo");
 		tower.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -105,14 +119,18 @@ public class menu : MonoBehaviour {
 	void SetText()
 	{
 		overallInfo.text = "Wave : " + (g.waveIndex + 1) + "/" + g.numWaves + "\nLives: " + g.lives + "\nGold: " + g.gold + "\nTime Factor: " + g.timeFactor/2;
+
+		if (g.waveIndex >= 0)
+		{
+			waveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + g.waves[g.waveIndex][0] + "\nHealth: " + g.waves[g.waveIndex][2] + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
+		}
 		if (g.waveIndex < g.numWaves - 1)
 		{
-			waveInfo.text = "Next: Wave " + (g.waveIndex + 2) + "\n# of creeps: " + g.waves[g.waveIndex + 1][0] + "\nHealth: " + g.waves[g.waveIndex + 1][2] + "\nSpacing: " + g.waves[g.waveIndex + 1][1] + "\nTravel Time: " + g.waves[g.waveIndex+1][3];
-
+			nextWaveInfo.text = "Wave " + (g.waveIndex + 2) + "\n#: " + g.waves[g.waveIndex + 1][0] + "\nHealth: " + g.waves[g.waveIndex + 1][2] + "\nSpacing: " + g.waves[g.waveIndex + 1][1] + "\nPace: " + g.waves[g.waveIndex+1][3];
 		}
 		else
 		{
-			waveInfo.text = "Next: Wave " + (g.waveIndex + 1) + "\n# of creeps: " + g.waves[g.waveIndex][0] + "\nHealth: " + g.waves[g.waveIndex][2] + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nTravel Time: " + g.waves[g.waveIndex][3];
+			nextWaveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + g.waves[g.waveIndex][0] + "\nHealth: " + 2 * g.waves[g.waveIndex][2] + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
 		}
 
 		switch (g.currButtonActive)

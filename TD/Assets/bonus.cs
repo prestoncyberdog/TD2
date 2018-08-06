@@ -201,8 +201,8 @@ public class bonus : MonoBehaviour
 				bonusInfo.text = "Increase range/splash radius of all splash towers by 0.5";
 				image.sprite = g.tiles[0].towerSprites[2];
 				break;
-			case 32://shock cd -15
-				bonusInfo.text = "Decrease cooldown of all shock towers by 15";
+			case 32://shock cd -14
+				bonusInfo.text = "Decrease cooldown of all shock towers by 14";
 				image.sprite = g.tiles[0].towerSprites[3];
 				break;
 			case 33://beam damage +5
@@ -222,8 +222,8 @@ public class bonus : MonoBehaviour
 				image.sprite = bonusSprites[0];
 				image.transform.localScale = new Vector3(3.0f/6.0f, 3.0f/6.0f, 1);
 				break;
-			case 37://+30 lives
-				bonusInfo.text = "Gain 30 lives";
+			case 37://+50 lives
+				bonusInfo.text = "Gain 50 lives";
 				image.sprite = bonusSprites[1];
 				image.transform.localScale = new Vector3(3.0f / 8.0f, 3.0f / 8.0f, 1);
 				break;
@@ -593,11 +593,11 @@ public class bonus : MonoBehaviour
 				g.ranges[18] += .5;
 				g.ranges[26] += .5;
 				break;
-			case 32://shock cd -15
-				g.cooldowns[3] -= 15;
-				g.cooldowns[11] -= 15;
-				g.cooldowns[19] -= 15;
-				g.cooldowns[26] -= 15;
+			case 32://shock cd -14
+				g.cooldowns[3] -= 14;
+				g.cooldowns[11] -= 14;
+				g.cooldowns[19] -= 14;
+				g.cooldowns[26] -= 14;
 				break;
 			case 33://beam damage +5
 				g.damages[4] += 5;
@@ -620,8 +620,8 @@ public class bonus : MonoBehaviour
 			case 36://+200 gold
 				g.gold += 200;
 				break;
-			case 37://+30 lives
-				g.lives += 30;
+			case 37://+50 lives
+				g.lives += 50;
 				break;
 			case 38://tag1 +2 slow power
 				g.effects[8] += (int)(4 / g.timeFactor);
@@ -631,6 +631,13 @@ public class bonus : MonoBehaviour
 				g.effects[14] += (int)(32 / g.timeFactor);
 				g.effects[22] += (int)(32 / g.timeFactor);
 				g.effects[28] += (int)(32 / g.timeFactor);
+				for (int j = 0; j < g.tiles.Length; j++)//reapply webbing to all tiles
+				{
+					if (g.tiles[j].towerType == g.tiles[j].TESLA || g.tiles[j].towerType == g.tiles[j].TESLA2 || g.tiles[j].towerType == g.tiles[j].TESLA3 || g.tiles[j].towerType == g.tiles[j].TESLACOIL)
+					{
+						g.tiles[j].makeWebs();
+					}
+				}
 				break;
 			case 40://bridge *.75 cooldown
 				g.cooldowns[7] = (int)(g.cooldowns[7] * 0.75);
@@ -701,23 +708,67 @@ public class bonus : MonoBehaviour
 					g.damages[i] = (int)(g.damages[i] * 1.2);
 					g.effects[i] = (int)(g.effects[i] * 1.5);
 				}
+				for (int j = 0; j < g.tiles.Length; j++)//reapply damage to all tiles
+				{
+					g.tiles[j].damage = g.damages[g.tiles[j].towerType];
+					if (g.damageBoostedTower == g.tiles[j])
+					{
+						g.tiles[j].damage = (int)(g.tiles[j].damage + g.damageBoost);
+					}
+					if (g.tiles[j].towerType == g.tiles[j].TESLA || g.tiles[j].towerType == g.tiles[j].TESLA2 || g.tiles[j].towerType == g.tiles[j].TESLA3 || g.tiles[j].towerType == g.tiles[j].TESLACOIL)
+					{
+						g.tiles[j].makeWebs();
+					}
+				}
 				break;
 			case 55://all towers +1 range
 				for (int i = 0; i < g.ranges.Length; i++)
 				{
 					g.ranges[i] = (g.ranges[i] + 1);
 				}
+				for (int j = 0; j < g.tiles.Length; j++)//reapply range to all tiles
+				{
+					g.tiles[j].range = g.ranges[g.tiles[j].towerType];
+					if (g.rangeBoostedTower == g.tiles[j])
+					{
+						g.tiles[j].range = (g.tiles[j].range + g.rangeBoost);
+					}
+				}
 				break;
 			case 56: //all towers *.8 cooldown
 				for (int i = 0; i < g.cooldowns.Length; i++)
 				{
 					g.cooldowns[i] = (int)(g.cooldowns[i] * .8);
+					if (g.cooldowns[i] % (4 / g.timeFactor) != 0)
+					{
+						g.cooldowns[i] -= (int)(g.cooldowns[i] % (4 / g.timeFactor));
+					}
+				}
+				for (int j = 0; j < g.tiles.Length; j++)//reapply speed to all tiles
+				{
+					g.tiles[j].maxCooldown = g.cooldowns[g.tiles[j].towerType];
+					if (g.speedBoostedTower == g.tiles[j])
+					{
+						g.tiles[j].maxCooldown = (int)(g.tiles[j].maxCooldown*g.speedBoost);
+					}
 				}
 				break;
 			case 57://all towers +1 effect
 				for (int i = 0; i < g.defaultEffects.Length; i++)
 				{
 					g.defaultEffects[i] = (int)(g.defaultEffects[i] + 1);
+				}
+				for (int j = 0; j < g.tiles.Length; j++)//reapply effect to all tiles
+				{
+					g.tiles[j].effect = g.defaultEffects[g.tiles[j].towerType];
+					if (g.effectBoostedTower == g.tiles[j])
+					{
+						g.tiles[j].effect = (int)(g.tiles[j].effect + g.effectBoost);
+					}
+					if (g.tiles[j].towerType == g.tiles[j].TESLA || g.tiles[j].towerType == g.tiles[j].TESLA2 || g.tiles[j].towerType == g.tiles[j].TESLA3 || g.tiles[j].towerType == g.tiles[j].TESLACOIL)
+					{
+						g.tiles[j].makeWebs();
+					}
 				}
 				break;
 			case 58://tesla +20 slow power 80% sell cost

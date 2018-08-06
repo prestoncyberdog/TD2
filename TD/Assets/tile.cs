@@ -748,6 +748,45 @@ public class tile : MonoBehaviour {
 					g.FindPath(g.start, g.end, true);
 				}
 			}
+			else if (status == EMPTY)
+			{
+				//buy blocker
+				if (g.gold - g.towerCosts[BLOCKER] >= 0)
+				{
+					status = FILLED;
+
+					//if the blocks the path, do nothing
+					int valid;
+					if (g.waveActive)
+					{
+						valid = g.FindPath(g.start, g.end, false);
+					}
+					else
+					{
+						valid = g.FindPath(g.start, g.end, true);
+					}
+
+					if (valid == 0)
+					{
+						status = EMPTY;
+						return;
+					}
+
+					towerType = BLOCKER;
+					this.GetComponent<SpriteRenderer>().sprite = towerSprites[BLOCKER];
+					g.gold -= g.towerCosts[BLOCKER];
+
+					if (g.waveActive == false)
+					{
+						refund = true;
+						if (towerType == BLOCKER)
+						{
+							blockerRefund = true;
+						}
+					}
+				}
+
+			}
 		}
 		
 	}

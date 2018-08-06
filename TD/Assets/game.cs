@@ -104,13 +104,13 @@ public class game : MonoBehaviour {
 		rangeIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
 		speedIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
 		effectCost = 30;
-		damageCost = 60;
+		damageCost = 30;
 		rangeCost = 30;
 		speedCost = 30;
 		eBoostGain = 1;
-		dBoostGain = 1;
+		dBoostGain = .5;
 		rBoostGain = 0.5;
-		sBoostGain = .75;
+		sBoostGain = .8;
 		boostCostMultiplier = 2;
 
 		towerRange = Instantiate(Range, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<rangeCircle>();
@@ -120,12 +120,12 @@ public class game : MonoBehaviour {
 		bonuses[0] = new int[] { 5, 20, 0 };//shock (doubles as default)
 		bonuses[1] = new int[] { 5, 20, 0 };//beam
 		bonuses[2] = new int[] { 5, 20, 0 };//coil
-		bonuses[3] = new int[] { 15, 50, 0 };//damage boost
-		bonuses[4] = new int[] { 15, 50, 0 };//range boost
-		bonuses[5] = new int[] { 15, 50, 0 };//speed boost
+		bonuses[3] = new int[] { 15, 50, 1 };//damage boost
+		bonuses[4] = new int[] { 15, 50, 1 };//range boost
+		bonuses[5] = new int[] { 15, 50, 1 };//speed boost
 		bonuses[6] = new int[] { 5, 20, 0 };//missile2
 		bonuses[7] = new int[] { 5, 20, 0 };//splash2
-		bonuses[8] = new int[] { 20, 30, 0 };//tesla
+		bonuses[8] = new int[] { 15, 25, 0 };//tesla
 		bonuses[9] = new int[] { 20, 30, 0 };//bridge
 		bonuses[10] = new int[] { 5, 20, 0 };//tag
 		bonuses[11] = new int[] { 20, 35, 0 };//shock2
@@ -133,29 +133,29 @@ public class game : MonoBehaviour {
 		bonuses[13] = new int[] { 20, 35, 0 };//coil2
 		bonuses[14] = new int[] { 30, 40, 0 };//tesla2
 		bonuses[15] = new int[] { 30, 40, 0 };//bridge2 
-		bonuses[16] = new int[] { 20, 35, 0 };//tag2
+		bonuses[16] = new int[] { 20, 30, 0 };//tag2
 		bonuses[17] = new int[] { 20, 35, 0 };//missile3 
 		bonuses[18] = new int[] { 20, 35, 0 };//splash3
 		bonuses[19] = new int[] { 35, 50, 1 };//shock3 requires shock 1 or 2
 		bonuses[20] = new int[] { 35, 50, 1 };//beam3 requires beam 1 or 2
 		bonuses[21] = new int[] { 35, 50, 1 };//coil3 requires coil 1 or 2
-		bonuses[22] = new int[] { 40, 50, 1 };//tesla3 requires tesla 1 or 2
-		bonuses[23] = new int[] { 40, 50, 1 };//bridge3  requires bridge 1 or 2
+		bonuses[22] = new int[] { 35, 50, 1 };//tesla3 requires tesla 1 or 2
+		bonuses[23] = new int[] { 35, 50, 1 };//bridge3  requires bridge 1 or 2
 		bonuses[24] = new int[] { 35, 50, 1 };//tag3 requires tag 1 or 2
-		bonuses[25] = new int[] { 15, 50, 0 };//effect boost
+		bonuses[25] = new int[] { 15, 50, 1 };//effect boost
 		bonuses[26] = new int[] { 35, 50, 1 };//missile4 requires missile 2 or 3
-		bonuses[27] = new int[] { 45, 50, 1 };//shocksplash requires shock 1 or 2
-		bonuses[28] = new int[] { 45, 50, 1 };//tagbeam requires tag3 and beam3 both available (not necessarily chosen)
-		bonuses[29] = new int[] { 45, 50, 1 };//teslacoil requires tesla3 and coil3 both available (not necessarily chosen)
+		bonuses[27] = new int[] { 40, 50, 1 };//shocksplash requires shock 1 or 2
+		bonuses[28] = new int[] { 40, 50, 1 };//tagbeam requires tag3 and beam3 both available (not necessarily chosen)
+		bonuses[29] = new int[] { 40, 50, 1 };//teslacoil requires tesla3 and coil3 both available (not necessarily chosen)
 		//here end tower bonuses
 		bonuses[30] = new int[] { 5, 5, 0 };//missile +2 damage
 		bonuses[31] = new int[] { 5, 5, 0 };//splash +.5 range
-		bonuses[32] = new int[] { 10, 15, 1 };//shock -15 cd requires shock1
+		bonuses[32] = new int[] { 10, 15, 1 };//shock -14 cd requires shock1
 		bonuses[33] = new int[] { 10, 15, 1 };//beam +5 damage requires beam1
 		bonuses[34] = new int[] { 10, 15, 1 };//coil +4 damage requires coil1
 		bonuses[35] = new int[] { 10, 15, 1 };//tag *2 damage requires tag1
 		bonuses[36] = new int[] { 20, 20, 0 };//+200 gold
-		bonuses[37] = new int[] { 20, 20, 0 };//+30 lives
+		bonuses[37] = new int[] { 20, 20, 0 };//+50 lives
 		bonuses[38] = new int[] { 20, 20, 1 };//tag1 +2 slow power requires tag1
 		bonuses[39] = new int[] { 25, 30, 1 };//tesla +15 slow power requires tesla1
 		bonuses[40] = new int[] { 25, 30, 1 };//bridge *.75 cooldown requires bridge1
@@ -194,50 +194,50 @@ public class game : MonoBehaviour {
 
 		gold = 30;
 
-		goldWaveMultiplier = 0;
+		goldWaveMultiplier = 1;
 		numWaves = 50;
 		waveIndex = -1;
 		waves = new int[numWaves][];
 
 		// these numbers mean: # of creeps, spacing, health, speed(high means slow)
 		waves[0] = new int[] { 10, 10, 1, 10 };//1
-		waves[1] = new int[] { 10, 6, 1, 10 };//2
-		waves[2] = new int[] { 15, 10, 2, 10 };//3
-		waves[3] = new int[] { 20, 10, 3, 10 };//4
-		waves[4] = new int[] { 50, 12, 4, 12 }; //5
-		waves[5] = new int[] { 30, 10, 5, 10 };//6
-		waves[6] = new int[] { 30, 8, 6, 10 };//7
-		waves[7] = new int[] { 50, 10, 7, 10 };//8
+		waves[1] = new int[] { 10, 6, 2, 10 };//2
+		waves[2] = new int[] { 15, 10, 3, 10 };//3
+		waves[3] = new int[] { 20, 10, 4, 10 };//4
+		waves[4] = new int[] { 50, 12, 5, 12 }; //5
+		waves[5] = new int[] { 30, 10, 7, 10 };//6
+		waves[6] = new int[] { 30, 8, 8, 10 };//7
+		waves[7] = new int[] { 50, 10, 10, 10 };//8
 		waves[8] = new int[] { 50, 6, 10, 12 };//9
-		waves[9] = new int[] { 100, 10, 15, 10 };//10
+		waves[9] = new int[] { 100, 10, 20, 10 };//10
 		waves[10] = new int[] { 50, 12, 25, 10 };//11
 		waves[11] = new int[] { 50, 10, 30, 10 };//12
-		waves[12] = new int[] { 50, 6, 30, 10 };//13
-		waves[13] = new int[] { 50, 10, 35, 10 };//14
-		waves[14] = new int[] { 150, 8, 40, 10 };//15
-		waves[15] = new int[] { 100, 6, 50, 10 };//16
-		waves[16] = new int[] { 10, 50, 150, 10 };//17
+		waves[12] = new int[] { 50, 6, 35, 10 };//13
+		waves[13] = new int[] { 50, 10, 40, 10 };//14
+		waves[14] = new int[] { 150, 8, 50, 10 };//15
+		waves[15] = new int[] { 100, 6, 60, 10 };//16
+		waves[16] = new int[] { 20, 50, 150, 10 };//17
 		waves[17] = new int[] { 100, 10, 80, 10 };//18
-		waves[18] = new int[] { 100, 6, 80, 10 };//19
-		waves[19] = new int[] { 200, 8, 100, 10 };//20
+		waves[18] = new int[] { 100, 6, 90, 10 };//19
+		waves[19] = new int[] { 200, 8, 110, 10 };//20
 		waves[20] = new int[] { 30, 2, 120, 10 };//21
-		waves[21] = new int[] { 150, 10, 130, 10 };//22
-		waves[22] = new int[] { 50, 8, 50, 4 };//23
-		waves[23] = new int[] { 150, 10, 140, 10 };//24
-		waves[24] = new int[] { 250, 8, 160, 10 };//25
-		waves[25] = new int[] { 100, 10, 170, 10 };//26
-		waves[26] = new int[] { 50, 15, 180, 10 };//27
-		waves[27] = new int[] { 150, 5, 180, 10 };//28
-		waves[28] = new int[] { 50, 8, 180, 10 };//29
-		waves[29] = new int[] { 300, 10, 220, 10 };//30
-		waves[30] = new int[] { 100, 15, 150, 5 };//31
-		waves[31] = new int[] { 150, 8, 250, 10 };//32
-		waves[32] = new int[] { 100, 40, 800, 12 };//33
-		waves[33] = new int[] { 100, 10, 280, 10 };//34
+		waves[21] = new int[] { 150, 10, 140, 10 };//22
+		waves[22] = new int[] { 50, 8, 60, 4 };//23
+		waves[23] = new int[] { 150, 10, 160, 10 };//24
+		waves[24] = new int[] { 250, 8, 170, 10 };//25
+		waves[25] = new int[] { 100, 10, 200, 10 };//26
+		waves[26] = new int[] { 50, 10, 220, 10 };//27
+		waves[27] = new int[] { 150, 5, 230, 10 };//28
+		waves[28] = new int[] { 50, 8, 250, 10 };//29
+		waves[29] = new int[] { 300, 10, 280, 10 };//30
+		waves[30] = new int[] { 100, 15, 180, 5 };//31
+		waves[31] = new int[] { 150, 8, 300, 10 };//32
+		waves[32] = new int[] { 100, 40, 800, 10 };//33
+		waves[33] = new int[] { 100, 8, 300, 8 };//34
 		waves[34] = new int[] { 350, 6, 320, 12 };//35
-		waves[35] = new int[] { 100, 10, 350, 10 };//36
-		waves[36] = new int[] { 100, 10, 365, 10 };//37
-		waves[37] = new int[] { 100, 10, 380, 8 };//38
+		waves[35] = new int[] { 100, 10, 360, 10 };//36
+		waves[36] = new int[] { 100, 8, 370, 10 };//37
+		waves[37] = new int[] { 100, 8, 380, 8 };//38
 		waves[38] = new int[] { 150, 6, 400, 10 };//39
 		waves[39] = new int[] { 400, 8, 450, 10 };//40
 		waves[40] = new int[] { 100, 10, 550, 8 };//41
@@ -272,11 +272,11 @@ public class game : MonoBehaviour {
 		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2, shock2, beam2
 		//coil2, tesla2, bridge2, tag2, missile3, splash3, shock3, beam3, coil3, tesla3, bridge3, tag3, missile4
 		//shocksplash, tagbeam, teslacoil
-		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 300, 200, 200, 200, 100, 200, 400, 500, 500, 400, 400, 400, 300, 800, 800, 800 };
+		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 300, 150, 150, 200, 100, 180, 400, 500, 500, 300, 300, 300, 300, 800, 800, 800 };
 		cooldowns = new int[] { 0, 20, 44, 74, 80, 0, 0, 80, 30, 20, 44, 70, 80, 0, 0, 40, 24, 20, 40, 60, 80, 0, 0, 20, 16, 20, 74, 80, 0 };
 		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2, 6.2, 3.3, 0, 3.8 };
-		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 10, 2, 15, 20, 12, 0, 0, 16, 25, 4, 22, 40, 16, 0, 0, 18, 100, 5, 30, 20 };
-		effects = new int[] { 0, 0, 0, 0, 0, 0, 30, 0, 2, 0, 0, 0, 0, 0, 60, 0, 2, 0, 0, 0, 0, 0, 90, 0, 4, 0, 0, 2, 90 };
+		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 12, 2, 18, 20, 12, 0, 0, 16, 35, 6, 30, 50, 16, 0, 0, 26, 100, 5, 30, 20 };
+		effects = new int[] { 0, 0, 0, 0, 0, 0, 30, 0, 2, 0, 0, 0, 0, 0, 60, 0, 4, 0, 0, 0, 0, 0, 90, 0, 6, 0, 0, 4, 90 };
 
 		timeFactor = 2;//to change this, call setTimeFactor here
 
@@ -972,6 +972,13 @@ public class game : MonoBehaviour {
 		{
 			cooldowns[j] = (int)(cooldowns[j] / toMultiply);
 			effects[j] = (int)(effects[j] / toMultiply);
+		}
+		for (int k = 0;k<tiles.Length;k++)
+		{
+			if (tiles[k].towerType == tiles[k].TESLA || tiles[k].towerType == tiles[k].TESLA2 || tiles[k].towerType == tiles[k].TESLA3 || tiles[k].towerType == tiles[k].TESLACOIL)
+			{
+				tiles[k].makeWebs();
+			}
 		}
 	}
 }
