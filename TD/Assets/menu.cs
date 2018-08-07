@@ -22,11 +22,28 @@ public class menu : MonoBehaviour {
 
 	public string towerInfoString;
 
+	public GameObject imageObject;
+	public SpriteRenderer image;
+	public GameObject imageObject2;
+	public SpriteRenderer image2;
+
 
 	// Use this for initialization
 	void Start () {
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 1280f)), 0);
+
+		imageObject = new GameObject();
+		image = imageObject.AddComponent<SpriteRenderer>();
+		image.transform.position = transform.position + new Vector3(-1f, 2.4f, -0.1f);
+		image.transform.localScale = new Vector3(.15f, .15f, 1);
+		image.transform.rotation = Quaternion.Euler(0, 0, -90);
+		imageObject2 = new GameObject();
+		image2 = imageObject2.AddComponent<SpriteRenderer>();
+		image2.transform.position = transform.position + new Vector3(1f, 2.4f, -0.1f);
+		image2.transform.localScale = new Vector3(.15f, .15f, 1);
+		image2.transform.rotation = Quaternion.Euler(0, 0, -90); 
+
 
 		transform.position = transform.position + new Vector3(0, 0, -.1f);
 
@@ -122,15 +139,20 @@ public class menu : MonoBehaviour {
 
 		if (g.waveIndex >= 0)
 		{
-			waveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + g.waves[g.waveIndex][0] + "\nHealth: " + g.waves[g.waveIndex][2] + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
+			waveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + g.waves[g.waveIndex][0] + "\nHealth: " + g.waves[g.waveIndex][2];// + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
+			image.sprite = ant.setSprite(g.waves[g.waveIndex][3], g.waves[g.waveIndex][1], g.lowSpeed, g.highSpeed, g.lowSpace, g.highSpace, g.enemySprites, g.timeFactor);
+
 		}
 		if (g.waveIndex < g.numWaves - 1)
 		{
-			nextWaveInfo.text = "Wave " + (g.waveIndex + 2) + "\n#: " + g.waves[g.waveIndex + 1][0] + "\nHealth: " + g.waves[g.waveIndex + 1][2] + "\nSpacing: " + g.waves[g.waveIndex + 1][1] + "\nPace: " + g.waves[g.waveIndex+1][3];
+			nextWaveInfo.text = "Wave " + (g.waveIndex + 2) + "\n#: " + g.waves[g.waveIndex + 1][0] + "\nHealth: " + g.waves[g.waveIndex + 1][2];// + "\nSpacing: " + g.waves[g.waveIndex + 1][1] + "\nPace: " + g.waves[g.waveIndex+1][3];
+			image2.sprite = ant.setSprite(g.waves[g.waveIndex + 1][3], g.waves[g.waveIndex + 1][1], g.lowSpeed, g.highSpeed, g.lowSpace, g.highSpace, g.enemySprites, g.timeFactor);
 		}
 		else
 		{
-			nextWaveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + g.waves[g.waveIndex][0] + "\nHealth: " + 2 * g.waves[g.waveIndex][2] + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
+			nextWaveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + g.waves[g.waveIndex][0] + "\nHealth: " + 2 * g.waves[g.waveIndex][2];// + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
+			image2.sprite = ant.setSprite(g.waves[g.waveIndex][3], g.waves[g.waveIndex][1], g.lowSpeed, g.highSpeed, g.lowSpace, g.highSpace, g.enemySprites, g.timeFactor);
+
 		}
 
 		switch (g.currButtonActive)

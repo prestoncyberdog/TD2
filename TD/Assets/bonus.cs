@@ -313,7 +313,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[6];
 				break;
 			case 59://remove all blocked tiles
-				bonusInfo.text = "Replace all dead tiles with empty spaces";
+				bonusInfo.text = "Replace all dead tiles with blockers";
 				image.sprite = g.tiles[0].blockedSprite;
 				break;
 		}
@@ -345,6 +345,7 @@ public class bonus : MonoBehaviour
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[20][2] = 0;//enable beam3
 				g.bonuses[33][2] = 0;//enable beam damage +5
+				g.bonuses[42][2] = 0;//enable beam +1 effect +5 damage
 				if (g.bonuses[24][2] == 0)//if tag3 also unlocked
 				{
 					g.bonuses[28][2] = 0;//enable tagbeam
@@ -416,6 +417,7 @@ public class bonus : MonoBehaviour
 				g.sideMenu.buttonsUsed++;
 				g.bonuses[23][2] = 0;//enable bridge3
 				g.bonuses[40][2] = 0;//enable bridge cooldown * .75
+				g.bonuses[43][2] = 0;//enable bridge +1 effect
 				break;
 			case 10://tag tower
 				temp = g.sideMenu.buttons[g.sideMenu.buttonsUsed];
@@ -706,7 +708,11 @@ public class bonus : MonoBehaviour
 				for (int i = 0;i<g.damages.Length;i++)
 				{
 					g.damages[i] = (int)(g.damages[i] * 1.2);
-					g.effects[i] = (int)(g.effects[i] * 1.5);
+					g.effects[i] = Mathf.CeilToInt(g.effects[i] * 1.5f);
+					if (g.effects[i] % (4.0 / g.timeFactor) != 0)
+					{
+						g.effects[i] += (int)((4.0 / g.timeFactor) - (g.effects[i] % (4 / g.timeFactor)));
+					}
 				}
 				for (int j = 0; j < g.tiles.Length; j++)//reapply damage to all tiles
 				{
@@ -786,8 +792,9 @@ public class bonus : MonoBehaviour
 				{
 					if (g.tiles[i].status == g.tiles[i].BLOCKED)
 					{
-						g.tiles[i].status = g.tiles[i].EMPTY;
-						g.tiles[i].GetComponent<SpriteRenderer>().sprite = g.tiles[i].emptySprite;
+						g.tiles[i].status = g.tiles[i].FILLED;
+						g.tiles[i].towerType = g.tiles[i].BLOCKER;
+						g.tiles[i].GetComponent<SpriteRenderer>().sprite = g.tiles[i].towerSprites[g.tiles[i].BLOCKER];
 					}
 				}
 				break;

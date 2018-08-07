@@ -17,6 +17,7 @@ public class ant : MonoBehaviour {
 	public int maxHealth = 1;
 	public int identIndex = 0;
 	public int bridgeCount;
+	public int spacing;
 
 	public bar healthBar;
 	public Transform Bar;
@@ -24,10 +25,11 @@ public class ant : MonoBehaviour {
 
 
 
-
 	Vector3 zboy = new Vector3(0, 0, -.01f);
 	// Use this for initialization
 	void Start () {
+		this.transform.localScale = new Vector3(.15f, .15f, 1);
+
 		healthBar = Instantiate(Bar, transform.position, Quaternion.identity).gameObject.GetComponent<bar>();
 		healthBar.parent = this;
 
@@ -48,6 +50,7 @@ public class ant : MonoBehaviour {
 		routeIndex = 1;
 		previous = route[0];
 		next = route[1];
+		orient();
 		bridgeCount = 0;
 	}
 
@@ -72,6 +75,11 @@ public class ant : MonoBehaviour {
 		{
 			maxProgress = g.spawnMaxProgress * 10;
 		}
+
+		//choose sprite to display
+		this.GetComponent<SpriteRenderer>().sprite = setSprite(maxProgress, spacing, g.lowSpeed, g.highSpeed, g.lowSpace, g.highSpace, g.enemySprites, g.timeFactor);
+
+
 
 		//movement of creeps
 		if (progress <= 0)
@@ -123,12 +131,13 @@ public class ant : MonoBehaviour {
 			previous = next;
 			next = route[routeIndex + 1];
 			routeIndex += 1;
+			orient();
 		}
-		
+
 		if (progress > 0)
 		{
 			Vector3 step = (next.transform.position + zboy - transform.position) / progress;
-			transform.Translate(step);
+			transform.Translate(step, Space.World);
 			progress -= 1;
 		}
 
@@ -142,78 +151,51 @@ public class ant : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
-	//this code has been improved upon elsewhere but is still here in case i find a bug later
-	/*
-	//plan a path from location 'from' to location 'to'
-	//returns 1 if successful, 0 if no path was found
-	//updates route as it goes
-	public int FindPath (tile from, tile to)
+
+	public static Sprite setSprite(int speed, int space, int lowSpeed2, int highSpeed2, int lowSpace2, int highSpace2, Sprite[] sprites2, double timingFactor)
 	{
-		tile current;
-		//set all tiles to unvisited, prev to null, dist to 10000
-		for (int i=0;i<g.tiles.Length;i++)
+		int speedIndex = 1;
+		int spaceIndex = 1;
+
+		if (speed < lowSpeed2 * 2/timingFactor)
 		{
-			g.tiles[i].visited = false;
-			g.tiles[i].prev = null;
-			g.tiles[i].dist = 10000;
+			speedIndex = 0;
+		}
+		else if (speed > highSpeed2 * 2 / timingFactor)
+		{
+			speedIndex = 2;
 		}
 
-		//enqueue from
-		Queue q = new Queue();
-		from.dist = 0;
-		from.visited = true;
-		q.Enqueue(from);
-
-		//while queue is not empty
-		while (q.Count > 0)
+		if (space < lowSpace2 * 2 / timingFactor)
 		{
-			current = (tile)q.Dequeue();//dequeue, check for end, return 1 if so
-			if (current == to)
-			{
-				//fill in correct path in route
-				//wont change route if no path is found
-				tile backTemp = current;
-				while (backTemp != null)
-				{
-					route[backTemp.dist] = backTemp;
-					backTemp = backTemp.prev;
-				}
-
-				return 1;
-			}
-
-			//enqueue valid neighbors
-			if (current.north != null && current.north.visited == false && current.north.status == current.EMPTY)
-			{
-				current.north.visited = true;
-				current.north.dist = current.dist + 1;
-				current.north.prev = current;
-				q.Enqueue(current.north);
-			}
-			if (current.south != null && current.south.visited == false && current.south.status == current.EMPTY)
-			{
-				current.south.visited = true;
-				current.south.dist = current.dist + 1;
-				current.south.prev = current;
-				q.Enqueue(current.south);
-			}
-			if (current.east != null && current.east.visited == false && current.east.status == current.EMPTY)
-			{
-				current.east.visited = true;
-				current.east.dist = current.dist + 1;
-				current.east.prev = current;
-				q.Enqueue(current.east);
-			}
-			if (current.west != null && current.west.visited == false && current.west.status == current.EMPTY)
-			{
-				current.west.visited = true;
-				current.west.dist = current.dist + 1;
-				current.west.prev = current;
-				q.Enqueue(current.west);
-			}
+			spaceIndex = 0;
 		}
-		
-		//if queue runs out without finding end, return 0
-		return 0;
-	}*/
+		else if (space > highSpace2 * 2 / timingFactor)
+		{
+			spaceIndex = 2;
+		}
+
+		int spriteChoice = 3 * speedIndex + spaceIndex;
+		return sprites2[spriteChoice];
+	}
+
+	public void orient()
+	{
+		int direction = 0;
+		if (next == previous.east)
+		{
+			direction = 1;
+		}
+		else if(next == previous.south)
+		{
+			direction = 2;
+		}
+		else if(next == previous.west)
+		{
+			direction = 3;
+		}
+
+		transform.rotation = Quaternion.identity;
+		gameObject.transform.Rotate(Vector3.forward, direction * -90f);
+	}
 }

@@ -59,13 +59,30 @@ MonoBehaviour:
   previous: {fileID: 0}
   next: {fileID: 0}
   progress: 0
-  MAX_PROGRESS: 10
+  maxProgress: 0
   routeIndex: 0
   health: 1
   maxHealth: 1
+  identIndex: 0
+  bridgeCount: 0
+  spacing: 0
+  lowSpeed: 10
+  highSpeed: 10
+  lowSpace: 10
+  highSpace: 10
   healthBar: {fileID: 0}
   Bar: {fileID: 4031786141763194, guid: 45f5eeab5f03e1748897dbea82372598, type: 2}
   Beam: {fileID: 4169319785508466, guid: 644104a5154153c49bec71e12807a27f, type: 2}
+  sprites:
+  - {fileID: 21300000, guid: 233cf485beb8fcc42a8c8bc10ba4ae2f, type: 3}
+  - {fileID: 21300000, guid: f93147f853ba9864495a2c70c3abf425, type: 3}
+  - {fileID: 21300000, guid: dbc251ddc8a6dba48884c66b09e2700d, type: 3}
+  - {fileID: 21300000, guid: 0d3248c29048b31478bcb1a8d7a7df0c, type: 3}
+  - {fileID: 21300000, guid: a6179e93d5ad97e489c56c50b8c9cec6, type: 3}
+  - {fileID: 21300000, guid: 70e21d0a0dd9bc74283ced5a865a48c6, type: 3}
+  - {fileID: 21300000, guid: c08ef08fe7d676c49a6f327bfff4c6e5, type: 3}
+  - {fileID: 21300000, guid: 505004871c05ab54b86fe2747951a8dd, type: 3}
+  - {fileID: 21300000, guid: a986441be85eaa94a9fedfd7445b60fc, type: 3}
 --- !u!212 &212001031876520328
 SpriteRenderer:
   m_ObjectHideFlags: 1
