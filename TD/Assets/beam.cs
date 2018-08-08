@@ -87,13 +87,13 @@ public class beam : MonoBehaviour {
 			else if (source.gameObject.GetComponent<tile>().status == source.gameObject.GetComponent<tile>().EMPTY)
 			{
 				//enemy.health -= damage*lifetime/10;
-				enemy.health -= damage * Mathf.CeilToInt(((Mathf.Pow((int)(lifetime * (g.timeFactor/2.0)), 1.9f + (effect - 1.0f)*.1f)) + 0.0f) / 3650.0f);
+				enemy.health -= damage * Mathf.CeilToInt(damage * ((Mathf.Pow((int)(lifetime * (g.timeFactor/2.0)), 1.9f + (effect - 1.0f)*.1f)) + 0.0f) / 3200.0f);
 				Destroy(gameObject);
 			}
 			else if ((target.transform.position - source.transform.position).magnitude > maxRange || (enemy.next == enemy.end && enemy.progress < 3))//range check
 			{
 				//enemy.health -= damage*lifetime/10;
-				enemy.health -= Mathf.CeilToInt(damage * ((Mathf.Pow((int)(lifetime * (g.timeFactor / 2.0)), 1.9f + (effect - 1.0f) * .1f)) + 0.0f) / 3650.0f);
+				enemy.health -= Mathf.CeilToInt(damage * ((Mathf.Pow((int)(lifetime * (g.timeFactor / 2.0)), 1.9f + (effect - 1.0f) * .1f)) + 0.0f) / 3200.0f);
 				source.gameObject.GetComponent<tile>().targeting.Remove(enemy);
 				Destroy(gameObject);
 			}

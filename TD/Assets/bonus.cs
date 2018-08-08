@@ -82,7 +82,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[4];
 				break;
 			case 2://coil tower
-				bonusInfo.text = "Coil Tower\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[5] + "\nRange: " + g.ranges[5] + "\nCost: " + g.towerCosts[5];
+				bonusInfo.text = "Coil Tower\nDamages all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[5] + "\nRange: " + g.ranges[5] + "\nCost: " + g.towerCosts[5];
 				image.sprite = g.tiles[0].towerSprites[5];
 				break;
 			case 3://damage boost
@@ -126,7 +126,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[12];
 				break;
 			case 13://coil2 tower
-				bonusInfo.text = "Coil Tower 2\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[13] + "\nRange: " + g.ranges[13] + "\nCost: " + g.towerCosts[13];
+				bonusInfo.text = "Coil Tower 2\nDamages all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[13] + "\nRange: " + g.ranges[13] + "\nCost: " + g.towerCosts[13];
 				image.sprite = g.tiles[0].towerSprites[13];
 				break;
 			case 14://tesla2 tower
@@ -158,7 +158,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[20];
 				break;
 			case 21://coil3 tower
-				bonusInfo.text = "Coil Tower 3\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[21] + "\nRange: " + g.ranges[21] + "\nCost: " + g.towerCosts[21];
+				bonusInfo.text = "Coil Tower 3\nDamages all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[21] + "\nRange: " + g.ranges[21] + "\nCost: " + g.towerCosts[21];
 				image.sprite = g.tiles[0].towerSprites[21];
 				break;
 			case 22://tesla3 tower

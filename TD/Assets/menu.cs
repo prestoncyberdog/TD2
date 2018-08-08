@@ -141,18 +141,19 @@ public class menu : MonoBehaviour {
 		{
 			waveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + g.waves[g.waveIndex][0] + "\nHealth: " + g.waves[g.waveIndex][2];// + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
 			image.sprite = ant.setSprite(g.waves[g.waveIndex][3], g.waves[g.waveIndex][1], g.lowSpeed, g.highSpeed, g.lowSpace, g.highSpace, g.enemySprites, g.timeFactor);
-
+			image.transform.position = transform.position + new Vector3(-1f, 2.4f, -0.1f);
 		}
 		if (g.waveIndex < g.numWaves - 1)
 		{
 			nextWaveInfo.text = "Wave " + (g.waveIndex + 2) + "\n#: " + g.waves[g.waveIndex + 1][0] + "\nHealth: " + g.waves[g.waveIndex + 1][2];// + "\nSpacing: " + g.waves[g.waveIndex + 1][1] + "\nPace: " + g.waves[g.waveIndex+1][3];
 			image2.sprite = ant.setSprite(g.waves[g.waveIndex + 1][3], g.waves[g.waveIndex + 1][1], g.lowSpeed, g.highSpeed, g.lowSpace, g.highSpace, g.enemySprites, g.timeFactor);
+			image2.transform.position = transform.position + new Vector3(1f, 2.4f, -0.1f);
 		}
 		else
 		{
 			nextWaveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + g.waves[g.waveIndex][0] + "\nHealth: " + 2 * g.waves[g.waveIndex][2];// + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
 			image2.sprite = ant.setSprite(g.waves[g.waveIndex][3], g.waves[g.waveIndex][1], g.lowSpeed, g.highSpeed, g.lowSpace, g.highSpace, g.enemySprites, g.timeFactor);
-
+			image2.transform.position = transform.position + new Vector3(1f, 2.4f, -0.1f);
 		}
 
 		switch (g.currButtonActive)
@@ -173,7 +174,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Beam Tower\nShoots all enemies in the direction its facing\nDamage: " + g.damages[4] + "\nCooldown: " + g.cooldowns[4] + "\nCost: " + g.towerCosts[4];
 				break;
 			case 5://coil
-				towerInfo.text = "Coil Tower\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[5] + "\nRange: " + g.ranges[5]  + "\nCost: " + g.towerCosts[5];
+				towerInfo.text = "Coil Tower\nDamages all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[5] + "\nRange: " + g.ranges[5]  + "\nCost: " + g.towerCosts[5];
 				break;
 			case 6://tesla
 				towerInfo.text = "Tesla Tower\nSlows enemies that pass between it and another Tesla\nSlow Power: " + g.effects[6]  + "\nCost: " + g.towerCosts[6];
@@ -197,7 +198,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Beam Tower 2\nShoots all enemies in the direction its facing\nDamage: " + g.damages[12] + "\nCooldown: " + g.cooldowns[12] + "\nCost: " + g.towerCosts[12];
 				break;
 			case 13://coil2
-				towerInfo.text = "Coil Tower 2\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[13] + "\nRange: " + g.ranges[13] + "\nCost: " + g.towerCosts[13];
+				towerInfo.text = "Coil Tower 2\nDamages all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[13] + "\nRange: " + g.ranges[13] + "\nCost: " + g.towerCosts[13];
 				break;
 			case 14://tesla2
 				towerInfo.text = "Tesla Tower 2\nSlows enemies that pass between it and another Tesla\nSlow Power: " + g.effects[14] + "\nCost: " + g.towerCosts[14];
@@ -221,7 +222,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Beam Tower 3\nShoots all enemies in the direction its facing\nDamage: " + g.damages[20] + "\nCooldown: " + g.cooldowns[20] + "\nCost: " + g.towerCosts[20];
 				break;
 			case 21://coil3
-				towerInfo.text = "Coil Tower 3\nShoots all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[21] + "\nRange: " + g.ranges[21] + "\nCost: " + g.towerCosts[21];
+				towerInfo.text = "Coil Tower 3\nDamages all enemies that leave its range based on how long they were in range\nBase Damage: " + g.damages[21] + "\nRange: " + g.ranges[21] + "\nCost: " + g.towerCosts[21];
 				break;
 			case 22://tesla3
 				towerInfo.text = "Tesla Tower 3\nSlows enemies that pass between it and another Tesla\nSlow Power: " + g.effects[22] + "\nCost: " + g.towerCosts[22];

@@ -167,8 +167,8 @@ public class game : MonoBehaviour {
 		bonuses[39] = new int[] { 25, 30, 1 };//tesla +15 slow power requires tesla1
 		bonuses[40] = new int[] { 25, 30, 1 };//bridge *.75 cooldown requires bridge1
 		bonuses[41] = new int[] { 25, 30, 1 };//splash +1 damage requires splash 2 or 3
-		bonuses[42] = new int[] { 30, 35, 1 };//beam +1 effect +5 damage requires beam 1 or 2
-		bonuses[43] = new int[] { 30, 35, 1 };//bridge +1 effect requires bridge 1 or 2
+		bonuses[42] = new int[] { 25, 35, 1 };//beam +1 effect +5 damage requires beam 1 or 2
+		bonuses[43] = new int[] { 25, 40, 1 };//bridge +1 effect requires bridge 1 or 2
 		bonuses[44] = new int[] { 35, 35, 1 };//missile3 +10 damage +1 range requires missile3
 		bonuses[45] = new int[] { 40, 40, 1 };//shock3 +10 damage requires shock3
 		bonuses[46] = new int[] { 30, 35, 1 };//Damage boost +1 requires damage boost
@@ -201,7 +201,7 @@ public class game : MonoBehaviour {
 
 		gold = 30;
 
-		goldWaveMultiplier = 1;
+		goldWaveMultiplier = 2;
 		numWaves = 50;
 		waveIndex = -1;
 		waves = new int[numWaves][];
@@ -217,18 +217,18 @@ public class game : MonoBehaviour {
 		waves[7] = new int[] { 30, 10, 10, 12 };//8
 		waves[8] = new int[] { 30, 8, 10, 8 };//9
 		waves[9] = new int[] { 100, 10, 20, 10 };//10
-		waves[10] = new int[] { 30, 12, 25, 10 };//11
+		waves[10] = new int[] { 30, 14, 25, 10 };//11
 		waves[11] = new int[] { 40, 12, 30, 8 };//12
 		waves[12] = new int[] { 40, 6, 35, 10 };//13
 		waves[13] = new int[] { 50, 10, 40, 10 };//14
 		waves[14] = new int[] { 150, 8, 50, 10 };//15
 		waves[15] = new int[] { 100, 6, 70, 10 };//16
-		waves[16] = new int[] { 20, 50, 180, 12 };//17
+		waves[16] = new int[] { 20, 50, 180, 14 };//17
 		waves[17] = new int[] { 100, 10, 90, 10 };//18
 		waves[18] = new int[] { 100, 6, 100, 10 };//19
 		waves[19] = new int[] { 200, 8, 120, 10 };//20
 		waves[20] = new int[] { 30, 2, 130, 10 };//21
-		waves[21] = new int[] { 150, 10, 150, 10 };//22 
+		waves[21] = new int[] { 150, 14, 160, 10 };//22 
 		waves[22] = new int[] { 50, 8, 60, 4 };//23
 		waves[23] = new int[] { 150, 10, 170, 10 };//24
 		waves[24] = new int[] { 250, 8, 190, 10 };//25
@@ -237,7 +237,7 @@ public class game : MonoBehaviour {
 		waves[27] = new int[] { 150, 5, 250, 10 };//28
 		waves[28] = new int[] { 50, 8, 280, 10 };//29
 		waves[29] = new int[] { 300, 10, 310, 10 };//30
-		waves[30] = new int[] { 100, 15, 200, 6 };//31
+		waves[30] = new int[] { 100, 16, 200, 6 };//31
 		waves[31] = new int[] { 150, 8, 330, 10 };//32
 		waves[32] = new int[] { 100, 40, 800, 10 };//33
 		waves[33] = new int[] { 100, 8, 350, 8 };//34
@@ -252,10 +252,10 @@ public class game : MonoBehaviour {
 		waves[42] = new int[] { 100, 10, 800, 10 };//43
 		waves[43] = new int[] { 100, 10, 900, 12 };//44
 		waves[44] = new int[] { 450, 10, 1000, 10 };//45
-		waves[45] = new int[] { 150, 10, 1200, 10 };//46
+		waves[45] = new int[] { 150, 14, 1200, 10 };//46
 		waves[46] = new int[] { 150, 10, 1300, 10 };//47
 		waves[47] = new int[] { 150, 10, 1400, 8 };//48
-		waves[48] = new int[] { 100, 2, 1500, 10 };//49
+		waves[48] = new int[] { 100, 4, 1500, 10 };//49
 		waves[49] = new int[] { 500, 6, 2000, 10 };//50
 
 
@@ -279,10 +279,10 @@ public class game : MonoBehaviour {
 		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2, shock2, beam2
 		//coil2, tesla2, bridge2, tag2, missile3, splash3, shock3, beam3, coil3, tesla3, bridge3, tag3, missile4
 		//shocksplash, tagbeam, teslacoil
-		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 50, 200, 200, 300, 150, 150, 200, 100, 180, 400, 500, 500, 300, 300, 300, 300, 800, 800, 800 };
-		cooldowns = new int[] { 0, 20, 44, 74, 80, 0, 0, 80, 30, 20, 44, 70, 80, 0, 0, 40, 24, 20, 40, 60, 80, 0, 0, 20, 16, 20, 74, 80, 0 };
+		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 70, 200, 200, 300, 150, 150, 200, 100, 200, 400, 500, 500, 300, 300, 300, 300, 800, 800, 800 };
+		cooldowns = new int[] { 0, 20, 44, 74, 80, 0, 0, 60, 30, 20, 44, 70, 80, 0, 0, 40, 24, 20, 40, 60, 80, 0, 0, 20, 16, 20, 74, 80, 0 };
 		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2, 6.2, 3.3, 0, 3.8 };
-		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 12, 2, 18, 20, 12, 0, 0, 16, 35, 6, 30, 50, 16, 0, 0, 26, 100, 5, 30, 20 };
+		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 16, 3, 24, 20, 12, 0, 0, 16, 50, 6, 50, 50, 16, 0, 0, 26, 200, 5, 30, 20 };
 		effects = new int[] { 0, 0, 0, 0, 0, 0, 40, 0, 2, 0, 0, 0, 0, 0, 80, 0, 4, 0, 0, 0, 0, 0, 120, 0, 6, 0, 0, 4, 120 };
 
 		timeFactor = 2;//to change this, call setTimeFactor here
@@ -295,6 +295,7 @@ public class game : MonoBehaviour {
 			defaultEffects[i] = 1;
 			sellCosts[i] = (int)(towerCosts[i] * .5);
 		}
+		defaultEffects[23] = 2;
 		maxSortCD = 10;
 		towerSelected = false;
 		sortCD = maxSortCD;
@@ -304,9 +305,9 @@ public class game : MonoBehaviour {
 		start.GetComponent<SpriteRenderer>().sprite = start.startSprite;
 		end.GetComponent<SpriteRenderer>().sprite = end.endSprite;
 		lowSpeed = 10;
-		highSpeed = 10;
+		highSpeed = 12;
 		lowSpace = 10;
-		highSpace = 10;
+		highSpace = 12;
 
 		paused = false;
 	}
@@ -807,7 +808,7 @@ public class game : MonoBehaviour {
 
 		for (int i = 0;i<tiles.Length;i++)
 		{
-			if (tiles[i].north == null || tiles[i].south == null || tiles[i].east == null || tiles[i].west == null)
+			if (tiles[i].north == null || tiles[i].south == null || tiles[i].east == null || tiles[i].west == null || tiles[i] == start || tiles[i] == end)
 			{
 				tiles[i].status = tiles[i].EMPTY;
 				tiles[i].GetComponent<SpriteRenderer>().sprite = tiles[i].emptySprite;
