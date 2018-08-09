@@ -237,7 +237,7 @@ public class menu : MonoBehaviour {
 				towerInfo.text = "Missile Tower 4\nShoots damaging missiles\nDamage: " + g.damages[25] + "\nRange: " + g.ranges[25] + "\nCooldown: " + g.cooldowns[25] + "\nCost: " + g.towerCosts[25];
 				break;
 			case 26://shocksplash
-				towerInfo.text = "Shocksplash Tower\nShoots  all enemies in range and splashes onto other nearby enemies\nDamage: " + g.damages[26] + "\nRange/Radius: " + g.ranges[26] + "\nCooldown: " + g.cooldowns[26] + "\nCost: " + g.towerCosts[26];
+				towerInfo.text = "Shocksplash Tower\nShoots and splashes on all enemies in range\nDamage: " + g.damages[26] + "\nRange: " + g.ranges[26] + "\nSplash radius: " + (g.ranges[26] + (g.defaultEffects[26] - 1.0) * 0.5) + "\nCooldown: " + g.cooldowns[26] + "\nCost: " + g.towerCosts[26];
 				break;
 			case 27://tagbeam
 				towerInfo.text = "Tagbeam Tower\nShoots and permanently slows all enemies in the direction its facing\nDamage: " + g.damages[27] + "\nSlow Power: " + g.effects[27] + "\nCooldown: " + g.cooldowns[27] + "\nCost: " + g.towerCosts[27];

@@ -110,12 +110,12 @@ public class game : MonoBehaviour {
 		damageIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
 		rangeIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
 		speedIndicator.transform.localScale = new Vector3(0.2f, 0.2f, 1);
-		effectCost = 30;
-		damageCost = 30;
-		rangeCost = 30;
-		speedCost = 30;
+		effectCost = 60;
+		damageCost = 60;
+		rangeCost = 60;
+		speedCost = 60;
 		eBoostGain = 1;
-		dBoostGain = .5;
+		dBoostGain = 0.5;
 		rBoostGain = 0.5;
 		sBoostGain = .8;
 		boostCostMultiplier = 2;
@@ -127,9 +127,9 @@ public class game : MonoBehaviour {
 		bonuses[0] = new int[] { 5, 20, 0 };//shock (doubles as default)
 		bonuses[1] = new int[] { 5, 20, 0 };//beam
 		bonuses[2] = new int[] { 5, 20, 0 };//coil
-		bonuses[3] = new int[] { 15, 50, 1 };//damage boost
-		bonuses[4] = new int[] { 15, 50, 1 };//range boost
-		bonuses[5] = new int[] { 15, 50, 1 };//speed boost
+		bonuses[3] = new int[] { 15, 50, 0 };//damage boost
+		bonuses[4] = new int[] { 15, 50, 0 };//range boost
+		bonuses[5] = new int[] { 15, 50, 0 };//speed boost
 		bonuses[6] = new int[] { 5, 20, 0 };//missile2
 		bonuses[7] = new int[] { 5, 20, 0 };//splash2
 		bonuses[8] = new int[] { 15, 25, 0 };//tesla
@@ -149,7 +149,7 @@ public class game : MonoBehaviour {
 		bonuses[22] = new int[] { 35, 50, 1 };//tesla3 requires tesla 1 or 2
 		bonuses[23] = new int[] { 35, 50, 1 };//bridge3  requires bridge 1 or 2
 		bonuses[24] = new int[] { 35, 50, 1 };//tag3 requires tag 1 or 2
-		bonuses[25] = new int[] { 15, 50, 1 };//effect boost
+		bonuses[25] = new int[] { 15, 50, 0 };//effect boost
 		bonuses[26] = new int[] { 35, 50, 1 };//missile4 requires missile 2 or 3
 		bonuses[27] = new int[] { 40, 50, 1 };//shocksplash requires shock 1 or 2
 		bonuses[28] = new int[] { 40, 50, 1 };//tagbeam requires tag3 and beam3 both available (not necessarily chosen)
@@ -161,7 +161,7 @@ public class game : MonoBehaviour {
 		bonuses[33] = new int[] { 10, 15, 1 };//beam +5 damage requires beam1
 		bonuses[34] = new int[] { 10, 15, 1 };//coil +4 damage requires coil1
 		bonuses[35] = new int[] { 10, 15, 1 };//tag *2 damage requires tag1
-		bonuses[36] = new int[] { 20, 20, 0 };//+200 gold
+		bonuses[36] = new int[] { 20, 20, 0 };//+300 gold
 		bonuses[37] = new int[] { 20, 20, 0 };//+50 lives
 		bonuses[38] = new int[] { 20, 20, 1 };//tag1 +2 slow power requires tag1
 		bonuses[39] = new int[] { 25, 30, 1 };//tesla +15 slow power requires tesla1
@@ -178,7 +178,7 @@ public class game : MonoBehaviour {
 		bonuses[50] = new int[] { 40, 40, 1 };//beam3 *.75 cooldown requires beam3
 		bonuses[51] = new int[] { 40, 40, 1 };//coil +1 range requires coil 2 or 3
 		bonuses[52] = new int[] { 40, 40, 1 };//tag +2 slow power requires tag 2 or 3
-		bonuses[53] = new int[] { 40, 40, 0 };//+300 gold
+		bonuses[53] = new int[] { 40, 40, 0 };//+500 gold
 		bonuses[54] = new int[] { 45, 45, 0 };//all towers *1.2 damage * 1.5 slow power
 		bonuses[55] = new int[] { 45, 45, 0 };//all towers +1 range
 		bonuses[56] = new int[] { 45, 45, 0 };//all towers *.8 cooldown
@@ -280,9 +280,9 @@ public class game : MonoBehaviour {
 		//coil2, tesla2, bridge2, tag2, missile3, splash3, shock3, beam3, coil3, tesla3, bridge3, tag3, missile4
 		//shocksplash, tagbeam, teslacoil
 		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 70, 200, 200, 300, 150, 150, 200, 100, 200, 400, 500, 500, 300, 300, 300, 300, 800, 800, 800 };
-		cooldowns = new int[] { 0, 20, 44, 74, 80, 0, 0, 60, 30, 20, 44, 70, 80, 0, 0, 40, 24, 20, 40, 60, 80, 0, 0, 20, 16, 20, 74, 80, 0 };
+		cooldowns = new int[] { 0, 20, 44, 74, 80, 0, 0, 60, 40, 20, 44, 70, 80, 0, 0, 40, 24, 20, 40, 60, 80, 0, 0, 20, 16, 20, 74, 80, 0 };
 		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2, 6.2, 3.3, 0, 3.8 };
-		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 16, 3, 24, 20, 12, 0, 0, 16, 50, 6, 50, 50, 16, 0, 0, 26, 200, 5, 30, 20 };
+		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 16, 3, 24, 20, 12, 0, 0, 16, 50, 5, 50, 50, 16, 0, 0, 26, 200, 5, 30, 20 };
 		effects = new int[] { 0, 0, 0, 0, 0, 0, 40, 0, 2, 0, 0, 0, 0, 0, 80, 0, 4, 0, 0, 0, 0, 0, 120, 0, 6, 0, 0, 4, 120 };
 
 		timeFactor = 2;//to change this, call setTimeFactor here

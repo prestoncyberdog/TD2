@@ -182,7 +182,7 @@ public class bonus : MonoBehaviour
 				image.sprite = g.tiles[0].towerSprites[25];
 				break;
 			case 27://shocksplash tower
-				bonusInfo.text = "Shocksplash Tower\nShoots  all enemies in range and splashes onto other nearby enemies\nDamage: " + g.damages[26] + "\nRange/Radius: " + g.ranges[26] + "\nCooldown: " + g.cooldowns[26] + "\nCost: " + g.towerCosts[26];
+				bonusInfo.text = "Shocksplash Tower\nShoots and splashes on all enemies in range\nDamage: " + g.damages[26] + "\nRange: " + g.ranges[26] + "\nSplash radius: " + (g.ranges[26] + (g.defaultEffects[26] - 1.0) * 0.5) + "\nCooldown: " + g.cooldowns[26] + "\nCost: " + g.towerCosts[26];
 				image.sprite = g.tiles[0].towerSprites[26];
 				break;
 			case 28://tagbeam tower
@@ -217,8 +217,8 @@ public class bonus : MonoBehaviour
 				bonusInfo.text = "Double damage of all tag towers";
 				image.sprite = g.tiles[0].towerSprites[8];
 				break;
-			case 36://+200 gold
-				bonusInfo.text = "Gain 200 gold";
+			case 36://+300 gold
+				bonusInfo.text = "Gain 300 gold";
 				image.sprite = bonusSprites[0];
 				image.transform.localScale = new Vector3(3.0f/6.0f, 3.0f/6.0f, 1);
 				break;
@@ -287,8 +287,8 @@ public class bonus : MonoBehaviour
 				bonusInfo.text = "Increase slow power of all tag towers by "+ (int)(4 / g.timeFactor) ;
 				image.sprite = g.tiles[0].towerSprites[24];
 				break;
-			case 53://+300 gold
-				bonusInfo.text = "Gain 300 gold";
+			case 53://+500 gold
+				bonusInfo.text = "Gain 500 gold";
 				image.sprite = bonusSprites[0];
 				image.transform.localScale = new Vector3(3.0f / 6.0f, 3.0f / 6.0f, 1);
 				break;
@@ -619,8 +619,8 @@ public class bonus : MonoBehaviour
 				g.damages[24] *= 2;
 				g.damages[27] *= 2;
 				break;
-			case 36://+200 gold
-				g.gold += 200;
+			case 36://+300 gold
+				g.gold += 300;
 				break;
 			case 37://+50 lives
 				g.lives += 50;
@@ -701,8 +701,8 @@ public class bonus : MonoBehaviour
 				g.effects[24] += (int)(4 / g.timeFactor);
 				g.effects[27] += (int)(4 / g.timeFactor);
 				break;
-			case 53://+300 gold
-				g.gold += 300;
+			case 53://+500 gold
+				g.gold += 500;
 				break;
 			case 54://all towers *1.2 damage * 1.5 slow power
 				for (int i = 0;i<g.damages.Length;i++)
