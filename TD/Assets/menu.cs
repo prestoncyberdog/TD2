@@ -26,12 +26,15 @@ public class menu : MonoBehaviour {
 	public SpriteRenderer image;
 	public GameObject imageObject2;
 	public SpriteRenderer image2;
+	public Vector3 pos;
+	public Camera c;
 
 
 	// Use this for initialization
 	void Start () {
+		c = FindObjectOfType<Camera>();
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 1280f)), 0);
+		pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 
 		imageObject = new GameObject();
 		image = imageObject.AddComponent<SpriteRenderer>();
@@ -130,6 +133,12 @@ public class menu : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		towerInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 315f / 894f, 0);
+		nextWaveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * 65f / 1280f, Screen.height * 210f / 894f, 0);
+		waveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * -65f / 1280f, Screen.height * 210f / 894f, 0);
+		overallInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * 320f / 894f, 0);
+
 		SetText();
 	}
 	

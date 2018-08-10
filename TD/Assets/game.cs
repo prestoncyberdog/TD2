@@ -4,7 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class game : MonoBehaviour {
+	public Camera c; 
 
+	public int gameType;
+	// if 0, normal game
+	//if 1, treat game as menu version
 	
 	public GameObject[] allTiles;
 	public tile[] tiles;
@@ -74,6 +78,7 @@ public class game : MonoBehaviour {
 	bonus option1;
 	bonus option2;
 	public int bonusFrequency;
+	public bool bonusInProgress;
 
 	public int gameMode;
 
@@ -96,9 +101,18 @@ public class game : MonoBehaviour {
 	public int highSpace;
 	public Sprite[] enemySprites = new Sprite[9];
 
+	//main menu stuff
+	int menuSpawnCooldown;
+	ant[] menuCreeps;
+	int[] menuSpacings;
+	int[] menuSpeeds;
+	int menuCreepIndex;
+
 
 	// Use this for initialization
 	void Start () {
+		c = FindObjectOfType<Camera>();
+
 		effectIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
 		damageIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
 		rangeIndicator = Instantiate(Indicator, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<boostIndicator>();
@@ -119,6 +133,7 @@ public class game : MonoBehaviour {
 		rBoostGain = 0.5;
 		sBoostGain = .8;
 		boostCostMultiplier = 2;
+		bonusInProgress = false;
 
 		towerRange = Instantiate(Range, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<rangeCircle>();
 
@@ -301,7 +316,18 @@ public class game : MonoBehaviour {
 		sortCD = maxSortCD;
 		route = new tile[200];//max route length < width * height < 200
 		beams = new beam[200];
-		randomizeBoard();
+
+		if (gameType == 0)
+		{
+			randomizeBoard();
+		}
+		else if (gameType == 1)
+		{
+			start = GameObject.Find("start").GetComponent<tile>();
+			end = GameObject.Find("end").GetComponent<tile>();
+			FindPath(start, end, true);
+		}
+
 		start.GetComponent<SpriteRenderer>().sprite = start.startSprite;
 		end.GetComponent<SpriteRenderer>().sprite = end.endSprite;
 		lowSpeed = 10;
@@ -310,46 +336,108 @@ public class game : MonoBehaviour {
 		highSpace = 12;
 
 		paused = false;
+
+		//main menu stuff
+		menuSpawnCooldown = 0;
+		menuCreeps = new ant[27];
+		menuSpacings = new int[] { 6, 6, 6, 10, 10, 10, 16, 16, 16, 6, 6, 6, 10, 10, 10, 16, 16, 16, 6, 6, 6, 10, 10, 10, 16, 16, 16 };
+		menuSpeeds = new int[] { 8, 8, 8, 8, 8, 8, 8, 8, 8, 12, 12, 12, 12, 12, 12, 12, 12, 12, 16, 16, 16, 16, 16, 16, 16, 16, 16 };
+		menuCreepIndex = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		//pausing/pause menu
+		if (Input.GetKeyDown(KeyCode.P) && gameType == 0 && bonusInProgress == false)
+		{
+			if (paused)
+			{
+				paused = false;
+				c.transform.position = new Vector3(2, 0, -10);
+				c.orthographicSize = 7;
+			}
+			else
+			{
+				paused = true;
+				c.transform.position = new Vector3(0, -100, -10);
+				c.orthographicSize = 4.9f;
+			}
+
+		}
 
 		if (paused)
 		{
 			return;
 		}
 
-		//manage spawning of enemies
-		if (toSpawnCount > 0)
+		if (gameType == 0)
 		{
-			if (spawnCD == 0)
+			//manage spawning of enemies
+			if (toSpawnCount > 0)
 			{
-				int tempIndex = 0;
-				for (int i=0;i<creeps.Length;i++)
+				if (spawnCD == 0)
 				{
-					tempIndex = i;
-					if (creeps[i] == null)
+					int tempIndex = 0;
+					for (int i = 0; i < creeps.Length; i++)
 					{
-						break;
+						tempIndex = i;
+						if (creeps[i] == null)
+						{
+							break;
+						}
 					}
-				}
-				creeps[tempIndex] = Instantiate(Ant, start.transform.position, Quaternion.identity).gameObject.GetComponent<ant>();
-				creeps[tempIndex].maxHealth = spawnHealth;
-				creeps[tempIndex].health = spawnHealth;
-				creeps[tempIndex].maxProgress = spawnMaxProgress;
-				creeps[tempIndex].identIndex = tempIndex;
-				creeps[tempIndex].spacing = spawnSpacing;
-				creeps[tempIndex].GetComponent<SpriteRenderer>().sprite = ant.setSprite(creeps[tempIndex].maxProgress, creeps[tempIndex].spacing, lowSpeed, highSpeed, lowSpace, highSpace, enemySprites, timeFactor);
-				spawnCD = spawnSpacing;  
+					creeps[tempIndex] = Instantiate(Ant, start.transform.position, Quaternion.identity).gameObject.GetComponent<ant>();
+					creeps[tempIndex].maxHealth = spawnHealth;
+					creeps[tempIndex].health = spawnHealth;
+					creeps[tempIndex].maxProgress = spawnMaxProgress;
+					creeps[tempIndex].identIndex = tempIndex;
+					creeps[tempIndex].spacing = spawnSpacing;
+					creeps[tempIndex].GetComponent<SpriteRenderer>().sprite = ant.setSprite(creeps[tempIndex].maxProgress, creeps[tempIndex].spacing, lowSpeed, highSpeed, lowSpace, highSpace, enemySprites, timeFactor);
+					spawnCD = spawnSpacing;
 
-				toSpawnCount -= 1;
+					toSpawnCount -= 1;
+
+				}
+				else
+				{
+					spawnCD -= 1;
+				}
+			}
+		}
+		else if (gameType == 1)
+		{
+			spawnMaxProgress = 20;
+			if (menuSpawnCooldown <= 0)
+			{
+				if (menuCreeps[menuCreepIndex] == null)
+				{
+					menuCreeps[menuCreepIndex] = Instantiate(Ant, start.transform.position, Quaternion.identity).gameObject.GetComponent<ant>();
+					menuCreeps[menuCreepIndex].maxHealth = 1;
+					menuCreeps[menuCreepIndex].health = 1;
+					menuCreeps[menuCreepIndex].maxProgress = menuSpeeds[menuCreepIndex];
+					menuCreeps[menuCreepIndex].identIndex = menuCreepIndex;
+					menuCreeps[menuCreepIndex].spacing = menuSpacings[menuCreepIndex];
+					menuCreeps[menuCreepIndex].GetComponent<SpriteRenderer>().sprite = ant.setSprite(menuCreeps[menuCreepIndex].maxProgress, menuCreeps[menuCreepIndex].spacing, lowSpeed, highSpeed, lowSpace, highSpace, enemySprites, timeFactor);
+					menuSpawnCooldown = menuSpacings[menuCreepIndex];
+					if ((menuCreepIndex + 1) %3 == 0)
+					{
+						menuSpawnCooldown += 30;
+					}
+
+				}
+				menuCreepIndex++;
+				if (menuCreepIndex >= menuCreeps.Length)
+				{
+					menuCreepIndex = 0;
+				}
 
 			}
 			else
 			{
-				spawnCD -= 1;
+				menuSpawnCooldown--;
 			}
+
 		}
 
 		//check if a wave is in progress
@@ -416,78 +504,82 @@ public class game : MonoBehaviour {
 			}
 		}
 
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (gameType == 0)
 		{
-			if (waveActive == false)
+			if (Input.GetKeyDown(KeyCode.Space))
 			{
-				if (waveIndex + 1 < numWaves)
+				if (waveActive == false)
 				{
-					waveIndex += 1;
-				}
-				else
-				{
-					waves[waveIndex][2] *= 2;
-				}
-				//SpawnCreeps(10, 10, 3);
-				route = new tile[200];//max route length < width * height < 200
-				SpawnCreeps(waves[waveIndex][0], waves[waveIndex][1], waves[waveIndex][2], waves[waveIndex][3]);
-				for(int i=0;i<tiles.Length;i++)
-				{
-					tiles[i].refund = false;
-					tiles[i].blockerRefund = false;
-					tiles[i].cooldown = 0;
+					if (waveIndex + 1 < numWaves)
+					{
+						waveIndex += 1;
+					}
+					else
+					{
+						waves[waveIndex][2] *= 2;
+					}
+					//SpawnCreeps(10, 10, 3);
+					route = new tile[200];//max route length < width * height < 200
+					SpawnCreeps(waves[waveIndex][0], waves[waveIndex][1], waves[waveIndex][2], waves[waveIndex][3]);
+					for (int i = 0; i < tiles.Length; i++)
+					{
+						tiles[i].refund = false;
+						tiles[i].blockerRefund = false;
+						tiles[i].cooldown = 0;
+					}
 				}
 			}
-		}
 
-		//handle time factor
-		if (Input.GetKeyDown(KeyCode.Z))
-		{
-			if (waveActive == false)
-			{
-				if (timeFactor > 1)
-				{
-					setTimeFactor(.5);
-				}
-			}
-		}
-		if (Input.GetKeyDown(KeyCode.X))
-		{
-			if (waveActive == false)
-			{
-				if (timeFactor < 4)
-				{
-					setTimeFactor(2);
-				}
-			}
-		}
 
-		if (Input.GetKeyDown(KeyCode.UpArrow))
-		{
-			if (lastTowerSelected != null && lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3 || lastTowerSelected.towerType == lastTowerSelected.TAGBEAM) && (waveActive == false || lastTowerSelected.unchanged == true))
+			//handle time factor
+			if (Input.GetKeyDown(KeyCode.Z))
 			{
-				lastTowerSelected.orient(0);
+				if (waveActive == false)
+				{
+					if (timeFactor > 1)
+					{
+						setTimeFactor(.5);
+					}
+				}
 			}
-		}
-		if (Input.GetKeyDown(KeyCode.RightArrow))
-		{
-			if (lastTowerSelected != null && lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3 || lastTowerSelected.towerType == lastTowerSelected.TAGBEAM) && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (Input.GetKeyDown(KeyCode.X))
 			{
-				lastTowerSelected.orient(1);
+				if (waveActive == false)
+				{
+					if (timeFactor < 4)
+					{
+						setTimeFactor(2);
+					}
+				}
 			}
-		}
-		if (Input.GetKeyDown(KeyCode.DownArrow))
-		{
-			if (lastTowerSelected != null && lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3 || lastTowerSelected.towerType == lastTowerSelected.TAGBEAM) && (waveActive == false || lastTowerSelected.unchanged == true))
+
+			if (Input.GetKeyDown(KeyCode.UpArrow))
 			{
-				lastTowerSelected.orient(2);
+				if (lastTowerSelected != null && lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3 || lastTowerSelected.towerType == lastTowerSelected.TAGBEAM) && (waveActive == false || lastTowerSelected.unchanged == true))
+				{
+					lastTowerSelected.orient(0);
+				}
 			}
-		}
-		if (Input.GetKeyDown(KeyCode.LeftArrow))
-		{
-			if (lastTowerSelected != null && lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3 || lastTowerSelected.towerType == lastTowerSelected.TAGBEAM) && (waveActive == false || lastTowerSelected.unchanged == true))
+			if (Input.GetKeyDown(KeyCode.RightArrow))
 			{
-				lastTowerSelected.orient(3);
+				if (lastTowerSelected != null && lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3 || lastTowerSelected.towerType == lastTowerSelected.TAGBEAM) && (waveActive == false || lastTowerSelected.unchanged == true))
+				{
+					lastTowerSelected.orient(1);
+				}
+			}
+			if (Input.GetKeyDown(KeyCode.DownArrow))
+			{
+				if (lastTowerSelected != null && lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3 || lastTowerSelected.towerType == lastTowerSelected.TAGBEAM) && (waveActive == false || lastTowerSelected.unchanged == true))
+				{
+					lastTowerSelected.orient(2);
+				}
+			}
+			if (Input.GetKeyDown(KeyCode.LeftArrow))
+			{
+				if (lastTowerSelected != null && lastTowerSelected.status == lastTowerSelected.FILLED && (lastTowerSelected.towerType == lastTowerSelected.BEAM || lastTowerSelected.towerType == lastTowerSelected.BEAM2 || lastTowerSelected.towerType == lastTowerSelected.BEAM3 || lastTowerSelected.towerType == lastTowerSelected.TAGBEAM) && (waveActive == false || lastTowerSelected.unchanged == true))
+				{
+					lastTowerSelected.orient(3);
+				}
 			}
 		}
 
@@ -907,6 +999,7 @@ public class game : MonoBehaviour {
 
 	public void offerBonuses ()
 	{
+		bonusInProgress = true;
 		paused = true;
 		int choice;
 
@@ -975,6 +1068,7 @@ public class game : MonoBehaviour {
 		Destroy(option1.gameObject);
 		Destroy(option2.gameObject);
 		paused = false;
+		bonusInProgress = false;
 	}
 
 	public void setTimeFactor(double toMultiply)

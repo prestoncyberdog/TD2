@@ -504,6 +504,10 @@ public class tile : MonoBehaviour {
 		{
 			return;
 		}
+		if (g.gameType == 1)
+		{
+			return;
+		}
 
 		button sample2 = FindObjectOfType<button>();
 		if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && status == FILLED)

@@ -15,7 +15,7 @@ public class button : MonoBehaviour {
 	public int RBoostCode; 
 	public int SBoostCode;
 	public int EBoostCode;
-
+	public Vector3 pos;
 	// Use this for initialization
 	void Start () {
 		EBoostCode = 46;
@@ -36,7 +36,9 @@ public class button : MonoBehaviour {
 		buttonInfo.alignment = TextAnchor.MiddleCenter;
 		//buttonInfo.rectTransform.anchorMin = new Vector3(0, 0, 0);
 		//buttonInfo.rectTransform.anchorMax = new Vector3(0, 0, 0);
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
+		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 894f)), 0);
+
+		//Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
 		buttonInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 42f / 894f, 0);
 	
 
@@ -45,6 +47,9 @@ public class button : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
+		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 894f)), 0);
+		buttonInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 42f / 894f, 0);
+
 		if (g.paused)
 		{
 			return;
