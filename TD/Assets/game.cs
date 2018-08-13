@@ -46,6 +46,7 @@ public class game : MonoBehaviour {
 	public int gold;
 	public int goldWaveMultiplier;
 	public double timeFactor;
+	public int rounds;
 
 	//special boosts
 	public double effectBoost;
@@ -213,6 +214,7 @@ public class game : MonoBehaviour {
 		speedBoost = 1;//this multiplies cooldown
 		MaxLives = 20;
 		lives = MaxLives;
+		rounds = 0;
 
 		gold = 30;
 
@@ -458,7 +460,7 @@ public class game : MonoBehaviour {
 			if (waveActive == false && waveWasWactive)
 			{
 				FindPath(start, end, true);
-				gold += (waveIndex + 1) * goldWaveMultiplier;
+				gold += rounds * goldWaveMultiplier;
 				if (gameMode >= 1 && (waveIndex+1)%bonusFrequency == 0 && waveIndex < numWaves - 1)
 				{
 					
@@ -530,6 +532,7 @@ public class game : MonoBehaviour {
 			{
 				if (waveActive == false)
 				{
+					rounds++;
 					if (waveIndex + 1 < numWaves)
 					{
 						waveIndex += 1;

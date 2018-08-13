@@ -9,6 +9,7 @@ public class menuButton : MonoBehaviour {
 
 	public Camera c;
 	public game g;
+	public audioScript a;
 
 	public GameObject overall;
 	public Text overallInfo;
@@ -24,8 +25,10 @@ public class menuButton : MonoBehaviour {
 		{
 			g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		}
+		a = GameObject.FindGameObjectWithTag("audio").GetComponent<audioScript>();
 
-		pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 31f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+
+		pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 
 		overall = new GameObject("overall");
 		overall.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -35,8 +38,8 @@ public class menuButton : MonoBehaviour {
 		overall.layer = 5;
 		overallInfo.color = Color.black;
 		overallInfo.alignment = TextAnchor.MiddleCenter;
-		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
-		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
+		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 100);
+		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 450);
 		overallInfo.rectTransform.anchoredPosition = pos;
 		if (menuButtonType == 0)
 		{
@@ -82,11 +85,27 @@ public class menuButton : MonoBehaviour {
 		{
 			overallInfo.text = "Next";
 		}
+		else if (menuButtonType == 11)
+		{
+			overallInfo.text = "Mute/Unmute";
+		}
+		else if (menuButtonType == 12)
+		{
+			overallInfo.text = "Option 1(active songs)";
+		}
+		else if (menuButtonType == 13)
+		{
+			overallInfo.text = "Option 2(background)";
+		}
+		else if (menuButtonType == 14)
+		{
+			overallInfo.text = "Audio";
+		}
 	}
 
 	// Update is called once per frame
 	void Update () {
-		pos = new Vector3((Screen.width * (7f /5f) * (transform.position.x - c.transform.position.x) / (Screen.width * 31f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		pos = new Vector3((Screen.width * (7f /5f) * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 		overallInfo.rectTransform.anchoredPosition = pos;
 
 	}
@@ -148,6 +167,22 @@ public class menuButton : MonoBehaviour {
 		else if (menuButtonType == 10)
 		{
 			SceneManager.LoadScene("instructions4");
+		}
+		else if (menuButtonType == 11)
+		{
+			a.manageMute();
+		}
+		else if (menuButtonType == 12)
+		{
+			a.setSongSet1();
+		}
+		else if (menuButtonType == 13)
+		{
+			a.setSongSet2();
+		}
+		else if (menuButtonType == 14)
+		{
+			SceneManager.LoadScene("audioControl");
 		}
 	}
 }

@@ -664,7 +664,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Your goal is to build towers to prevent the enemies from reaching the exit.
-    Towers can only be built on top of blocker tiles. To build a tower, clock on its
+    Towers can only be built on top of blocker tiles. To build a tower, click on its
     button on the side menu and then left click the tile you want to build on. To
     sell, right click a tower. Also, right clicking an empty tile builds a bocker.
 

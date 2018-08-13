@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\ant.cs" />
+    <Compile Include="Assets\audioScript.cs" />
     <Compile Include="Assets\bar.cs" />
     <Compile Include="Assets\beam.cs" />
     <Compile Include="Assets\bonus.cs" />

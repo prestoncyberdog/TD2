@@ -51,6 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f7d1f79a5680347978882e7f650124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  c: {fileID: 0}
+  gameType: 0
   allTiles: []
   tiles: []
   tileSpace: 1
@@ -106,6 +108,7 @@ MonoBehaviour:
   boostCostMultiplier: 0
   Bonus: {fileID: 4650647113119270, guid: 58c08198798c46a42b8c0bc6b30795bb, type: 2}
   bonusFrequency: 0
+  bonusInProgress: 0
   gameMode: 0
   towerSelected: 0
   towerRange: {fileID: 0}

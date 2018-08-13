@@ -43,7 +43,7 @@ public class bonus : MonoBehaviour
 		bonusInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
 
 
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 31f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
+		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
 		bonusInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * -150f / 894f, 0);
 
 	}
