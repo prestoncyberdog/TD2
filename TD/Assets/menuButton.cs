@@ -25,7 +25,7 @@ public class menuButton : MonoBehaviour {
 			g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
 		}
 
-		pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 31f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 
 		overall = new GameObject("overall");
 		overall.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -86,7 +86,7 @@ public class menuButton : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		pos = new Vector3((Screen.width * (7f /5f) * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		pos = new Vector3((Screen.width * (7f /5f) * (transform.position.x - c.transform.position.x) / (Screen.width * 31f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 		overallInfo.rectTransform.anchoredPosition = pos;
 
 	}

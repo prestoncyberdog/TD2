@@ -7,6 +7,7 @@ public class missile : MonoBehaviour {
 	public ant target;
 	public game g;
 	public int damage = 1;
+	public int effect;
 	public int type;
 
 	// Use this for initialization
@@ -49,7 +50,22 @@ public class missile : MonoBehaviour {
 			{
 				target.health -= damage;
 			}
-		
+			
+			//apply splash damage if effect boosted
+			if (effect > 1)
+			{
+				for (int j = 0; j < g.creeps.Length; j++)//find enemis to splash
+				{
+					if (g.creeps[j] != null && (g.creeps[j].transform.position - target.transform.position).magnitude < ((effect - 1.0) * 0.2))
+					{
+						if (g.creeps[j] != target)//dont do double damage
+						{
+							g.creeps[j].health -= (int)(damage * ((effect - 1.0) * 0.1));
+						}
+					}
+				}
+			}
+
 			Destroy(gameObject);
 		}
 	}

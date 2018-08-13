@@ -116,6 +116,7 @@ public class tile : MonoBehaviour {
 						missile temp = Instantiate(Missile, transform.position, Quaternion.identity).gameObject.GetComponent<missile>();
 						temp.target = g.creeps[i];
 						temp.damage = damage;
+						temp.effect = effect;
 						temp.type = 0;
 						fired = true;
 						break;
@@ -145,7 +146,7 @@ public class tile : MonoBehaviour {
 						//shock enemy
 						List<ant> hits = new List<ant>();
 						Vector3 currPos = g.creeps[i].transform.position;
-						for (int j=0;j<g.creeps.Length;j++)//find enemis to splash
+						for (int j=0;j<g.creeps.Length;j++)//find enemies to splash
 						{
 							if (g.creeps[j] != null && (g.creeps[j].transform.position - currPos).magnitude < (range + (effect-1.0)*0.5))
 							{
@@ -167,10 +168,11 @@ public class tile : MonoBehaviour {
 							{
 								temp.source = g.creeps[i].transform;
 							}
-							else
+							else//the enemy that was hit directly
 							{
 								temp.source = this.transform;
 								temp.damage += damage;
+								g.creeps[i].progress += (effect - 1) * g.effects[towerType];
 							}
 
 							if (g.creeps[i].health > 0)
@@ -232,6 +234,7 @@ public class tile : MonoBehaviour {
 							temp.GetComponent<SpriteRenderer>().sprite = temp.whiteBeam;
 							temp.lifetime = (int)(12.0 / g.timeFactor);
 							temp.setBeam(temp.beamType);
+							g.creeps[i].progress += (effect - 1) * g.effects[towerType];
 						}
 
 

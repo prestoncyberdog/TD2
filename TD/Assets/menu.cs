@@ -34,7 +34,7 @@ public class menu : MonoBehaviour {
 	void Start () {
 		c = FindObjectOfType<Camera>();
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
-		pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 31f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 
 		imageObject = new GameObject();
 		image = imageObject.AddComponent<SpriteRenderer>();
@@ -133,7 +133,7 @@ public class menu : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 31f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 		towerInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 315f / 894f, 0);
 		nextWaveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * 65f / 1280f, Screen.height * 210f / 894f, 0);
 		waveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * -65f / 1280f, Screen.height * 210f / 894f, 0);
@@ -160,7 +160,7 @@ public class menu : MonoBehaviour {
 		}
 		else
 		{
-			nextWaveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + g.waves[g.waveIndex][0] + "\nHealth: " + 2 * g.waves[g.waveIndex][2];// + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
+			nextWaveInfo.text = "Wave " + (g.waveIndex + 1) + "\n#: " + 100 + "\nHealth: " + 2 * g.waves[g.waveIndex][2];// + "\nSpacing: " + g.waves[g.waveIndex][1] + "\nPace: " + g.waves[g.waveIndex][3];
 			image2.sprite = ant.setSprite(g.waves[g.waveIndex][3], g.waves[g.waveIndex][1], g.lowSpeed, g.highSpeed, g.lowSpace, g.highSpace, g.enemySprites, g.timeFactor);
 			image2.transform.position = transform.position + new Vector3(1f, 2.4f, -0.1f);
 		}

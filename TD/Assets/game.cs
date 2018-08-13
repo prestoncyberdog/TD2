@@ -170,7 +170,7 @@ public class game : MonoBehaviour {
 		bonuses[28] = new int[] { 40, 50, 1 };//tagbeam requires tag3 and beam3 both available (not necessarily chosen)
 		bonuses[29] = new int[] { 40, 50, 1 };//teslacoil requires tesla3 and coil3 both available (not necessarily chosen)
 		//here end tower bonuses
-		bonuses[30] = new int[] { 5, 5, 0 };//missile +2 damage
+		bonuses[30] = new int[] { 5, 5, 0 };//missile *1.2 damage
 		bonuses[31] = new int[] { 5, 5, 0 };//splash +.5 range
 		bonuses[32] = new int[] { 10, 15, 1 };//shock -14 cd requires shock1
 		bonuses[33] = new int[] { 10, 15, 1 };//beam +5 damage requires beam1
@@ -191,14 +191,14 @@ public class game : MonoBehaviour {
 		bonuses[48] = new int[] { 30, 35, 1 };//Speed boost *.5 requires speed boost
 		bonuses[49] = new int[] { 30, 35, 1 };//Effect boost +1 requires effect boost
 		bonuses[50] = new int[] { 40, 40, 1 };//beam3 *.75 cooldown requires beam3
-		bonuses[51] = new int[] { 40, 40, 1 };//coil +1 range requires coil 2 or 3
+		bonuses[51] = new int[] { 30, 40, 1 };//coil +1 range requires coil 2 or 3
 		bonuses[52] = new int[] { 40, 40, 1 };//tag +2 slow power requires tag 2 or 3
 		bonuses[53] = new int[] { 40, 40, 0 };//+500 gold
 		bonuses[54] = new int[] { 45, 45, 0 };//all towers *1.2 damage * 1.5 slow power
 		bonuses[55] = new int[] { 45, 45, 0 };//all towers +1 range
 		bonuses[56] = new int[] { 45, 45, 0 };//all towers *.8 cooldown
 		bonuses[57] = new int[] { 45, 45, 0 };//all towers +1 effect
-		bonuses[58] = new int[] { 40, 40, 1 };//tesla +20 slow power 80% sell cost requires tesla 2 or 3
+		bonuses[58] = new int[] { 35, 40, 1 };//tesla +20 slow power 80% sell cost requires tesla 2 or 3
 		bonuses[59] = new int[] { 20, 40, 0 };//remove all blocked tiles
 
 
@@ -297,8 +297,8 @@ public class game : MonoBehaviour {
 		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 70, 200, 200, 300, 150, 150, 200, 100, 200, 400, 500, 500, 300, 300, 300, 300, 800, 800, 800 };
 		cooldowns = new int[] { 0, 20, 44, 74, 80, 0, 0, 60, 40, 20, 44, 70, 80, 0, 0, 40, 24, 20, 40, 60, 80, 0, 0, 20, 16, 20, 74, 80, 0 };
 		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2, 6.2, 3.3, 0, 3.8 };
-		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 16, 3, 24, 20, 12, 0, 0, 16, 50, 5, 50, 50, 16, 0, 0, 26, 200, 5, 30, 20 };
-		effects = new int[] { 0, 0, 0, 0, 0, 0, 40, 0, 2, 0, 0, 0, 0, 0, 80, 0, 4, 0, 0, 0, 0, 0, 120, 0, 6, 0, 0, 4, 120 };
+		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 16, 3, 24, 20, 12, 0, 0, 16, 50, 5, 50, 50, 16, 0, 0, 26, 200, 5, 30, 16 };
+		effects = new int[] { 0, 0, 0, 2, 0, 0, 40, 0, 2, 0, 0, 4, 0, 0, 80, 0, 4, 0, 0, 4, 0, 0, 120, 0, 6, 0, 4, 4, 120 };
 
 		timeFactor = 2;//to change this, call setTimeFactor here
 
@@ -472,10 +472,18 @@ public class game : MonoBehaviour {
 		if (damageBoostedTower != null)
 		{
 			damageBoostedTower.damage = (int)(damages[damageBoostedTower.towerType] * damageBoost);
+			if (damageBoostedTower.status == damageBoostedTower.FILLED && damageBoostedTower.towerType != damageBoostedTower.BLOCKER)
+			{
+				damageIndicator.transform.position = damageBoostedTower.transform.position + new Vector3(-.3f, .3f, -.001f);
+			}
 		}
 		if (rangeBoostedTower != null)
 		{
 			rangeBoostedTower.range = (ranges[rangeBoostedTower.towerType] + rangeBoost);
+			if (rangeBoostedTower.status == rangeBoostedTower.FILLED && rangeBoostedTower.towerType != rangeBoostedTower.BLOCKER)
+			{
+				rangeIndicator.transform.position = rangeBoostedTower.transform.position + new Vector3(.3f, .3f, -.001f);
+			}
 		}
 		if (speedBoostedTower != null)
 		{
@@ -484,10 +492,22 @@ public class game : MonoBehaviour {
 			{
 				speedBoostedTower.maxCooldown -= (int)(speedBoostedTower.maxCooldown % (4/timeFactor));
 			}
+			if (speedBoostedTower.status == speedBoostedTower.FILLED && speedBoostedTower.towerType != speedBoostedTower.BLOCKER)
+			{
+				speedIndicator.transform.position = speedBoostedTower.transform.position + new Vector3(-.3f, -.3f, -.001f);
+			}
 		}
 		if (effectBoostedTower != null)
 		{
 			effectBoostedTower.effect = (int)(defaultEffects[effectBoostedTower.towerType] + effectBoost);
+			if (effectBoostedTower.status == effectBoostedTower.FILLED && effectBoostedTower.towerType != effectBoostedTower.BLOCKER)
+			{
+				effectIndicator.transform.position = effectBoostedTower.transform.position + new Vector3(.3f, -.3f, -.001f);
+			}
+			if ((effectBoostedTower.towerType == effectBoostedTower.TESLA) || (effectBoostedTower.towerType == effectBoostedTower.TESLA2) || (effectBoostedTower.towerType == effectBoostedTower.TESLA3)|| (effectBoostedTower.towerType == effectBoostedTower.TESLACOIL))
+			{
+				effectBoostedTower.makeWebs();
+			}
 		}
 
 
@@ -514,9 +534,10 @@ public class game : MonoBehaviour {
 					{
 						waveIndex += 1;
 					}
-					else
+					else//infinite doubling health waves
 					{
 						waves[waveIndex][2] *= 2;
+						waves[waveIndex][0] = 100;
 					}
 					//SpawnCreeps(10, 10, 3);
 					route = new tile[200];//max route length < width * height < 200

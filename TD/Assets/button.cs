@@ -36,7 +36,7 @@ public class button : MonoBehaviour {
 		buttonInfo.alignment = TextAnchor.MiddleCenter;
 		//buttonInfo.rectTransform.anchorMin = new Vector3(0, 0, 0);
 		//buttonInfo.rectTransform.anchorMax = new Vector3(0, 0, 0);
-		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 894f)), 0);
+		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 31f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 894f)), 0);
 
 		//Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
 		buttonInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 42f / 894f, 0);
@@ -47,7 +47,7 @@ public class button : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
-		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 894f)), 0);
+		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 31f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 894f)), 0);
 		buttonInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 42f / 894f, 0);
 
 		if (g.paused)
@@ -236,7 +236,7 @@ public class button : MonoBehaviour {
 					if (g.effectBoostedTower != null)
 					{
 						g.effectBoostedTower.effect = 1+ (int)g.effectBoost;//(g.ranges[g.rangeBoostedTower.towerType] + g.rangeBoost);
-						if ((g.effectBoostedTower.towerType == g.effectBoostedTower.TESLA) || (g.effectBoostedTower.towerType == g.effectBoostedTower.TESLA2)|| (g.effectBoostedTower.towerType == g.effectBoostedTower.TESLA3))
+						if ((g.effectBoostedTower.towerType == g.effectBoostedTower.TESLA) || (g.effectBoostedTower.towerType == g.effectBoostedTower.TESLA2)|| (g.effectBoostedTower.towerType == g.effectBoostedTower.TESLA3)|| (g.effectBoostedTower.towerType == g.effectBoostedTower.TESLACOIL))
 						{
 							g.effectBoostedTower.makeWebs();
 						}

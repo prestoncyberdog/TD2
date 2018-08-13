@@ -43,7 +43,7 @@ public class bonus : MonoBehaviour
 		bonusInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
 
 
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
+		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 31f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
 		bonusInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * -150f / 894f, 0);
 
 	}
@@ -193,8 +193,8 @@ public class bonus : MonoBehaviour
 				bonusInfo.text = "Teslacoil Tower\nActs as both a powerful Coil and Tesla tower\nBase Damage: " + g.damages[28] + "\nSlow Power: " + g.effects[28] + "\nRange: " + g.ranges[28] + "\nCost: " + g.towerCosts[28];
 				image.sprite = g.tiles[0].towerSprites[28];
 				break;
-			case 30://missile damage +2
-				bonusInfo.text = "Increase damage of all missile towers by 2";
+			case 30://missile damage *1.2
+				bonusInfo.text = "Multiply damage of all missile towers by 1.2";
 				image.sprite = g.tiles[0].towerSprites[1];
 				break;
 			case 31://splash range +.5
@@ -583,11 +583,11 @@ public class bonus : MonoBehaviour
 				temp.GetComponent<SpriteRenderer>().sprite = temp.towerSprites[28];
 				g.sideMenu.buttonsUsed++;
 				break;
-			case 30://missile damage +2
-				g.damages[1] += 2;
-				g.damages[9] += 2;
-				g.damages[17] += 2;
-				g.damages[25] += 2;
+			case 30://missile damage *1.2
+				g.damages[1] = Mathf.CeilToInt((g.damages[1] * 1.2f));
+				g.damages[9] = Mathf.CeilToInt((g.damages[9] * 1.2f));
+				g.damages[17] = Mathf.CeilToInt((g.damages[17] * 1.2f));
+				g.damages[25] = Mathf.CeilToInt((g.damages[25] * 1.2f));
 				break;
 			case 31://splash range +.5
 				g.ranges[2] += .5;
