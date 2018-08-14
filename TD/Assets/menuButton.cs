@@ -101,6 +101,10 @@ public class menuButton : MonoBehaviour {
 		{
 			overallInfo.text = "Audio";
 		}
+		else if (menuButtonType == 15)
+		{
+			overallInfo.text = "Keep Playing";
+		}
 	}
 
 	// Update is called once per frame
@@ -183,6 +187,13 @@ public class menuButton : MonoBehaviour {
 		else if (menuButtonType == 14)
 		{
 			SceneManager.LoadScene("audioControl");
+		}
+		else if (menuButtonType == 15)
+		{
+			g.paused = false;
+			c.transform.position = new Vector3(2, 0, -10);
+			c.orthographicSize = 7;
+			g.endGameText.rectTransform.anchoredPosition = new Vector3(0, 10000, 0);
 		}
 	}
 }

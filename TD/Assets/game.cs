@@ -9,6 +9,7 @@ public class game : MonoBehaviour {
 	public int gameType;
 	// if 0, normal game
 	//if 1, treat game as menu version
+	public bool dead;
 	
 	public GameObject[] allTiles;
 	public tile[] tiles;
@@ -109,6 +110,9 @@ public class game : MonoBehaviour {
 	int[] menuSpeeds;
 	int menuCreepIndex;
 
+	public GameObject endGameObject;
+	public Text endGameText;
+
 
 	// Use this for initialization
 	void Start () {
@@ -135,6 +139,7 @@ public class game : MonoBehaviour {
 		sBoostGain = .8;
 		boostCostMultiplier = 2;
 		bonusInProgress = false;
+		dead = false;
 
 		towerRange = Instantiate(Range, new Vector3(100, 100, 0), Quaternion.identity).gameObject.GetComponent<rangeCircle>();
 
@@ -177,7 +182,7 @@ public class game : MonoBehaviour {
 		bonuses[33] = new int[] { 10, 15, 1 };//beam +5 damage requires beam1
 		bonuses[34] = new int[] { 10, 15, 1 };//coil +4 damage requires coil1
 		bonuses[35] = new int[] { 10, 15, 1 };//tag *2 damage requires tag1
-		bonuses[36] = new int[] { 20, 20, 0 };//+300 gold
+		bonuses[36] = new int[] { 20, 20, 1 };//+300 gold never available
 		bonuses[37] = new int[] { 20, 20, 0 };//+50 lives
 		bonuses[38] = new int[] { 20, 20, 1 };//tag1 +2 slow power requires tag1
 		bonuses[39] = new int[] { 25, 30, 1 };//tesla +15 slow power requires tesla1
@@ -194,7 +199,7 @@ public class game : MonoBehaviour {
 		bonuses[50] = new int[] { 40, 40, 1 };//beam3 *.75 cooldown requires beam3
 		bonuses[51] = new int[] { 30, 40, 1 };//coil +1 range requires coil 2 or 3
 		bonuses[52] = new int[] { 40, 40, 1 };//tag +2 slow power requires tag 2 or 3
-		bonuses[53] = new int[] { 40, 40, 0 };//+500 gold
+		bonuses[53] = new int[] { 40, 40, 0 };//+700 gold
 		bonuses[54] = new int[] { 45, 45, 0 };//all towers *1.2 damage * 1.5 slow power
 		bonuses[55] = new int[] { 45, 45, 0 };//all towers +1 range
 		bonuses[56] = new int[] { 45, 45, 0 };//all towers *.8 cooldown
@@ -299,7 +304,7 @@ public class game : MonoBehaviour {
 		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 70, 200, 200, 300, 150, 150, 200, 100, 200, 400, 500, 500, 300, 300, 300, 300, 800, 800, 800 };
 		cooldowns = new int[] { 0, 20, 44, 74, 80, 0, 0, 60, 40, 20, 44, 70, 80, 0, 0, 40, 24, 20, 40, 60, 80, 0, 0, 20, 16, 20, 74, 80, 0 };
 		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2, 6.2, 3.3, 0, 3.8 };
-		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 16, 3, 24, 20, 12, 0, 0, 16, 50, 5, 50, 50, 16, 0, 0, 26, 200, 5, 30, 16 };
+		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 16, 3, 24, 20, 12, 0, 0, 16, 50, 5, 50, 50, 16, 0, 0, 26, 200, 5, 30, 10 };
 		effects = new int[] { 0, 0, 0, 2, 0, 0, 40, 0, 2, 0, 0, 4, 0, 0, 80, 0, 4, 0, 0, 4, 0, 0, 120, 0, 6, 0, 4, 4, 120 };
 
 		timeFactor = 2;//to change this, call setTimeFactor here
@@ -332,6 +337,8 @@ public class game : MonoBehaviour {
 
 		start.GetComponent<SpriteRenderer>().sprite = start.startSprite;
 		end.GetComponent<SpriteRenderer>().sprite = end.endSprite;
+		start.GetComponent<Renderer>().enabled = true;
+		end.GetComponent<Renderer>().enabled = true;
 		lowSpeed = 10;
 		highSpeed = 12;
 		lowSpace = 10;
@@ -345,6 +352,20 @@ public class game : MonoBehaviour {
 		menuSpacings = new int[] { 6, 6, 6, 10, 10, 10, 16, 16, 16, 6, 6, 6, 10, 10, 10, 16, 16, 16, 6, 6, 6, 10, 10, 10, 16, 16, 16 };
 		menuSpeeds = new int[] { 8, 8, 8, 8, 8, 8, 8, 8, 8, 12, 12, 12, 12, 12, 12, 12, 12, 12, 16, 16, 16, 16, 16, 16, 16, 16, 16 };
 		menuCreepIndex = 0;
+
+		
+		endGameObject = new GameObject("endGameText");
+		endGameObject.transform.SetParent(FindObjectOfType<Canvas>().transform);
+		endGameText = endGameObject.AddComponent<Text>();
+		endGameText.fontSize = 120;
+		endGameText.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+		endGameObject.layer = 5;
+		endGameText.color = Color.white;
+		endGameText.alignment = TextAnchor.MiddleCenter;
+		endGameText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
+		endGameText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 500);
+		endGameText.rectTransform.anchoredPosition = new Vector3(0, 10000, 0);
+		endGameText.text = "Victory";
 	}
 	
 	// Update is called once per frame
@@ -371,6 +392,12 @@ public class game : MonoBehaviour {
 		if (paused)
 		{
 			return;
+		}
+
+		if (lives <= 0 && gameType == 0)
+		{
+			c.backgroundColor = Color.black;
+			dead = true;
 		}
 
 		if (gameType == 0)
@@ -461,11 +488,20 @@ public class game : MonoBehaviour {
 			{
 				FindPath(start, end, true);
 				gold += rounds * goldWaveMultiplier;
-				if (gameMode >= 1 && (waveIndex+1)%bonusFrequency == 0 && waveIndex < numWaves - 1)
+				if (gameMode >= 1 && (waveIndex+1)%bonusFrequency == 0 && waveIndex < numWaves - 1 && dead == false)
 				{
 					
 					offerBonuses();
 					
+				}
+
+				if (rounds == 50 && dead == false)
+				{
+					paused = true;
+					c.transform.position = new Vector3(0, -119, -10);
+					c.orthographicSize = 4.9f;
+					endGameText.rectTransform.anchoredPosition = new Vector3(0, Screen.height * 320f / 894f, 0);
+
 				}
 			}
 		}
@@ -524,6 +560,11 @@ public class game : MonoBehaviour {
 			{
 				sortCD--;
 			}
+		}
+
+		if (dead)//game should run with no inputs allowed after death
+		{
+			return;
 		}
 
 		if (gameType == 0)
@@ -928,6 +969,7 @@ public class game : MonoBehaviour {
 			{
 				tiles[i].status = tiles[i].EMPTY;
 				tiles[i].GetComponent<SpriteRenderer>().sprite = tiles[i].emptySprite;
+				tiles[i].GetComponent<Renderer>().enabled = true;
 			}
 		}
 
@@ -994,6 +1036,7 @@ public class game : MonoBehaviour {
 		//expand area if possible
 		baseTile.status = baseTile.BLOCKED;
 		baseTile.GetComponent<SpriteRenderer>().sprite = baseTile.blockedSprite;
+		baseTile.GetComponent<Renderer>().enabled = false;
 		if (baseTile.north != null && baseTile.north.north != null && baseTile.north.status == baseTile.EMPTY && currBlockerSize < maxSize - 1 && Random.Range(0, 2) < 1)
 		{
 			baseTile.north.visited = true;

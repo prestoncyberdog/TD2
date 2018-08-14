@@ -287,8 +287,8 @@ public class bonus : MonoBehaviour
 				bonusInfo.text = "Increase slow power of all tag towers by "+ (int)(4 / g.timeFactor) ;
 				image.sprite = g.tiles[0].towerSprites[24];
 				break;
-			case 53://+500 gold
-				bonusInfo.text = "Gain 500 gold";
+			case 53://+700 gold
+				bonusInfo.text = "Gain 700 gold";
 				image.sprite = bonusSprites[0];
 				image.transform.localScale = new Vector3(3.0f / 6.0f, 3.0f / 6.0f, 1);
 				break;
@@ -701,8 +701,8 @@ public class bonus : MonoBehaviour
 				g.effects[24] += (int)(4 / g.timeFactor);
 				g.effects[27] += (int)(4 / g.timeFactor);
 				break;
-			case 53://+500 gold
-				g.gold += 500;
+			case 53://+700 gold
+				g.gold += 700;
 				break;
 			case 54://all towers *1.2 damage * 1.5 slow power
 				for (int i = 0;i<g.damages.Length;i++)
@@ -795,7 +795,9 @@ public class bonus : MonoBehaviour
 						g.tiles[i].status = g.tiles[i].FILLED;
 						g.tiles[i].towerType = g.tiles[i].BLOCKER;
 						g.tiles[i].GetComponent<SpriteRenderer>().sprite = g.tiles[i].towerSprites[g.tiles[i].BLOCKER];
+						
 					}
+					g.tiles[i].GetComponent<Renderer>().enabled = true;
 				}
 				break;
 		}

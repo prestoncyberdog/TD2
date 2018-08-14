@@ -141,7 +141,7 @@ public class tile : MonoBehaviour {
 				//choose enemy
 				for (int i = 0; i < g.creeps.Length; i++)
 				{
-					if (g.creeps[i] != null && (g.creeps[i].transform.position - transform.position).magnitude <= range)
+					if (g.creeps[i] != null && (g.creeps[i].transform.position - transform.position).magnitude <= range && g.creeps[i].health > 0)
 					{
 						//shock enemy
 						List<ant> hits = new List<ant>();
@@ -153,36 +153,67 @@ public class tile : MonoBehaviour {
 								hits.Add(g.creeps[j]);
 							}
 						}
-						for (int k = 0;k<hits.Count;k++)
+
+						//if shocksplash and more than 20 hits, shoot 1 enemy only
+						//does same damage but with less lag
+						if (towerType == SHOCKSPLASH && hits.Count > 20)
 						{
 							beam temp = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
 							temp.transform.position = new Vector3(100, 100, 0);
 							temp.beamType = 0;
-							temp.lifetime = (int)(12.0/g.timeFactor);
-							if (towerType == SHOCKSPLASH)
-							{
-								temp.GetComponent<SpriteRenderer>().sprite = temp.gwBeam;
-							}
+							temp.lifetime = (int)(12.0 / g.timeFactor);
+							temp.GetComponent<SpriteRenderer>().sprite = temp.gwBeam;
+							temp.source = this.transform;
+							temp.damage += damage * 2;
+							g.creeps[i].progress += (effect - 1) * g.effects[towerType];
+							temp.target = g.creeps[i].transform;
+							temp.enemy = g.creeps[i];
+							temp.setBeam(temp.beamType);
 
-							if (hits[k] != g.creeps[i])
+							for (int k = 0; k < hits.Count; k++)
 							{
-								temp.source = g.creeps[i].transform;
+								hits[k].health -= damage;
 							}
-							else//the enemy that was hit directly
-							{
-								temp.source = this.transform;
-								temp.damage += damage;
-								g.creeps[i].progress += (effect - 1) * g.effects[towerType];
-							}
+						}
+						//otherwise  create all splashing beams
+						else
+						{
 
-							if (g.creeps[i].health > 0)
+							for (int k = 0; k < hits.Count; k++)
 							{
-								temp.target = hits[k].transform;
-								temp.damage += damage;
-								temp.enemy = hits[k];
-								temp.setBeam(temp.beamType);
-							}
+								beam temp = Instantiate(Beam, transform.position, Quaternion.identity).gameObject.GetComponent<beam>();
+								temp.transform.position = new Vector3(100, 100, 0);
+								temp.beamType = 0;
+								temp.lifetime = (int)(12.0 / g.timeFactor);
+								if (towerType == SHOCKSPLASH)
+								{
+									temp.GetComponent<SpriteRenderer>().sprite = temp.gwBeam;
+								}
 
+								if (hits[k] != g.creeps[i])
+								{
+									temp.source = g.creeps[i].transform;
+								}
+								else//the enemy that was hit directly
+								{
+									temp.source = this.transform;
+									temp.damage += damage;
+									g.creeps[i].progress += (effect - 1) * g.effects[towerType];
+								}
+
+								if (g.creeps[i].health > 0)
+								{
+									temp.target = hits[k].transform;
+									temp.damage += damage;
+									temp.enemy = hits[k];
+									temp.setBeam(temp.beamType);
+								}
+								else
+								{
+									hits[k].health -= damage;//deal damage directly
+								}
+
+							}
 						}
 						fired = true;
 						if (towerType != SHOCKSPLASH)
@@ -503,7 +534,7 @@ public class tile : MonoBehaviour {
 
 	void OnMouseOver()
 	{
-		if (g.paused)
+		if (g.paused || g.dead)
 		{
 			return;
 		}
@@ -735,6 +766,7 @@ public class tile : MonoBehaviour {
 				{
 					bridgeStart = null;
 					bridgeEnd = null;
+					transform.rotation = Quaternion.identity;
 				}
 
 				if (towerType == BLOCKER)

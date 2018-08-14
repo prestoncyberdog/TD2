@@ -26,6 +26,9 @@ public class menu : MonoBehaviour {
 	public SpriteRenderer image;
 	public GameObject imageObject2;
 	public SpriteRenderer image2;
+	public GameObject highlightObject;
+	public SpriteRenderer highlightImage;
+	public int currButtonIndex;
 	public Vector3 pos;
 	public Camera c;
 
@@ -45,8 +48,7 @@ public class menu : MonoBehaviour {
 		image2 = imageObject2.AddComponent<SpriteRenderer>();
 		image2.transform.position = transform.position + new Vector3(1f, 2.4f, -0.1f);
 		image2.transform.localScale = new Vector3(.15f, .15f, 1);
-		image2.transform.rotation = Quaternion.Euler(0, 0, -90); 
-
+		image2.transform.rotation = Quaternion.Euler(0, 0, -90);
 
 		transform.position = transform.position + new Vector3(0, 0, -.1f);
 
@@ -113,7 +115,14 @@ public class menu : MonoBehaviour {
 				buttons[i].buttonType = 0;
 			}
 		}
-		
+
+		currButtonIndex = 0;
+		highlightObject = new GameObject();
+		highlightImage = highlightObject.AddComponent<SpriteRenderer>();
+		highlightImage.sprite = g.tiles[0].blockedSprite;
+		highlightImage.transform.localScale = new Vector3(1.1f, 1.1f, 1);
+		highlightImage.transform.position = buttons[currButtonIndex].transform.position + new Vector3(0, 0, .1f);
+
 
 		if (g.gameMode == 0)
 		{
@@ -138,6 +147,19 @@ public class menu : MonoBehaviour {
 		nextWaveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * 65f / 1280f, Screen.height * 210f / 894f, 0);
 		waveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * -65f / 1280f, Screen.height * 210f / 894f, 0);
 		overallInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * 320f / 894f, 0);
+		if (g.dead == false)
+		{
+			highlightImage.transform.position = buttons[currButtonIndex].transform.position + new Vector3(0, 0, .1f);
+		}
+
+		if (g.dead && buttons[0] != null)
+		{
+			for (int i =0;i<buttons.Length;i++)
+			{
+				Destroy(buttons[i].buttonInfo);
+				Destroy(buttons[i].gameObject);
+			}
+		}
 
 		SetText();
 	}
@@ -275,6 +297,16 @@ public class menu : MonoBehaviour {
 			g.towerRange.transform.position = g.lastTowerSelected.transform.position + new Vector3(0, 0, -.01f);
 			float scaleFactor = (float)(g.lastTowerSelected.range / 2.5);
 			g.towerRange.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1);
+		}
+
+		if (g.dead)
+		{
+			towerInfo.fontSize = 30;
+			towerInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 600);
+			towerInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 220);
+			towerInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 70f / 894f, 0);
+			towerInfo.text = "Press P for pause menu";
+			highlightImage.transform.position = new Vector3(0, 100, 0);
 		}
 	}
 }

@@ -261,7 +261,7 @@ MonoBehaviour:
     a boost button on the side menu and then left clicking a tower will apply the
     boost to that tower. You can change what tower is boosted for free when there
     is no wave active. \n\nRight clicking a boost button on the side menu spends your
-    gold to permanently upgrade that boost.\n\nThe effect boost works differently
+    gold to permanently upgrade that boost.\n\nThe effect boost (blue) works differently
     for each tower. For missiles, it adds splash damage, for splash it increases splash
     radius, for shock it adds a slow effect, for coil it increases the damage exponent,
     for tesla and tag it increases slow power. It also allows beams to shoot through

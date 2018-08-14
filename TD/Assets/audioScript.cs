@@ -7,6 +7,7 @@ public class audioScript : MonoBehaviour {
 	public AudioClip[] songs;
 	public AudioClip[] songSet1 = new AudioClip[12];
 	public AudioClip[] songSet2 = new AudioClip[12];
+	public AudioClip[] starters1 = new AudioClip[2];
 
 	public int songIndex;
 	public AudioSource musicSource;
@@ -57,7 +58,12 @@ public class audioScript : MonoBehaviour {
 	{
 		musicSource.Stop();
 		CancelInvoke();
-		songs = songSet1;
+		songs = new AudioClip[songSet1.Length];
+		for (int i=0;i<songSet1.Length;i++)
+		{
+			songs[i] = songSet1[i];
+		}
+		//songs = songSet1;
 		scrambleSongs();
 		musicSource.clip = songs[0];
 		musicSource.Play();
@@ -68,7 +74,12 @@ public class audioScript : MonoBehaviour {
 	{
 		musicSource.Stop();
 		CancelInvoke();
-		songs = songSet2;
+		songs = new AudioClip[songSet2.Length];
+		for (int i = 0; i < songSet2.Length; i++)
+		{
+			songs[i] = songSet2[i];
+		}
+		//songs = songSet2;
 		musicSource.clip = songs[0];
 		musicSource.Play();
 		Invoke("playNextSong", musicSource.clip.length);
@@ -94,11 +105,21 @@ public class audioScript : MonoBehaviour {
 
 	public void scrambleSongs ()
 	{
-		int choice;
-		for (int i = 0;i<songs.Length;i++)
+		int choice = Random.Range(0, starters1.Length);
+		//swapSongs(0, choice);
+		int choice2;
+		for (int i = 1;i<songs.Length;i++)//dont scramble first song
 		{
-			choice = Random.Range(0, songs.Length);
-			swapSongs(i, choice);
+			choice2 = Random.Range(1, songs.Length);
+			swapSongs(i, choice2);
+		}
+		for (int i=0;i<songs.Length;i++)
+		{
+			if (songs[i] == starters1[choice])
+			{
+				swapSongs(0, i);
+				break;
+			}
 		}
 	}
 
