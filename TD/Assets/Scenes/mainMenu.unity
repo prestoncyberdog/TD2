@@ -1598,6 +1598,11 @@ Prefab:
       propertyPath: songSet2.Array.size
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 114041053470689004, guid: 453dcfd4742f42e41979e8747c0d9849,
+        type: 2}
+      propertyPath: songSet1.Array.size
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 4521610090041662, guid: 453dcfd4742f42e41979e8747c0d9849, type: 2}
       propertyPath: m_LocalPosition.x
       value: -0.44411463
@@ -1648,7 +1653,7 @@ Prefab:
         type: 2}
       propertyPath: songSet1.Array.data[2]
       value: 
-      objectReference: {fileID: 8300000, guid: 35ce6b653fe641d46a6a4a5502891a56, type: 3}
+      objectReference: {fileID: 8300000, guid: bf080578fd6608f4b98e9d8b58e944fa, type: 3}
     - target: {fileID: 114041053470689004, guid: 453dcfd4742f42e41979e8747c0d9849,
         type: 2}
       propertyPath: songSet1.Array.data[3]
@@ -1658,7 +1663,7 @@ Prefab:
         type: 2}
       propertyPath: songSet1.Array.data[4]
       value: 
-      objectReference: {fileID: 8300000, guid: d739645ed98c4cf4198519a3c50327b5, type: 3}
+      objectReference: {fileID: 8300000, guid: 5dd1c91c9fcdbba4782a158de62fecdc, type: 3}
     - target: {fileID: 114041053470689004, guid: 453dcfd4742f42e41979e8747c0d9849,
         type: 2}
       propertyPath: songSet1.Array.data[5]
@@ -1764,6 +1769,31 @@ Prefab:
       propertyPath: starters1.Array.data[1]
       value: 
       objectReference: {fileID: 8300000, guid: 085a4dcf9478e3e4183dd316e89d9ce1, type: 3}
+    - target: {fileID: 114041053470689004, guid: 453dcfd4742f42e41979e8747c0d9849,
+        type: 2}
+      propertyPath: songs.Array.data[4]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114041053470689004, guid: 453dcfd4742f42e41979e8747c0d9849,
+        type: 2}
+      propertyPath: songs.Array.data[7]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114041053470689004, guid: 453dcfd4742f42e41979e8747c0d9849,
+        type: 2}
+      propertyPath: songSet1.Array.data[12]
+      value: 
+      objectReference: {fileID: 8300000, guid: 23a4790581999414787c94c3655e89c7, type: 3}
+    - target: {fileID: 114041053470689004, guid: 453dcfd4742f42e41979e8747c0d9849,
+        type: 2}
+      propertyPath: songSet1.Array.data[13]
+      value: 
+      objectReference: {fileID: 8300000, guid: 6857b2e2d9704a043b827f130c9f4c2a, type: 3}
+    - target: {fileID: 114041053470689004, guid: 453dcfd4742f42e41979e8747c0d9849,
+        type: 2}
+      propertyPath: songSet1.Array.data[14]
+      value: 
+      objectReference: {fileID: 8300000, guid: bc109a7e6ae3bb346bcbec0b31d800bc, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 453dcfd4742f42e41979e8747c0d9849, type: 2}
   m_IsPrefabAsset: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 public class audioScript : MonoBehaviour {
 
 	public AudioClip[] songs;
-	public AudioClip[] songSet1 = new AudioClip[12];
+	public AudioClip[] songSet1 = new AudioClip[15];
 	public AudioClip[] songSet2 = new AudioClip[12];
 	public AudioClip[] starters1 = new AudioClip[2];
 
@@ -25,6 +25,18 @@ public class audioScript : MonoBehaviour {
 		musicSource.volume = .6f;
 		songIndex = 0;
 		scrambleSongs();
+
+		int choice = Random.Range(0, starters1.Length);
+
+		for (int i = 0; i < songs.Length; i++)
+		{
+			if (songs[i] == starters1[choice])
+			{
+				swapSongs(0, i);
+				break;
+			}
+		}
+
 		musicSource.clip = songs[0];
 		DontDestroyOnLoad(this);
 		musicSource.Play();
@@ -105,21 +117,12 @@ public class audioScript : MonoBehaviour {
 
 	public void scrambleSongs ()
 	{
-		int choice = Random.Range(0, starters1.Length);
 		//swapSongs(0, choice);
 		int choice2;
-		for (int i = 1;i<songs.Length;i++)//dont scramble first song
+		for (int i = 0;i<songs.Length;i++)
 		{
-			choice2 = Random.Range(1, songs.Length);
+			choice2 = Random.Range(0, songs.Length);
 			swapSongs(i, choice2);
-		}
-		for (int i=0;i<songs.Length;i++)
-		{
-			if (songs[i] == starters1[choice])
-			{
-				swapSongs(0, i);
-				break;
-			}
 		}
 	}
 

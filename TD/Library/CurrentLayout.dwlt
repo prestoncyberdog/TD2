@@ -107,9 +107,9 @@ MonoBehaviour:
     width: 1280
     height: 932
   m_MinSize: {x: 681, y: 492}
-  m_MaxSize: {x: 14004, y: 14042}
+  m_MaxSize: {x: 14002, y: 14042}
   vertical: 0
-  controlID: 10880
+  controlID: 644
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -130,10 +130,10 @@ MonoBehaviour:
     y: 0
     width: 999
     height: 932
-  m_MinSize: {x: 404, y: 492}
+  m_MinSize: {x: 406, y: 492}
   m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
-  controlID: 10956
+  controlID: 645
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -154,10 +154,10 @@ MonoBehaviour:
     y: 0
     width: 999
     height: 567
-  m_MinSize: {x: 404, y: 221}
-  m_MaxSize: {x: 8004, y: 4021}
+  m_MinSize: {x: 406, y: 221}
+  m_MaxSize: {x: 8006, y: 4021}
   vertical: 0
-  controlID: 10957
+  controlID: 646
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -366,10 +366,10 @@ MonoBehaviour:
     height: 546
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
-    scrollPos: {x: 0, y: 0}
+    scrollPos: {x: 0, y: 175}
     m_SelectedIDs: dafaffff
     m_LastClickedID: -1318
-    m_ExpandedIDs: 0e5dfaff64f5ffffe6fbfffff4ffffff00000000
+    m_ExpandedIDs: e6fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -627,7 +627,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 737}
+    m_ScrollPosition: {x: 0, y: 275.5}
     m_GridSize: 64
   m_DirectoriesAreaWidth: 115
 --- !u!114 &17
