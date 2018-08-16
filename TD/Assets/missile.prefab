@@ -53,6 +53,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  g: {fileID: 0}
+  damage: 1
+  effect: 0
+  type: 0
+  Explosion: {fileID: 4675053553533662, guid: 4854890f3d833c943a300ca1b09c003a, type: 2}
 --- !u!212 &212747447742089380
 SpriteRenderer:
   m_ObjectHideFlags: 1

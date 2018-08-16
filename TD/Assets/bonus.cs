@@ -40,17 +40,22 @@ public class bonus : MonoBehaviour
 		bonusInfo.alignment = TextAnchor.MiddleCenter;
 		//bonusInfo.rectTransform.localScale = new Vector3(3, 3, 1);
 		bonusInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 300);
-		bonusInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
+		bonusInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
 
+		Vector3 pos = g.c.WorldToScreenPoint(transform.position + new Vector3(0,-2f,0));
+		bonusInfo.rectTransform.anchorMin = new Vector2(0, 0);
+		bonusInfo.rectTransform.anchorMax = new Vector2(0, 0);
 
-		Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
-		bonusInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * -150f / 894f, 0);
+		//Vector3 pos = new Vector3((Screen.width * (transform.position.x - 2) / (Screen.width * 20f / 1280f)), (Screen.height * transform.position.y / (Screen.height * 14f / 894f)), 0);
+		bonusInfo.rectTransform.anchoredPosition = pos;// + new Vector3(0, Screen.height * -150f / 894f, 0);
 
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
+		Vector3 pos = g.c.WorldToScreenPoint(transform.position + new Vector3(0, -2f, 0));
+		bonusInfo.rectTransform.anchoredPosition = pos;
 		if (setup == false)
 		{
 			setup = true;
@@ -209,8 +214,8 @@ public class bonus : MonoBehaviour
 				bonusInfo.text = "Increase damage of all beam towers by 5";
 				image.sprite = g.tiles[0].towerSprites[4];
 				break;
-			case 34://coil damage +4
-				bonusInfo.text = "Increase base damage of all coil towers by 4";
+			case 34://coil damage +8
+				bonusInfo.text = "Increase base damage of all coil towers by 8";
 				image.sprite = g.tiles[0].towerSprites[5];
 				break;
 			case 35://tag damage *2
@@ -607,11 +612,11 @@ public class bonus : MonoBehaviour
 				g.damages[20] += 5;
 				g.damages[27] += 5;
 				break;
-			case 34://coil damage +4
-				g.damages[5] += 4;
-				g.damages[13] += 4;
-				g.damages[21] += 4;
-				g.damages[28] += 4;
+			case 34://coil damage +8
+				g.damages[5] += 8;
+				g.damages[13] += 8;
+				g.damages[21] += 8;
+				g.damages[28] += 8;
 				break;
 			case 35://tag damage *2
 				g.damages[8] *= 2;
@@ -799,6 +804,8 @@ public class bonus : MonoBehaviour
 					}
 					g.tiles[i].GetComponent<Renderer>().enabled = true;
 				}
+				g.start.GetComponent<SpriteRenderer>().sprite = g.start.startSprite;
+				g.end.GetComponent<SpriteRenderer>().sprite = g.end.endSprite;
 				break;
 		}
 	}

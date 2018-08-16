@@ -113,6 +113,8 @@ public class game : MonoBehaviour {
 	public GameObject endGameObject;
 	public Text endGameText;
 
+	public Transform Menu;
+
 
 	// Use this for initialization
 	void Start () {
@@ -134,8 +136,8 @@ public class game : MonoBehaviour {
 		rangeCost = 60;
 		speedCost = 60;
 		eBoostGain = 1;
-		dBoostGain = 0.5;
-		rBoostGain = 0.5;
+		dBoostGain = 0.8;
+		rBoostGain = 0.8;
 		sBoostGain = .8;
 		boostCostMultiplier = 2;
 		bonusInProgress = false;
@@ -180,7 +182,7 @@ public class game : MonoBehaviour {
 		bonuses[31] = new int[] { 5, 5, 0 };//splash +.5 range
 		bonuses[32] = new int[] { 10, 15, 1 };//shock -14 cd requires shock1
 		bonuses[33] = new int[] { 10, 15, 1 };//beam +5 damage requires beam1
-		bonuses[34] = new int[] { 10, 15, 1 };//coil +4 damage requires coil1
+		bonuses[34] = new int[] { 10, 15, 1 };//coil +8 damage requires coil1
 		bonuses[35] = new int[] { 10, 15, 1 };//tag *2 damage requires tag1
 		bonuses[36] = new int[] { 20, 20, 1 };//+300 gold never available
 		bonuses[37] = new int[] { 20, 20, 0 };//+50 lives
@@ -301,10 +303,10 @@ public class game : MonoBehaviour {
 		//blocker, missile, splash, shock, beam, coil, tesla, bridge, tag, missile2, splash2, shock2, beam2
 		//coil2, tesla2, bridge2, tag2, missile3, splash3, shock3, beam3, coil3, tesla3, bridge3, tag3, missile4
 		//shocksplash, tagbeam, teslacoil
-		towerCosts = new int[] { 2, 10, 15, 35, 40, 50, 40, 50, 35, 50, 70, 200, 200, 300, 150, 150, 200, 100, 200, 400, 500, 500, 300, 300, 300, 300, 800, 800, 800 };
+		towerCosts = new int[] { 2, 10, 15, 35, 40, 40, 40, 50, 35, 50, 70, 200, 200, 300, 150, 150, 200, 100, 200, 400, 500, 500, 300, 300, 300, 300, 800, 800, 800 };
 		cooldowns = new int[] { 0, 20, 44, 74, 80, 0, 0, 60, 40, 20, 44, 70, 80, 0, 0, 40, 24, 20, 40, 60, 80, 0, 0, 20, 16, 20, 74, 80, 0 };
 		ranges = new double[] { 0, 3.2, 2.3, 1.8, 0, 1.8, 0, 0, 1.2, 4.2, 3.3, 2.3, 0, 2.8, 0, 0, 2.2, 5.2, 4.3, 2.8, 0, 3.8, 0, 0, 3.2, 6.2, 3.3, 0, 3.8 };
-		damages = new int[] { 0, 2, 1, 8, 5, 8, 0, 0, 6, 16, 3, 24, 20, 12, 0, 0, 16, 50, 5, 50, 50, 16, 0, 0, 26, 200, 5, 30, 10 };
+		damages = new int[] { 0, 2, 1, 8, 5, 12, 0, 0, 6, 16, 2, 24, 20, 12, 0, 0, 16, 50, 4, 50, 50, 16, 0, 0, 26, 200, 5, 30, 10 };
 		effects = new int[] { 0, 0, 0, 2, 0, 0, 40, 0, 2, 0, 0, 4, 0, 0, 80, 0, 4, 0, 0, 4, 0, 0, 120, 0, 6, 0, 4, 4, 120 };
 
 		timeFactor = 2;//to change this, call setTimeFactor here
@@ -366,6 +368,13 @@ public class game : MonoBehaviour {
 		endGameText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 500);
 		endGameText.rectTransform.anchoredPosition = new Vector3(0, 10000, 0);
 		endGameText.text = "Victory";
+
+		if (gameType == 0)
+		{
+			sideMenu = Instantiate(Menu, transform.position, Quaternion.identity).gameObject.GetComponent<menu>();
+			sideMenu.transform.position = new Vector3(9,0,0);
+			sideMenu.transform.localScale = new Vector3(.8f, 2.58f, 1);
+		}
 	}
 	
 	// Update is called once per frame

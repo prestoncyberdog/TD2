@@ -27,8 +27,8 @@ public class menuButton : MonoBehaviour {
 		}
 		a = GameObject.FindGameObjectWithTag("audio").GetComponent<audioScript>();
 
-
-		pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		pos = c.WorldToScreenPoint(transform.position);
+		//pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 
 		overall = new GameObject("overall");
 		overall.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -41,6 +41,8 @@ public class menuButton : MonoBehaviour {
 		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 100);
 		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 450);
 		overallInfo.rectTransform.anchoredPosition = pos;
+		overallInfo.rectTransform.anchorMin = new Vector2(0, 0);
+		overallInfo.rectTransform.anchorMax = new Vector2(0, 0);
 		if (menuButtonType == 0)
 		{
 			overallInfo.text = "New Game";
@@ -109,7 +111,8 @@ public class menuButton : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		pos = new Vector3((Screen.width * (7f /5f) * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		pos = c.WorldToScreenPoint(transform.position);
+		//pos = new Vector3((Screen.width * (7f /5f) * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 		overallInfo.rectTransform.anchoredPosition = pos;
 
 	}

@@ -16,6 +16,12 @@ public class menu : MonoBehaviour {
 	public GameObject tower;
 	public Text towerInfo;
 
+	public Vector3 infoOffset;
+	public Vector3 infoOffsetY;
+	public Vector3 overallOffset;
+	public Vector3 towerinfoOffset;
+
+
 	public Transform Button;
 	public button[] buttons;
 	public int buttonsUsed;
@@ -37,7 +43,8 @@ public class menu : MonoBehaviour {
 	void Start () {
 		c = FindObjectOfType<Camera>();
 		g = GameObject.FindGameObjectWithTag("game").GetComponent<game>();
-		pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		pos = g.c.WorldToScreenPoint(transform.position);
+		//pos = new Vector3((Screen.width * (transform.position.x - c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
 
 		imageObject = new GameObject();
 		image = imageObject.AddComponent<SpriteRenderer>();
@@ -52,6 +59,8 @@ public class menu : MonoBehaviour {
 
 		transform.position = transform.position + new Vector3(0, 0, -.1f);
 
+		overallOffset = c.WorldToScreenPoint(new Vector3(0, 5.0f, 0)) - c.WorldToScreenPoint(new Vector3(0, 0, 0));
+
 		overall = new GameObject("overall");
 		overall.transform.SetParent(FindObjectOfType<Canvas>().transform);
 		overallInfo = overall.AddComponent<Text>();
@@ -62,7 +71,12 @@ public class menu : MonoBehaviour {
 		overallInfo.alignment = TextAnchor.MiddleCenter;
 		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
 		overallInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
-		overallInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * 320f / 894f, 0);
+		overallInfo.rectTransform.anchoredPosition = pos + overallOffset;
+		overallInfo.rectTransform.anchorMin = new Vector2(0, 0);
+		overallInfo.rectTransform.anchorMax = new Vector2(0, 0);
+
+		infoOffset = c.WorldToScreenPoint(new Vector3(-1, 0, 0)) - c.WorldToScreenPoint(new Vector3(0, 0, 0));
+		infoOffsetY = c.WorldToScreenPoint(new Vector3(0, 3.4f, 0)) - c.WorldToScreenPoint(new Vector3(0, 0, 0)); 
 
 		wave = new GameObject("waveinfo");
 		wave.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -74,7 +88,9 @@ public class menu : MonoBehaviour {
 		waveInfo.alignment = TextAnchor.MiddleCenter;
 		waveInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
 		waveInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
-		waveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * -65f / 1280f, Screen.height * 210f / 894f, 0);
+		waveInfo.rectTransform.anchoredPosition = pos + infoOffset + infoOffsetY;
+		waveInfo.rectTransform.anchorMin = new Vector2(0, 0);
+		waveInfo.rectTransform.anchorMax = new Vector2(0, 0);
 
 		nextWave = new GameObject("nextwaveinfo");
 		nextWave.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -86,7 +102,11 @@ public class menu : MonoBehaviour {
 		nextWaveInfo.alignment = TextAnchor.MiddleCenter;
 		nextWaveInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
 		nextWaveInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
-		nextWaveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * 65f / 1280f, Screen.height * 210f / 894f, 0);
+		nextWaveInfo.rectTransform.anchoredPosition = pos - infoOffset + infoOffsetY;
+		nextWaveInfo.rectTransform.anchorMin = new Vector2(0, 0);
+		nextWaveInfo.rectTransform.anchorMax = new Vector2(0, 0);
+
+		towerinfoOffset = c.WorldToScreenPoint(new Vector3(0, -4.9f, 0)) - c.WorldToScreenPoint(new Vector3(0, 0, 0));
 
 		tower = new GameObject("towerinfo");
 		tower.transform.SetParent(FindObjectOfType<Canvas>().transform);
@@ -98,7 +118,9 @@ public class menu : MonoBehaviour {
 		towerInfo.alignment = TextAnchor.MiddleCenter;
 		towerInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 200);
 		towerInfo.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 220);
-		towerInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 315f/894f, 0);
+		towerInfo.rectTransform.anchoredPosition = pos + towerinfoOffset;
+		towerInfo.rectTransform.anchorMin = new Vector2(0, 0);
+		towerInfo.rectTransform.anchorMax = new Vector2(0, 0);
 
 		towerInfoString = "";
 
@@ -142,11 +164,12 @@ public class menu : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
-		towerInfo.rectTransform.anchoredPosition = pos + new Vector3(0, -Screen.height * 315f / 894f, 0);
-		nextWaveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * 65f / 1280f, Screen.height * 210f / 894f, 0);
-		waveInfo.rectTransform.anchoredPosition = pos + new Vector3(Screen.width * -65f / 1280f, Screen.height * 210f / 894f, 0);
-		overallInfo.rectTransform.anchoredPosition = pos + new Vector3(0, Screen.height * 320f / 894f, 0);
+		pos = g.c.WorldToScreenPoint(transform.position);
+		//pos = new Vector3((Screen.width * (transform.position.x - g.c.transform.position.x) / (Screen.width * 20f / 1280f)), ((Screen.height * (transform.position.y - g.c.transform.position.y)) / (Screen.height * 14f / 1280f)), 0);
+		towerInfo.rectTransform.anchoredPosition = pos + towerinfoOffset;
+		waveInfo.rectTransform.anchoredPosition = pos + infoOffset + infoOffsetY;
+		nextWaveInfo.rectTransform.anchoredPosition = pos - infoOffset + infoOffsetY;
+		overallInfo.rectTransform.anchoredPosition = pos + overallOffset;
 		if (g.dead == false)
 		{
 			highlightImage.transform.position = buttons[currButtonIndex].transform.position + new Vector3(0, 0, .1f);
